@@ -1,25 +1,21 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_dmzj/app/app_setting.dart';
 import 'package:flutter_dmzj/app/config_helper.dart';
-import 'package:flutter_dmzj/app/utils.dart';
+import 'package:flutter_dmzj/controllers/home_index_controller.dart';
 import 'package:flutter_dmzj/sql/comic_down.dart';
 import 'package:flutter_dmzj/sql/comic_history.dart';
-import 'package:flutter_dmzj/views/comic/comic_home.dart';
+import 'package:flutter_dmzj/views/news/news_detail.dart';
 import 'package:flutter_dmzj/views/settings/comic_reader_settings.dart';
 import 'package:flutter_dmzj/views/settings/novel_reader_settings.dart';
 import 'package:flutter_dmzj/views/user/login_page.dart';
-import 'package:flutter_dmzj/views/news/news_home.dart';
-import 'package:flutter_dmzj/views/novel/novel_home.dart';
 import 'package:flutter_dmzj/views/setting_page.dart';
-import 'package:flutter_dmzj/views/user/personal_page.dart';
 import 'package:flutter_dmzj/views/user/user_page.dart';
+import 'package:get/get.dart';
+import 'package:ionicons/ionicons.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sqflite/sqflite.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 import 'app/app_theme.dart';
 import 'app/user_info.dart';
@@ -47,7 +43,6 @@ void main() async {
 
 Future initDatabase() async {
   var databasesPath = await getDatabasesPath();
-  // File(databasesPath+"/nsplayer.db").deleteSync();
   var db = await openDatabase(databasesPath + "/comic_history.db", version: 1,
       onCreate: (Database _db, int version) async {
     await _db.execute('''
@@ -81,13 +76,10 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return GetMaterialApp(
       title: '动漫之家Flutter',
       theme: ThemeData(
         primarySwatch: Provider.of<AppTheme>(context).themeColor,
-        appBarTheme: AppBarTheme(
-          brightness: Brightness.dark,
-        ),
       ),
       themeMode: Provider.of<AppTheme>(context).themeMode,
       darkTheme: ThemeData(
@@ -95,7 +87,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Provider.of<AppTheme>(context).themeColor,
         accentColor: Provider.of<AppTheme>(context).themeColor,
       ),
-      home: MyHomePage(),
+      home: HomePage(),
       initialRoute: "/",
       routes: {
         "/Setting": (_) => SettingPage(),
@@ -104,119 +96,61 @@ class MyApp extends StatelessWidget {
         "/ComicReaderSettings": (_) => ComicReaderSettings(),
         "/NovelReaderSettings": (_) => NovelReaderSettings(),
       },
+      getPages: [
+        GetPage(
+          name: '/',
+          page: () => HomePage(),
+        ),
+        // GetPage(
+        //   name: '/news/detail',
+        //   page: () => NewsDetailPage(),
+        // ),
+      ],
     );
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  @override
-  _MyHomePageState createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage>
-    with SingleTickerProviderStateMixin {
-  List<Widget> pages = [
-    ComicHomePage(),
-    Container(),
-    Container(),
-    PersonalPage()
-  ];
-  int _index = 0;
-
-  @override
-  void initState() {
-    super.initState();
-    checkUpdate();
-  }
-
-  void checkUpdate() async {
-    var newVer = await Utils.checkVersion();
-    if (newVer == null) {
-      return;
-    }
-    if (await Utils.showAlertDialogAsync(
-        context, Text('有新版本可以更新'), Text(newVer.message!))) {
-      if (Platform.isAndroid) {
-        launch(newVer.android_url!);
-      } else {
-        launch(newVer.ios_url!);
-      }
-    }
-  }
-
+class HomePage extends StatelessWidget {
+  HomePage({Key? key}) : super(key: key);
+  final controller = Get.put(HomeIndexController());
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      bottomNavigationBar: BottomNavigationBar(
-        type: BottomNavigationBarType.fixed,
-        currentIndex: _index,
-        onTap: (index) {
-          setState(() {
-            if (index == 1 && pages[1] is Container) {
-              pages[1] = NewsHomePage();
-            }
-            if (index == 2 && pages[2] is Container) {
-              pages[2] = NovelHomePage();
-            }
-            _index = index;
-          });
-        },
-        items: <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            label: "漫画",
-            icon: Icon(Icons.library_books),
-          ),
-          BottomNavigationBarItem(
-            label: "新闻",
-            icon: Icon(Icons.whatshot),
-          ),
-          BottomNavigationBarItem(
-            label: "轻小说",
-            icon: Icon(Icons.book),
-          ),
-          BottomNavigationBarItem(
-            label: "我的",
-            icon: Icon(Icons.account_circle),
-          ),
-        ],
+    return Obx(
+      () => Scaffold(
+        body: IndexedStack(
+          index: controller.index.value,
+          children: controller.pages,
+        ),
+        bottomNavigationBar: BottomNavigationBar(
+          type: BottomNavigationBarType.fixed,
+          currentIndex: controller.index.value,
+          onTap: controller.changeIndex,
+          unselectedFontSize: 12,
+          selectedFontSize: 12,
+          items: <BottomNavigationBarItem>[
+            BottomNavigationBarItem(
+              label: "漫画",
+              icon: Icon(Ionicons.home_outline),
+              activeIcon: Icon(Ionicons.home),
+            ),
+            BottomNavigationBarItem(
+              label: "新闻",
+              icon: Icon(Ionicons.newspaper_outline),
+              activeIcon: Icon(Ionicons.newspaper),
+            ),
+            BottomNavigationBarItem(
+              label: "轻小说",
+              icon: Icon(Ionicons.reader_outline),
+              activeIcon: Icon(Ionicons.reader),
+            ),
+            BottomNavigationBarItem(
+              label: "我的",
+              icon: Icon(Ionicons.person_circle_outline),
+              activeIcon: Icon(Ionicons.person_circle),
+            ),
+          ],
+        ),
       ),
-      body: Row(
-        children: <Widget>[
-          // NavigationRail(
-          //   backgroundColor: Theme.of(context).bottomAppBarColor,
-          //     onDestinationSelected: (int index) {
-          //       setState(() {
-          //         _index = index;
-          //       });
-          //     },
-          //     labelType: NavigationRailLabelType.all,
-          //     destinations: [
-          //       NavigationRailDestination(
-          //         icon: Icon(Icons.library_books),
-          //         label: Text('漫画'),
-          //       ),
-          //       NavigationRailDestination(
-          //         icon: Icon(Icons.whatshot),
-          //         label: Text('新闻'),
-          //       ),
-          //       NavigationRailDestination(
-          //         icon: Icon(Icons.book),
-          //         label: Text('轻小说'),
-          //       ),
-          //       NavigationRailDestination(
-          //         icon: Icon(Icons.account_circle),
-          //         label: Text('我的'),
-          //       ),
-          //     ],
-          //     selectedIndex: _index),
-          // VerticalDivider(thickness: 1, width: 1),
-          Expanded(
-              child: IndexedStack(
-            index: _index,
-            children: pages,
-          ))
-        ],
-      ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
 }

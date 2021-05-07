@@ -18,7 +18,7 @@ class ComicApi {
   Future<List<ComicUpdateListItemResponse>> getUpdateList(String? type,
       {int page = 1}) async {
     var path = "${ApiUtil.BASE_URL_V4}/comic/update/list/$type/$page";
-    var result = await HttpUtil.instance!.httpGet(
+    var result = await HttpUtil.instance.httpGet(
       path,
       queryParameters: ApiUtil.defaultParameter(needLogined: true),
     );
@@ -34,7 +34,7 @@ class ComicApi {
   /// 漫画详情
   Future<ComicDetailInfoResponse> getDetail(int comicId) async {
     var path = "${ApiUtil.BASE_URL_V4}/comic/detail/$comicId";
-    var result = await HttpUtil.instance!.httpGet(
+    var result = await HttpUtil.instance.httpGet(
       path,
       queryParameters: ApiUtil.defaultParameter(needLogined: true),
     );
@@ -58,7 +58,7 @@ class ComicApi {
       'rank_type': rankType,
       'page': page
     });
-    var result = await HttpUtil.instance!.httpGet(
+    var result = await HttpUtil.instance.httpGet(
       path,
       queryParameters: par,
     );

@@ -257,8 +257,8 @@ class _NovelReaderPageState extends State<NovelReaderPage> {
                                             _showControls = !_showControls;
                                           });
                                         },
-                                        child:
-                                            Utils.createCacheImage(f!, 100, 100),
+                                        child: Utils.createCacheImage(
+                                            f!, 100, 100),
                                       ))
                                   .toList(),
                             )
@@ -874,8 +874,8 @@ class _NovelReaderPageState extends State<NovelReaderPage> {
 
       //检查缓存
 
-      var url = NovelApi.instance!
-          .getNovelContentUrl(_currentItem!.volume_id, _currentItem!.chapter_id);
+      var url = NovelApi.instance.getNovelContentUrl(
+          _currentItem!.volume_id, _currentItem!.chapter_id);
       FileInfo? file = await _cacheManager.getFileFromCache(url);
       if (file == null) {
         file = await _cacheManager.downloadFile(url);

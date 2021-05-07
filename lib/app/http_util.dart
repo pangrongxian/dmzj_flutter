@@ -2,11 +2,11 @@ import 'package:dio/dio.dart';
 
 class HttpUtil {
   static HttpUtil? _httpUtil;
-  static HttpUtil? get instance {
+  static HttpUtil get instance {
     if (_httpUtil == null) {
       _httpUtil = HttpUtil();
     }
-    return _httpUtil;
+    return _httpUtil!;
   }
 
   late Dio dio;
@@ -26,7 +26,6 @@ class HttpUtil {
         queryParameters: queryParameters,
         options: Options(
           responseType: ResponseType.plain,
-          //headers: header,
         ),
       );
 
@@ -38,6 +37,31 @@ class HttpUtil {
         throw AppError("网络请求失败");
       }
       return "";
+    }
+  }
+
+  Future<dynamic> httpGetJson(
+    String url, {
+    Map<String, dynamic>? queryParameters,
+    bool needLogin = false,
+  }) async {
+    try {
+      var result = await dio.get(
+        url,
+        queryParameters: queryParameters,
+        options: Options(
+          responseType: ResponseType.json,
+        ),
+      );
+
+      return result.data;
+    } catch (e) {
+      if (e is DioError) {
+        dioErrorHandle(e);
+      } else {
+        throw AppError("网络请求失败");
+      }
+      return {};
     }
   }
 

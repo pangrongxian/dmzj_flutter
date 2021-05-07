@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:collection/collection.dart' show IterableExtension;
 import 'package:flutter/material.dart';
 import 'package:flutter_dmzj/app/api.dart';
 import 'package:flutter_dmzj/app/utils.dart';
@@ -354,20 +353,14 @@ class _ComicCategoryDetailPageState extends State<ComicCategoryDetailPage>
       List jsonMap = jsonDecode(response.body);
       List<ComicCategoryDetailFilter> detail =
           jsonMap.map((f) => ComicCategoryDetailFilter.fromJson(f)).toList();
-      if (detail != null) {
-        for (var item in detail) {
-          var _item = item.items!.firstWhereOrNull((f) => f.tagId == widget.id);
-          if (_item != null) {
-            item.item = _item;
-          } else {
-            item.item = item.items![0];
-          }
-        }
-        setState(() {
-          _fiters = detail;
-        });
-        loadData();
+      for (var item in detail) {
+        item.item = item.items!.firstWhere((f) => f.tagId == widget.id,
+            orElse: () => item.items![0]);
       }
+      setState(() {
+        _fiters = detail;
+      });
+      loadData();
     } catch (e) {
       print(e);
     }

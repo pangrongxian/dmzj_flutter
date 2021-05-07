@@ -333,7 +333,7 @@ class _NovelDetailPageState extends State<NovelDetailPage>
       setState(() {
         _loading = true;
       });
-      var detail = await NovelApi.instance!.getDetail(widget.novelId);
+      var detail = await NovelApi.instance.getDetail(widget.novelId);
       // print(detail.writeToJson());
       // Uint8List responseBody;
       // var api = Api.novelDetail(widget.novelId);
@@ -389,7 +389,7 @@ class _NovelDetailPageState extends State<NovelDetailPage>
 
       // List<NovelVolumeItem> detail =
       //     jsonMap.map((f) => NovelVolumeItem.fromJson(f)).toList();
-      var detail = await NovelApi.instance!.getChapter(widget.novelId);
+      var detail = await NovelApi.instance.getChapter(widget.novelId);
       setState(() {
         volumes = detail;
       });

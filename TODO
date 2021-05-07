@@ -1,4 +1,5 @@
 替换http->dio
 移除无用package
-provider->Get
-null safe
+替换provider->Get
+替换sqlite->hive
+支持null safety

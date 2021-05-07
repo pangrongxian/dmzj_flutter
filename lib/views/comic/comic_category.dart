@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_dmzj/app/api.dart';
 import 'package:flutter_dmzj/app/utils.dart';
 import 'package:flutter_dmzj/models/comic/comic_category_item.dart';
+import 'package:flutter_dmzj/widgets/border_card.dart';
 import 'package:http/http.dart' as http;
 
 class ComicCategoryPage extends StatefulWidget {
@@ -32,7 +33,7 @@ class _ComicCategoryPageState extends State<ComicCategoryPage>
   }
 
   double getWidth() {
-    var count = MediaQuery.of(context).size.width ~/ 160;
+    var count = MediaQuery.of(context).size.width ~/ 120;
     if (count < 3) count = 3;
     return (MediaQuery.of(context).size.width - count * 8) / count - 8;
   }
@@ -48,31 +49,26 @@ class _ComicCategoryPageState extends State<ComicCategoryPage>
         physics: ScrollPhysics(),
         itemCount: _list.length,
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: MediaQuery.of(context).size.width ~/ 160 < 3
+            crossAxisCount: MediaQuery.of(context).size.width ~/ 120 < 3
                 ? 3
-                : MediaQuery.of(context).size.width ~/ 160,
-            crossAxisSpacing: 4.0,
-            mainAxisSpacing: 4.0,
+                : MediaQuery.of(context).size.width ~/ 120,
+            crossAxisSpacing: 12.0,
+            mainAxisSpacing: 12.0,
             childAspectRatio: getWidth() / (getWidth() + 32)),
-        itemBuilder: (context, i) => Container(
-          child: Card(
-            child: InkWell(
-              onTap: () {
-                Utils.openPage(context, _list[i].tag_id, 11,
-                    title: _list[i].title);
-              },
-              child: Column(
-                children: <Widget>[
-                  ClipRRect(
-                      borderRadius: BorderRadius.circular(4),
-                      child: Utils.createCacheImage(_list[i].cover!, 200, 200)),
-                  SizedBox(height: 4),
-                  Flexible(
-                    child: Text(_list[i].title!),
-                  ),
-                ],
+        itemBuilder: (context, i) => BorderCard(
+          onTap: () {
+            Utils.openPage(context, _list[i].tag_id, 11, title: _list[i].title);
+          },
+          child: Column(
+            children: <Widget>[
+              ClipRRect(
+                  borderRadius: BorderRadius.circular(4),
+                  child: Utils.createCacheImage(_list[i].cover!, 200, 200)),
+              SizedBox(height: 4),
+              Flexible(
+                child: Text(_list[i].title!),
               ),
-            ),
+            ],
           ),
         ),
       ),
