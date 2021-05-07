@@ -13,14 +13,14 @@ class NovelHomePage extends StatefulWidget {
 
 class _NovelHomePageState extends State<NovelHomePage>
     with TickerProviderStateMixin {
-  TabController _tabController;
+  TabController? _tabController;
 
   @override
   void initState() {
     super.initState();
     _tabController = TabController(length: 4, vsync: this);
     Utils.changeNovelHomeTabIndex.on<int>().listen((e) {
-      _tabController.animateTo(e);
+      _tabController!.animateTo(e);
     });
   }
 

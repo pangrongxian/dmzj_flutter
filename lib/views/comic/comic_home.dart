@@ -14,14 +14,14 @@ class ComicHomePage extends StatefulWidget {
 
 class _ComicHomePageState extends State<ComicHomePage>
     with TickerProviderStateMixin {
-  TabController _tabController;
+  TabController? _tabController;
 
   @override
   void initState() {
     super.initState();
     _tabController = TabController(length: 5, vsync: this);
     Utils.changeComicHomeTabIndex.on<int>().listen((e) {
-      _tabController.animateTo(e);
+      _tabController!.animateTo(e);
     });
   }
 

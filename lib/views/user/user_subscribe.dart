@@ -14,7 +14,7 @@ import 'package:provider/provider.dart';
 
 class UserSubscribePage extends StatefulWidget {
   final int index;
-  UserSubscribePage({Key key, this.index = 0}) : super(key: key);
+  UserSubscribePage({Key? key, this.index = 0}) : super(key: key);
 
   @override
   _UserSubscribeStatePage createState() => _UserSubscribeStatePage();
@@ -48,7 +48,7 @@ class _UserSubscribeStatePage extends State<UserSubscribePage> {
 
 class SubscribeTabView extends StatefulWidget {
   final int type;
-  SubscribeTabView(this.type, {Key key}) : super(key: key);
+  SubscribeTabView(this.type, {Key? key}) : super(key: key);
 
   @override
   _SubscribeTabViewState createState() => _SubscribeTabViewState();
@@ -216,8 +216,8 @@ class _SubscribeTabViewState extends State<SubscribeTabView>
       var response = await http.get(Uri.parse(Api.userSubscribe(
           widget.type,
           _subType,
-          Provider.of<AppUserInfo>(context, listen: false).loginInfo.uid,
-          Provider.of<AppUserInfo>(context, listen: false).loginInfo.dmzj_token,
+          Provider.of<AppUserInfo>(context, listen: false).loginInfo!.uid,
+          Provider.of<AppUserInfo>(context, listen: false).loginInfo!.dmzj_token,
           letter: _letters.values.toList()[_selectLetters],
           page: _page)));
 

@@ -14,16 +14,16 @@ final String comicDownloadColumnUrls = 'Urls';
 
 
 class ComicDownloadSqlItem {
-	int chapterID;
-String chapterName;
-int comicID;
-String comicName;
-int status;
-String volume;
-int page;
-int count;
-String savePath;
-String urls;
+	int? chapterID;
+String? chapterName;
+int? comicID;
+String? comicName;
+int? status;
+String? volume;
+int? page;
+int? count;
+String? savePath;
+String? urls;
 
   ComicDownloadSqlItem(this.chapterID,this.chapterName,this.comicID,this.comicName,this.status,this.volume,{this.page,this.count,this.savePath,this.urls});
 
@@ -62,13 +62,13 @@ urls = map[comicDownloadColumnUrls];
 }
 
 class ComicDownloadProvider {
- static Database db;
+ static late Database db;
  static Future<ComicDownloadSqlItem> insert(ComicDownloadSqlItem item) async {
     await db.insert(comicDownloadTableName, item.toMap());
     return item;
   }
 
-  static Future<ComicDownloadSqlItem> getItem(int id) async {
+  static Future<ComicDownloadSqlItem?> getItem(int? id) async {
     
     List<Map> maps = await db.query(comicDownloadTableName,
         columns: [comicDownloadColumnChapterID,
@@ -86,7 +86,7 @@ comicDownloadColumnUrls,
         whereArgs: [id]);
 
     if (maps.length > 0) {
-      return ComicDownloadSqlItem.fromMap(maps.first);
+      return ComicDownloadSqlItem.fromMap(maps.first as Map<String, dynamic>);
     }
     return null;
   }

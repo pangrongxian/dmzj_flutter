@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 class CommnetDetailPage extends StatefulWidget {
   final int commentId;
 
-  CommnetDetailPage(this.commentId, {Key key}) : super(key: key);
+  CommnetDetailPage(this.commentId, {Key? key}) : super(key: key);
 
   @override
   _CommnetDetailPageState createState() => _CommnetDetailPageState();

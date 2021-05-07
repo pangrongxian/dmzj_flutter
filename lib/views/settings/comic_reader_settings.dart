@@ -3,7 +3,7 @@ import 'package:flutter_dmzj/app/app_setting.dart';
 import 'package:provider/provider.dart';
 
 class ComicReaderSettings extends StatefulWidget {
-  ComicReaderSettings({Key key}) : super(key: key);
+  ComicReaderSettings({Key? key}) : super(key: key);
 
   @override
   _ComicReaderSettingsState createState() => _ComicReaderSettingsState();

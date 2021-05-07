@@ -5,7 +5,7 @@ import 'package:flutter_dmzj/app/utils.dart';
 import 'package:provider/provider.dart';
 
 class PersonalPage extends StatefulWidget {
-  PersonalPage({Key key}) : super(key: key);
+  PersonalPage({Key? key}) : super(key: key);
 
   @override
   _PersonalPageState createState() => _PersonalPageState();
@@ -123,8 +123,8 @@ class _PersonalPageState extends State<PersonalPage> {
                                 backgroundImage:
                                     Utils.createCachedImageProvider(
                                         Provider.of<AppUserInfo>(context)
-                                            .loginInfo
-                                            .photo),
+                                            .loginInfo!
+                                            .photo!),
                               ),
                             ),
                             SizedBox(
@@ -132,8 +132,8 @@ class _PersonalPageState extends State<PersonalPage> {
                             ),
                             Text(
                               Provider.of<AppUserInfo>(context)
-                                  .loginInfo
-                                  .nickname,
+                                  .loginInfo!
+                                  .nickname!,
                               style: TextStyle(
                                   color: Colors.white,
                                   fontWeight: FontWeight.bold),

@@ -4,7 +4,7 @@ class IconTextButton extends StatefulWidget {
   final Icon icon;
   final String title;
   final Function onTap;
-  IconTextButton(this.icon, this.title, this.onTap, {Key key})
+  IconTextButton(this.icon, this.title, this.onTap, {Key? key})
       : super(key: key);
 
   _IconTextButtonState createState() => _IconTextButtonState();
@@ -16,7 +16,7 @@ class _IconTextButtonState extends State<IconTextButton> {
     return Container(
       child: Expanded(
           child: InkWell(
-        onTap: widget.onTap,
+        onTap: widget.onTap as void Function()?,
         child: Container(
           padding: EdgeInsets.fromLTRB(8, 16, 8, 16),
           child: Row(

@@ -10,7 +10,7 @@ import 'package:share/share.dart';
 
 class ComicSpecialDetailPage extends StatefulWidget {
   final int id;
-  ComicSpecialDetailPage(this.id, {Key key}) : super(key: key);
+  ComicSpecialDetailPage(this.id, {Key? key}) : super(key: key);
 
   @override
   _ComicSpecialDetailPageState createState() => _ComicSpecialDetailPageState();
@@ -20,7 +20,7 @@ class _ComicSpecialDetailPageState extends State<ComicSpecialDetailPage>
     with AutomaticKeepAliveClientMixin {
   @override
   bool get wantKeepAlive => true;
-  ComicSpecia _detail;
+  ComicSpecia? _detail;
   @override
   void initState() {
     super.initState();
@@ -35,12 +35,12 @@ class _ComicSpecialDetailPageState extends State<ComicSpecialDetailPage>
             length: 3, // This is the number of tabs.
             child: Scaffold(
               appBar: AppBar(
-                title: Text(_detail.title),
+                title: Text(_detail!.title!),
                 actions: <Widget>[
                   IconButton(
                       icon: Icon(Icons.share),
                       onPressed: () => Share.share(
-                          "${_detail.title}\r\nhttp://m.dmzj.com/zhuanti/${_detail.page_url}"))
+                          "${_detail!.title}\r\nhttp://m.dmzj.com/zhuanti/${_detail!.page_url}"))
                 ],
                 bottom: TabBar(
                     tabs: [Tab(text: "介绍"), Tab(text: "漫画"), Tab(text: "评论")]),
@@ -53,19 +53,19 @@ class _ComicSpecialDetailPageState extends State<ComicSpecialDetailPage>
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: <Widget>[
                         Utils.createCacheImage(
-                            _detail.mobile_header_pic, 710, 350),
+                            _detail!.mobile_header_pic!, 710, 350),
                         SizedBox(height: 12),
                         Text(
-                          _detail.title,
+                          _detail!.title!,
                           style: TextStyle(fontWeight: FontWeight.bold),
                         ),
                         SizedBox(height: 12),
-                        Text(_detail.description)
+                        Text(_detail!.description!)
                       ],
                     ),
                   ),
                   ListView(
-                    children: _detail.comics
+                    children: _detail!.comics!
                         .map<Widget>((f) => createItem(f))
                         .toList(),
                   ),
@@ -94,7 +94,7 @@ class _ComicSpecialDetailPageState extends State<ComicSpecialDetailPage>
           children: <Widget>[
             Container(
               width: 80,
-              child: Utils.createCacheImage(item.cover, 270, 360),
+              child: Utils.createCacheImage(item.cover!, 270, 360),
             ),
             SizedBox(
               width: 12,
@@ -104,20 +104,20 @@ class _ComicSpecialDetailPageState extends State<ComicSpecialDetailPage>
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   Text(
-                    item.name,
+                    item.name!,
                     maxLines: 1,
                   ),
                   SizedBox(
                     height: 4,
                   ),
-                  Text(item.recommend_brief,
+                  Text(item.recommend_brief!,
                       style: TextStyle(color: Colors.grey, fontSize: 14),
                       maxLines: 1),
                   SizedBox(
                     height: 4,
                   ),
                   Text(
-                    item.recommend_reason,
+                    item.recommend_reason!,
                     style: TextStyle(color: Colors.grey, fontSize: 14),
                     maxLines: 3,
                   )

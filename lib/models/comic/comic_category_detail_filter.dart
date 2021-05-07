@@ -1,64 +1,68 @@
 import 'dart:convert' show json;
 
 class ComicCategoryDetailFilter {
-  String _title;
-  String get title => _title;
-  List<ComicCategoryDetailFilterItem> _items;
-  List<ComicCategoryDetailFilterItem> get items => _items;
+  String? _title;
+  String? get title => _title;
+  List<ComicCategoryDetailFilterItem>? _items;
+  List<ComicCategoryDetailFilterItem>? get items => _items;
 
-  ComicCategoryDetailFilterItem _item;
-  ComicCategoryDetailFilterItem get item => _item;
-  set item(value)  {
+  ComicCategoryDetailFilterItem? _item;
+  ComicCategoryDetailFilterItem? get item => _item;
+  set item(value) {
     _item = value;
   }
 
-    ComicCategoryDetailFilter({
-String title,
-List<ComicCategoryDetailFilterItem> items,
-}):_title=title,_items=items;
-  factory ComicCategoryDetailFilter.fromJson(jsonRes){ if(jsonRes == null) return null;
-    List<ComicCategoryDetailFilterItem> items = jsonRes['items'] is List ? []: null; 
-    if(items!=null) {
- for (var item in jsonRes['items']) { if (item != null) { items.add(ComicCategoryDetailFilterItem.fromJson(item));  }
-    }
+  ComicCategoryDetailFilter({
+    String? title,
+    List<ComicCategoryDetailFilterItem>? items,
+  })  : _title = title,
+        _items = items;
+  factory ComicCategoryDetailFilter.fromJson(jsonRes) {
+    List<ComicCategoryDetailFilterItem>? items =
+        jsonRes['items'] is List ? [] : null;
+    for (var item in jsonRes['items'] ?? []) {
+      items!.add(ComicCategoryDetailFilterItem.fromJson(item));
     }
 
-
-return ComicCategoryDetailFilter(    title : jsonRes['title'],
- items:items,
-);}
+    return ComicCategoryDetailFilter(
+      title: jsonRes['title'],
+      items: items,
+    );
+  }
   Map<String, dynamic> toJson() => {
         'title': _title,
         'items': _items,
-};
+      };
 
   @override
-String  toString() {
+  String toString() {
     return json.encode(this);
   }
 }
+
 class ComicCategoryDetailFilterItem {
-  int _tag_id;
-  int get tag_id => _tag_id;
-  String _tag_name;
-  String get tag_name => _tag_name;
+  int? _tagId;
+  int? get tagId => _tagId;
+  String? _tagName;
+  String? get tagName => _tagName;
 
-    ComicCategoryDetailFilterItem({
-int tag_id,
-String tag_name,
-}):_tag_id=tag_id,_tag_name=tag_name;
-  factory ComicCategoryDetailFilterItem.fromJson(jsonRes)=>jsonRes == null? null:ComicCategoryDetailFilterItem(    tag_id : jsonRes['tag_id'],
-    tag_name : jsonRes['tag_name'],
-);
+  ComicCategoryDetailFilterItem({
+    int? tagId,
+    String? tagName,
+  })  : _tagId = tagId,
+        _tagName = tagName;
+  factory ComicCategoryDetailFilterItem.fromJson(jsonRes) =>
+      ComicCategoryDetailFilterItem(
+        tagId: jsonRes['tag_id'],
+        tagName: jsonRes['tag_name'],
+      );
   Map<String, dynamic> toJson() => {
-        'tag_id': _tag_id,
-        'tag_name': _tag_name,
-};
+        'tag_id': tagId,
+        'tag_name': tagName,
+      };
 
   @override
-String  toString() {
+  String toString() {
     return json.encode(this);
   }
 }
-
-

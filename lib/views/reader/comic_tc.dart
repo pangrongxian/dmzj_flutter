@@ -6,7 +6,7 @@ class ComicTCPage extends StatefulWidget {
   final List<ComicChapterViewPoint> list;
   final int comicId;
   final int chapterId;
-  ComicTCPage(this.list, this.comicId, this.chapterId, {Key key})
+  ComicTCPage(this.list, this.comicId, this.chapterId, {Key? key})
       : super(key: key);
 
   @override
@@ -58,7 +58,7 @@ class ComicTCPageState extends State<ComicTCPage> {
                       color: Theme.of(context).accentColor.withOpacity(color),
                       borderRadius: BorderRadius.circular(8)),
                   child: Text(
-                    f.content,
+                    f.content!,
                     style: TextStyle(color: Colors.white),
                   ),
                 ),

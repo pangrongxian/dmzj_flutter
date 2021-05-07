@@ -11,7 +11,7 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:http/http.dart' as http;
 
 class LoginPage extends StatefulWidget {
-  LoginPage({Key key}) : super(key: key);
+  LoginPage({Key? key}) : super(key: key);
 
   _LoginPageState createState() => _LoginPageState();
 }
@@ -154,16 +154,16 @@ class _LoginPageState extends State<LoginPage> {
       if (data.result == 1) {
         Provider.of<AppUserInfo>(context, listen: false).changeIsLogin(true);
         Provider.of<AppUserInfo>(context, listen: false)
-            .changeBindTel(data.data.bind_phone.length != 0);
+            .changeBindTel(data.data!.bind_phone!.length != 0);
         Provider.of<AppUserInfo>(context, listen: false)
             .changeLoginInfo(data.data);
         Provider.of<AppUserInfo>(context, listen: false)
-            .getUserProfile(data.data.uid, data.data.dmzj_token);
+            .getUserProfile(data.data!.uid, data.data!.dmzj_token);
         Fluttertoast.showToast(msg: "登录成功", toastLength: Toast.LENGTH_SHORT);
         UserHelper.loadComicHistory();
         Navigator.pop(context);
       } else {
-        Fluttertoast.showToast(msg: data.msg, toastLength: Toast.LENGTH_SHORT);
+        Fluttertoast.showToast(msg: data.msg!, toastLength: Toast.LENGTH_SHORT);
       }
       print(body);
     } catch (e) {

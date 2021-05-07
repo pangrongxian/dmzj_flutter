@@ -7,10 +7,10 @@ import 'package:flutter_dmzj/models/comic/comic_ns_search_item.dart';
 import 'package:flutter_dmzj/models/search_hot_word.dart';
 import 'package:http/http.dart' as http;
 
-class ComicSearchBarDelegate extends SearchDelegate<String> {
+class ComicSearchBarDelegate extends SearchDelegate<String?> {
   ComicSearchBarDelegate(
       {String searchFieldLabel = "输入关键字搜索漫画",
-      TextInputType keyboardType,
+      TextInputType? keyboardType,
       TextInputAction textInputAction = TextInputAction.search})
       : super(
             searchFieldLabel: searchFieldLabel,
@@ -63,10 +63,9 @@ class ComicSearchBarDelegate extends SearchDelegate<String> {
               );
             return ListView(
               children:
-                  snapshot.data.map((f) => createItem(context, f)).toList(),
+                  snapshot.data!.map((f) => createItem(context, f)).toList(),
             );
         }
-        return null; // unreachable
       },
     );
   }
@@ -105,21 +104,20 @@ class ComicSearchBarDelegate extends SearchDelegate<String> {
                   Padding(
                       padding: EdgeInsets.symmetric(horizontal: 8),
                       child: Wrap(
-                        children: snapshot.data
+                        children: snapshot.data!
                             .map((f) =>
-                                createWorditem(context, f.name, f.id, type: 1))
+                                createWorditem(context, f.name!, f.id, type: 1))
                             .toList(),
                       ))
                 ],
               ),
             );
         }
-        return null; // unreachable
       },
     );
   }
 
-  Widget createWorditem(BuildContext context, String title, int id,
+  Widget createWorditem(BuildContext context, String title, int? id,
       {int type = 1}) {
     return Padding(
       padding: EdgeInsets.all(4),
@@ -160,7 +158,7 @@ class ComicSearchBarDelegate extends SearchDelegate<String> {
                   borderRadius: BorderRadius.circular(4),
                   child: Container(
                     width: 80,
-                    child: Utils.createCacheImage(item.cover, 270, 360),
+                    child: Utils.createCacheImage(item.cover!, 270, 360),
                   )),
               SizedBox(
                 width: 12,
@@ -170,7 +168,7 @@ class ComicSearchBarDelegate extends SearchDelegate<String> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     Text(
-                      item.title,
+                      item.title!,
                       maxLines: 1,
                     ),
                     SizedBox(
@@ -195,7 +193,7 @@ class ComicSearchBarDelegate extends SearchDelegate<String> {
                     SizedBox(
                       height: 2,
                     ),
-                    Text(item.status,
+                    Text(item.status!,
                         style: TextStyle(color: Colors.grey, fontSize: 14)),
                     // SizedBox(
                     //   height: 2,

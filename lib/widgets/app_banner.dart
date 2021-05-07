@@ -3,9 +3,9 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 
 class AppBanner extends StatefulWidget {
-  final List<Widget> items;
+  final List<Widget>? items;
 
-  AppBanner({Key key, this.items}) : super(key: key);
+  AppBanner({Key? key, this.items}) : super(key: key);
 
   _AppBannerState createState() => _AppBannerState();
 }
@@ -33,7 +33,7 @@ class _AppBannerState extends State<AppBanner> {
                 viewportFraction: 1.0,
                 autoPlay: true,
               ),
-              items: widget.items.length != 0
+              items: widget.items!.length != 0
                   ? widget.items
                   : [
                       Center(
@@ -47,7 +47,7 @@ class _AppBannerState extends State<AppBanner> {
               bottom: 4.0,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
-                children: widget.items.map<Widget>((index) {
+                children: widget.items!.map<Widget>((index) {
                   return Container(
                     width: 8.0,
                     height: 8.0,
@@ -55,7 +55,7 @@ class _AppBannerState extends State<AppBanner> {
                         EdgeInsets.symmetric(vertical: 10.0, horizontal: 2.0),
                     decoration: BoxDecoration(
                         shape: BoxShape.circle,
-                        color: currentBannerIndex == widget.items.indexOf(index)
+                        color: currentBannerIndex == widget.items!.indexOf(index)
                             ? Theme.of(context).accentColor
                             : Color.fromRGBO(0, 0, 0, 0.4)),
                   );
@@ -68,22 +68,22 @@ class _AppBannerState extends State<AppBanner> {
 }
 
 class BannerImageItem extends StatelessWidget {
-  final String pic;
-  final Function onTaped;
-  final String title;
-  BannerImageItem({Key key, this.pic, this.onTaped, this.title = ""})
+  final String? pic;
+  final Function? onTaped;
+  final String? title;
+  BannerImageItem({Key? key, this.pic, this.onTaped, this.title = ""})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: onTaped,
+      onTap: onTaped as void Function()?,
       child: Stack(
         alignment: AlignmentDirectional.bottomStart,
         fit: StackFit.expand,
         children: <Widget>[
           CachedNetworkImage(
-            imageUrl: pic,
+            imageUrl: pic!,
             fit: BoxFit.cover,
             httpHeaders: {"Referer": "http://www.dmzj.com/"},
             placeholder: (context, url) => Center(
@@ -97,7 +97,7 @@ class BannerImageItem extends StatelessWidget {
               left: 8,
               child: Container(
                 padding: EdgeInsets.all(8),
-                child: Text(title,
+                child: Text(title!,
                     style: TextStyle(
                       color: Colors.white,
                       shadows: [

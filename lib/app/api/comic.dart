@@ -6,8 +6,8 @@ import 'package:flutter_dmzj/protobuf/comic/update_list_response.pb.dart';
 import 'api_util.dart';
 
 class ComicApi {
-  static ComicApi _comicApi;
-  static ComicApi get instance {
+  static ComicApi? _comicApi;
+  static ComicApi? get instance {
     if (_comicApi == null) {
       _comicApi = ComicApi();
     }
@@ -15,10 +15,10 @@ class ComicApi {
   }
 
   /// 首页-更新
-  Future<List<ComicUpdateListItemResponse>> getUpdateList(String type,
+  Future<List<ComicUpdateListItemResponse>> getUpdateList(String? type,
       {int page = 1}) async {
     var path = "${ApiUtil.BASE_URL_V4}/comic/update/list/$type/$page";
-    var result = await HttpUtil.instance.httpGet(
+    var result = await HttpUtil.instance!.httpGet(
       path,
       queryParameters: ApiUtil.defaultParameter(needLogined: true),
     );
@@ -34,7 +34,7 @@ class ComicApi {
   /// 漫画详情
   Future<ComicDetailInfoResponse> getDetail(int comicId) async {
     var path = "${ApiUtil.BASE_URL_V4}/comic/detail/$comicId";
-    var result = await HttpUtil.instance.httpGet(
+    var result = await HttpUtil.instance!.httpGet(
       path,
       queryParameters: ApiUtil.defaultParameter(needLogined: true),
     );
@@ -49,7 +49,7 @@ class ComicApi {
 
   /// 首页-排行榜
   Future<List<ComicRankListItemResponse>> getRankList(
-      {int tagId = 0, int byTime = 0, int rankType, int page = 0}) async {
+      {int? tagId = 0, int? byTime = 0, int? rankType, int page = 0}) async {
     var path = "${ApiUtil.BASE_URL_V4}/comic/rank/list";
     var par = ApiUtil.defaultParameter(needLogined: true);
     par.addAll({
@@ -58,7 +58,7 @@ class ComicApi {
       'rank_type': rankType,
       'page': page
     });
-    var result = await HttpUtil.instance.httpGet(
+    var result = await HttpUtil.instance!.httpGet(
       path,
       queryParameters: par,
     );

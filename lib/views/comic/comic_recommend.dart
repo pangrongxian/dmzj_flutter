@@ -14,7 +14,7 @@ import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
 
 class ComicRecommend extends StatefulWidget {
-  ComicRecommend({Key key}) : super(key: key);
+  ComicRecommend({Key? key}) : super(key: key);
 
   ComicRecommendState createState() => ComicRecommendState();
 }
@@ -38,7 +38,7 @@ class ComicRecommendState extends State<ComicRecommend>
   List<ComicHomeNewItem> _mySub = [];
 
   //如果是IOS，且在审核期间，隐藏Banner
-  bool _hideBanner = false;
+  bool? _hideBanner = false;
 
   @override
   void initState() {
@@ -99,7 +99,7 @@ class ComicRecommendState extends State<ComicRecommend>
                 : CrossAxisAlignment.center,
             children: <Widget>[
               //banner
-              (Platform.isIOS && _hideBanner)
+              (Platform.isIOS && _hideBanner!)
                   ? Container()
                   : AppBanner(
                       items: _banners
@@ -192,8 +192,8 @@ class ComicRecommendState extends State<ComicRecommend>
   }
 
   Widget _getItem(String title, List items,
-      {Icon icon,
-      Function ontap,
+      {Icon? icon,
+      Function? ontap,
       bool needSubTitle = true,
       int count = 3,
       double ratio = 3 / 5.2,
@@ -240,8 +240,8 @@ class ComicRecommendState extends State<ComicRecommend>
   }
 
   Widget _getItem2(String title, List items,
-      {Icon icon,
-      Function ontap,
+      {Icon? icon,
+      Function? ontap,
       bool needSubTitle = true,
       int count = 3,
       double ratio = 3 / 5.2,
@@ -286,7 +286,7 @@ class ComicRecommendState extends State<ComicRecommend>
         ));
   }
 
-  Widget _getTitle(String title, {Icon icon, Function ontap}) {
+  Widget _getTitle(String title, {Icon? icon, Function? ontap}) {
     return Row(
       children: <Widget>[
         Expanded(
@@ -303,7 +303,7 @@ class ComicRecommendState extends State<ComicRecommend>
               color: Theme.of(context).cardColor,
               child: InkWell(
                 borderRadius: BorderRadius.circular(12),
-                onTap: ontap,
+                onTap: ontap as void Function()?,
                 child: Padding(
                     padding: EdgeInsets.all(4),
                     child: icon ??
@@ -317,9 +317,9 @@ class ComicRecommendState extends State<ComicRecommend>
     );
   }
 
-  Widget _getComicItemBuilder(int id, int type, String pic, String title,
-      {String author = "",
-      String url = "",
+  Widget _getComicItemBuilder(int? id, int? type, String pic, String title,
+      {String? author = "",
+      String? url = "",
       double width = 270,
       double height = 360}) {
     return RawMaterialButton(
@@ -601,7 +601,7 @@ class ComicRecommendState extends State<ComicRecommend>
         return;
       }
       var response = await http.get(Uri.parse(Api.comicMySub(
-          Provider.of<AppUserInfo>(context, listen: false).loginInfo.uid)));
+          Provider.of<AppUserInfo>(context, listen: false).loginInfo!.uid)));
       var jsonMap = jsonDecode(response.body);
 
       List items = jsonMap["data"]["data"];

@@ -8,10 +8,11 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
 
 class UserHelper {
-  static Future<bool> comicSubscribe(int comicId, {bool cancel = false}) async {
+  static Future<bool> comicSubscribe(int? comicId,
+      {bool cancel = false}) async {
     try {
       //TODO 跳转登录
-      if (!ConfigHelper.getUserIsLogined() ?? false) {
+      if (!ConfigHelper.getUserIsLogined()) {
         Fluttertoast.showToast(msg: '没有登录');
         return false;
       }
@@ -44,7 +45,7 @@ class UserHelper {
   static Future<bool> novelSubscribe(int novelId, {bool cancel = false}) async {
     try {
       //TODO 跳转登录
-      if (!ConfigHelper.getUserIsLogined() ?? false) {
+      if (!ConfigHelper.getUserIsLogined()) {
         Fluttertoast.showToast(msg: '没有登录');
         return false;
       }
@@ -79,7 +80,7 @@ class UserHelper {
       {int page = 0}) async {
     try {
       //TODO 跳转登录
-      if (!ConfigHelper.getUserIsLogined() ?? false) {
+      if (!ConfigHelper.getUserIsLogined()) {
         Fluttertoast.showToast(msg: '没有登录');
         return false;
       }
@@ -108,7 +109,7 @@ class UserHelper {
     }
   }
 
-  static Future<bool> comicLikeViewPoint(int id) async {
+  static Future<bool> comicLikeViewPoint(int? id) async {
     try {
       // if (!ConfigHelper.getUserIsLogined() ?? false) {
       //   Fluttertoast.showToast(msg: '没有登录');
@@ -134,10 +135,10 @@ class UserHelper {
   }
 
   static Future<bool> comicAddComicHistory(int comicId, int chapterId,
-      {int page = 1}) async {
+      {int? page = 1}) async {
     try {
       //TODO 跳转登录
-      if (!ConfigHelper.getUserIsLogined() ?? false) {
+      if (!ConfigHelper.getUserIsLogined()) {
         return false;
       }
       var uid = ConfigHelper.getUserInfo()?.uid ?? "";
@@ -156,11 +157,11 @@ class UserHelper {
   }
 
   static Future<bool> comicAddNovelHistory(
-      int novelId, int volumeId, int chapterId,
+      int novelId, int? volumeId, int? chapterId,
       {int page = 1}) async {
     try {
       //TODO 跳转登录
-      if (!ConfigHelper.getUserIsLogined() ?? false) {
+      if (!ConfigHelper.getUserIsLogined()) {
         return false;
       }
       var uid = ConfigHelper.getUserInfo()?.uid ?? "";
@@ -179,10 +180,10 @@ class UserHelper {
     }
   }
 
-  static Future<bool> newsCheckSub(int newsId) async {
+  static Future<bool> newsCheckSub(int? newsId) async {
     try {
       //TODO 跳转登录
-      if (!ConfigHelper.getUserIsLogined() ?? false) {
+      if (!ConfigHelper.getUserIsLogined()) {
         return false;
       }
       var uid = ConfigHelper.getUserInfo()?.uid ?? "";
@@ -204,10 +205,10 @@ class UserHelper {
     }
   }
 
-  static Future<bool> addOrCancelNewsSub(int newsId, bool cancel) async {
+  static Future<bool> addOrCancelNewsSub(int? newsId, bool cancel) async {
     try {
       //TODO 跳转登录
-      if (!ConfigHelper.getUserIsLogined() ?? false) {
+      if (!ConfigHelper.getUserIsLogined()) {
         Fluttertoast.showToast(msg: '没有登录');
         return false;
       }
@@ -235,25 +236,23 @@ class UserHelper {
 
   static Future<bool> loadComicHistory() async {
     try {
-      if (!ConfigHelper.getUserIsLogined() ?? false) {
+      if (!ConfigHelper.getUserIsLogined()) {
         return false;
       }
-      var response = await http
-          .get(Uri.parse(Api.userComicHistory(ConfigHelper.getUserInfo().uid)));
+      var response = await http.get(
+          Uri.parse(Api.userComicHistory(ConfigHelper.getUserInfo()!.uid)));
       List jsonMap = jsonDecode(response.body);
       List<ComicHistoryItem> detail =
           jsonMap.map((i) => ComicHistoryItem.fromJson(i)).toList();
-      if (detail != null) {
-        for (var item in detail) {
-          var historyItem = await ComicHistoryProvider.getItem(item.comic_id);
-          if (historyItem != null) {
-            historyItem.chapter_id = item.chapter_id;
-            historyItem.page = item.progress?.toDouble() ?? 1;
-            await ComicHistoryProvider.update(historyItem);
-          } else {
-            await ComicHistoryProvider.insert(ComicHistory(item.comic_id,
-                item.chapter_id, item.progress?.toDouble() ?? 1, 1));
-          }
+      for (var item in detail) {
+        var historyItem = await ComicHistoryProvider.getItem(item.comic_id);
+        if (historyItem != null) {
+          historyItem.chapter_id = item.chapter_id;
+          historyItem.page = item.progress?.toDouble() ?? 1;
+          await ComicHistoryProvider.update(historyItem);
+        } else {
+          await ComicHistoryProvider.insert(ComicHistory(item.comic_id,
+              item.chapter_id, item.progress?.toDouble() ?? 1, 1));
         }
       }
       return true;

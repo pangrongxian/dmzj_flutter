@@ -7,10 +7,10 @@ import 'package:flutter_dmzj/models/novel/novel_search_result_item.dart';
 import 'package:flutter_dmzj/models/search_hot_word.dart';
 import 'package:http/http.dart' as http;
 
-class NovelSearchBarDelegate extends SearchDelegate<String> {
+class NovelSearchBarDelegate extends SearchDelegate<String?> {
   NovelSearchBarDelegate(
       {String searchFieldLabel = "输入关键字搜索轻小说",
-      TextInputType keyboardType,
+      TextInputType? keyboardType,
       TextInputAction textInputAction = TextInputAction.search})
       : super(
             searchFieldLabel: searchFieldLabel,
@@ -64,10 +64,9 @@ class NovelSearchBarDelegate extends SearchDelegate<String> {
               );
             return ListView(
               children:
-                  snapshot.data.map((f) => createItem(context, f)).toList(),
+                  snapshot.data!.map((f) => createItem(context, f)).toList(),
             );
         }
-        return null; // unreachable
       },
     );
   }
@@ -107,8 +106,8 @@ class NovelSearchBarDelegate extends SearchDelegate<String> {
                     Padding(
                         padding: EdgeInsets.symmetric(horizontal: 8),
                         child: Wrap(
-                          children: snapshot.data
-                              .map((f) => createWorditem(context, f.name, f.id,
+                          children: snapshot.data!
+                              .map((f) => createWorditem(context, f.name!, f.id,
                                   type: 2))
                               .toList(),
                         ))
@@ -116,14 +115,13 @@ class NovelSearchBarDelegate extends SearchDelegate<String> {
                 ),
               );
           }
-          return null; // unreachable
         },
       );
     }
     return Container();
   }
 
-  Widget createWorditem(BuildContext context, String title, int id,
+  Widget createWorditem(BuildContext context, String title, int? id,
       {int type = 2}) {
     return Padding(
       padding: EdgeInsets.all(4),
@@ -164,7 +162,7 @@ class NovelSearchBarDelegate extends SearchDelegate<String> {
                   borderRadius: BorderRadius.circular(4),
                   child: Container(
                     width: 80,
-                    child: Utils.createCacheImage(item.cover, 270, 360),
+                    child: Utils.createCacheImage(item.cover!, 270, 360),
                   )),
               SizedBox(
                 width: 12,
@@ -174,7 +172,7 @@ class NovelSearchBarDelegate extends SearchDelegate<String> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     Text(
-                      item.title,
+                      item.title!,
                       maxLines: 1,
                     ),
                     SizedBox(
@@ -200,7 +198,7 @@ class NovelSearchBarDelegate extends SearchDelegate<String> {
                       height: 2,
                     ),
                     Text(
-                      item.types,
+                      item.types!,
                       style: TextStyle(color: Colors.grey, fontSize: 14),
                       overflow: TextOverflow.ellipsis,
                       maxLines: 2,
@@ -221,9 +219,7 @@ class NovelSearchBarDelegate extends SearchDelegate<String> {
       List ls = jsonDecode(response.body);
       List<NovelSearchResultItem> detail =
           ls.map((i) => NovelSearchResultItem.fromJson(i)).toList();
-      if (detail != null) {
-        return detail;
-      }
+      return detail;
     } catch (e) {
       print(e);
     }
@@ -236,9 +232,7 @@ class NovelSearchBarDelegate extends SearchDelegate<String> {
       List ls = jsonDecode(response.body);
       List<SearchHotWord> detail =
           ls.map((i) => SearchHotWord.fromJson(i)).toList();
-      if (detail != null) {
-        return detail;
-      }
+      return detail;
     } catch (e) {
       print(e);
     }

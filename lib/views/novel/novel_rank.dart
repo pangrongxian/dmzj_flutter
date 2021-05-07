@@ -14,7 +14,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
 
 class NovelRankPage extends StatefulWidget {
-  NovelRankPage({Key key}) : super(key: key);
+  NovelRankPage({Key? key}) : super(key: key);
 
   @override
   _NovelRankPageState createState() => _NovelRankPageState();
@@ -147,7 +147,7 @@ class _NovelRankPageState extends State<NovelRankPage>
                   borderRadius: BorderRadius.circular(4),
                   child: Container(
                     width: 80,
-                    child: Utils.createCacheImage(item.cover, 270, 360),
+                    child: Utils.createCacheImage(item.cover!, 270, 360),
                   )),
               SizedBox(
                 width: 12,
@@ -157,7 +157,7 @@ class _NovelRankPageState extends State<NovelRankPage>
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     Text(
-                      item.name,
+                      item.name!,
                       maxLines: 1,
                     ),
                     SizedBox(
@@ -190,7 +190,7 @@ class _NovelRankPageState extends State<NovelRankPage>
                     Text(
                         "更新于" +
                             TimelineUtil.format(
-                              item.last_update_time * 1000,
+                              item.last_update_time! * 1000,
                               locale: 'zh',
                             ),
                         style: TextStyle(color: Colors.grey, fontSize: 14)),

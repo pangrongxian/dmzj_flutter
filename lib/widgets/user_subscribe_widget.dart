@@ -5,7 +5,7 @@ import 'package:flutter_dmzj/models/user/user_subscribe_item.dart';
 class UserSubscribeWidget extends StatefulWidget {
   final List<SubscribeItem> list;
   final int type;
-  UserSubscribeWidget(this.list, {this.type = 0, Key key}) : super(key: key);
+  UserSubscribeWidget(this.list, {this.type = 0, Key? key}) : super(key: key);
 
   @override
   _UserSubscribeWidgetState createState() => _UserSubscribeWidgetState();
@@ -38,10 +38,10 @@ class _UserSubscribeWidgetState extends State<UserSubscribeWidget> {
                 context,
                 widget.list[i].id,
                 widget.type + 1,
-                widget.list[i].sub_img,
-                widget.list[i].name,
-                '更新:' + widget.list[i].sub_update,
-                widget.list[i].status),
+                widget.list[i].sub_img!,
+                widget.list[i].name!,
+                '更新:' + widget.list[i].sub_update!,
+                widget.list[i].status!),
           )
         : Center(
             child: Container(
@@ -54,7 +54,7 @@ class _UserSubscribeWidgetState extends State<UserSubscribeWidget> {
           );
   }
 
-  Widget _getComicItemBuilder(BuildContext context, int id, int type,
+  Widget _getComicItemBuilder(BuildContext context, int? id, int type,
       String pic, String title, String lastUpdate, String view) {
     return Card(
       child: InkWell(

@@ -9,10 +9,10 @@ final String comicHistoryColumnPage = 'page';
 final String comicHistoryMode = 'mode';
 
 class ComicHistory {
-  int comic_id;
-  int chapter_id;
-  double page;
-  int mode;
+  int? comic_id;
+  int? chapter_id;
+  double? page;
+  int? mode;
   
   Map<String, dynamic> toMap() {
     var map = <String, dynamic>{
@@ -35,7 +35,7 @@ class ComicHistory {
 }
 
  class ComicHistoryProvider {
-  static Database db;
+  static late Database db;
 
 
   static Future<ComicHistory> insert(ComicHistory item) async {
@@ -44,14 +44,14 @@ class ComicHistory {
     return item;
   }
 
-  static Future<ComicHistory> getItem(int id) async {
+  static Future<ComicHistory?> getItem(int? id) async {
     
     List<Map> maps = await db.query(comicHistoryTable,
         columns: [comicHistoryColumnComicID, comicHistoryColumnChapterID, comicHistoryColumnPage,comicHistoryMode],
         where: '$comicHistoryColumnComicID = ?',
         whereArgs: [id]);
     if (maps.length > 0) {
-      return ComicHistory.fromMap(maps.first);
+      return ComicHistory.fromMap(maps.first as Map<String, dynamic>);
     }
     return null;
   }

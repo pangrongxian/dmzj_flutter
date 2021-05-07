@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:photo_view/photo_view.dart';
 
 class ImageView extends StatefulWidget {
-  ImageView({Key key}) : super(key: key);
+  ImageView({Key? key}) : super(key: key);
 
   _ImageViewState createState() => _ImageViewState();
 }

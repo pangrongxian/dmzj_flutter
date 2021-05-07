@@ -4,16 +4,16 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 class WebViewPage extends StatefulWidget {
-  final String url;
-  WebViewPage(this.url, {Key key}) : super(key: key);
+  final String? url;
+  WebViewPage(this.url, {Key? key}) : super(key: key);
 
   @override
   _WebViewPageState createState() => _WebViewPageState();
 }
 
 class _WebViewPageState extends State<WebViewPage> {
-  WebViewController _controller;
-  String _title = "网页加载中...";
+  late WebViewController _controller;
+  String? _title = "网页加载中...";
 
   @override
   void setState(fn) {
@@ -26,7 +26,7 @@ class _WebViewPageState extends State<WebViewPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(_title),
+        title: Text(_title!),
         actions: <Widget>[
           IconButton(
               icon: Icon(Icons.share),
@@ -35,10 +35,14 @@ class _WebViewPageState extends State<WebViewPage> {
                     "${await _controller.getTitle()}\r\n${await _controller.currentUrl()}");
               }),
           IconButton(
-              icon: Icon(Icons.open_in_browser),
-              onPressed: () async {
-                launch(await _controller.currentUrl());
-              })
+            icon: Icon(Icons.open_in_browser),
+            onPressed: () async {
+              var url = await _controller.currentUrl();
+              if (url != null) {
+                launch(url);
+              }
+            },
+          )
         ],
       ),
       body: WebView(

@@ -23,8 +23,8 @@ class AppTheme with ChangeNotifier {
     "朴素灰": Colors.blueGrey
   };
 
-  ThemeMode _themeMode;
-  String _themeModeName;
+  ThemeMode? _themeMode;
+  String? _themeModeName;
   get themeMode => _themeMode;
   get themeModeName => _themeModeName;
   void changeThemeMode(int index) {
@@ -55,7 +55,7 @@ class AppTheme with ChangeNotifier {
         title: new Text(
           item,
         ),
-        onChanged: (value) {
+        onChanged: (dynamic value) {
           changeThemeMode(AppTheme.themeModes.keys.toList().indexOf(item));
           Navigator.of(context).pop();
         },
@@ -64,8 +64,8 @@ class AppTheme with ChangeNotifier {
     return widgets;
   }
 
-  Color _themeColor;
-  String _themeColorName;
+  Color? _themeColor;
+  String? _themeColorName;
   get themeColor => _themeColor;
   get themeColorName => _themeColorName;
   void changeThemeColor(int index) {
@@ -97,7 +97,7 @@ class AppTheme with ChangeNotifier {
           item,
           style: TextStyle(color: AppTheme.themeColors[item]),
         ),
-        onChanged: (value) {
+        onChanged: (dynamic value) {
           changeThemeColor(AppTheme.themeColors.keys.toList().indexOf(item));
           Navigator.of(context).pop();
         },

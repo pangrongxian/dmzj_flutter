@@ -51,7 +51,7 @@ class CommentHelper {
       String originCommentId = "0",
       String toUid = "0"}) async {
     try {
-      if (!ConfigHelper.getUserIsLogined() ?? false) {
+      if (!ConfigHelper.getUserIsLogined()) {
         //TODO 跳转登录
         return CommnetResult(false, "没有登录");
       }

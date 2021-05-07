@@ -14,7 +14,7 @@ import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
 
 class NovelRecommend extends StatefulWidget {
-  NovelRecommend({Key key}) : super(key: key);
+  NovelRecommend({Key? key}) : super(key: key);
 
   NovelRecommendState createState() => NovelRecommendState();
 }
@@ -31,7 +31,7 @@ class NovelRecommendState extends State<NovelRecommend>
   List<ComicHomeComicItem> _hot = [];
 
   //如果是IOS，且在审核期间，隐藏Banner
-  bool _hideBanner = false;
+  bool? _hideBanner = false;
 
   @override
   void initState() {
@@ -84,7 +84,7 @@ class NovelRecommendState extends State<NovelRecommend>
                 : CrossAxisAlignment.center,
             children: <Widget>[
               //bannera
-              (Platform.isIOS && _hideBanner)
+              (Platform.isIOS && _hideBanner!)
                   ? Container()
                   : AppBanner(
                       items: _banners
@@ -140,8 +140,8 @@ class NovelRecommendState extends State<NovelRecommend>
   }
 
   Widget _getItem(String title, List items,
-      {Icon icon,
-      Function ontap,
+      {Icon? icon,
+      Function? ontap,
       bool needSubTitle = true,
       int count = 3,
       double ratio = 3 / 5.2,
@@ -187,7 +187,7 @@ class NovelRecommendState extends State<NovelRecommend>
     );
   }
 
-  Widget _getTitle(String title, {Icon icon, Function ontap}) {
+  Widget _getTitle(String title, {Icon? icon, Function? ontap}) {
     return Row(
       children: <Widget>[
         Expanded(
@@ -204,7 +204,7 @@ class NovelRecommendState extends State<NovelRecommend>
               color: Theme.of(context).cardColor,
               child: InkWell(
                 borderRadius: BorderRadius.circular(12),
-                onTap: ontap,
+                onTap: ontap as void Function()?,
                 child: Padding(
                     padding: EdgeInsets.all(4),
                     child: icon ??
@@ -218,9 +218,9 @@ class NovelRecommendState extends State<NovelRecommend>
     );
   }
 
-  Widget _getComicItemBuilder(int id, int type, String pic, String title,
-      {String author = "",
-      String url = "",
+  Widget _getComicItemBuilder(int? id, int? type, String pic, String title,
+      {String? author = "",
+      String? url = "",
       double width = 270,
       double height = 360}) {
     return RawMaterialButton(
@@ -270,7 +270,7 @@ class NovelRecommendState extends State<NovelRecommend>
                 ? Container()
                 : Flexible(
                     child: Text(
-                    author,
+                    author!,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                     style: TextStyle(color: Colors.grey, fontSize: 12.0),
@@ -363,7 +363,7 @@ class NovelRecommendState extends State<NovelRecommend>
         return;
       }
       var response = await http.get(Uri.parse(Api.comicMySub(
-          Provider.of<AppUserInfo>(context, listen: false).loginInfo.uid)));
+          Provider.of<AppUserInfo>(context, listen: false).loginInfo!.uid)));
       var jsonMap = jsonDecode(response.body);
 
       List items = jsonMap["data"]["data"];

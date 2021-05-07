@@ -12,7 +12,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
 
 class ComicSpecialPage extends StatefulWidget {
-  ComicSpecialPage({Key key}) : super(key: key);
+  ComicSpecialPage({Key? key}) : super(key: key);
 
   @override
   _ComicSpecialPageState createState() => _ComicSpecialPageState();
@@ -78,16 +78,16 @@ class _ComicSpecialPageState extends State<ComicSpecialPage>
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.stretch,
                           children: <Widget>[
-                            Utils.createCacheImage(f.small_cover, 710, 280),
+                            Utils.createCacheImage(f.small_cover!, 710, 280),
                             SizedBox(height: 4),
                             Flexible(
                               child: Row(
                                 children: <Widget>[
-                                  Expanded(child: Text(f.title)),
+                                  Expanded(child: Text(f.title!)),
                                   Text(
                                     DateUtil.formatDate(
                                         DateTime.fromMillisecondsSinceEpoch(
-                                            f.create_time * 1000),
+                                            f.create_time! * 1000),
                                         format: "yyyy-MM-dd"),
                                     style: TextStyle(
                                         color: Colors.grey, fontSize: 12),

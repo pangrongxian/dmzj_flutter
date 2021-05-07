@@ -18,7 +18,7 @@ class Api {
   }
 
   /// 新闻数据
-  static String newsStat(int id) {
+  static String newsStat(int? id) {
     return "$apiHost/v3/article/total/$id.json?${defaultParameter()}";
   }
 
@@ -28,7 +28,7 @@ class Api {
   }
 
   /// 点赞新闻
-  static String addNewsLike(int id) {
+  static String addNewsLike(int? id) {
     return "$apiHost/article/mood/$id?${defaultParameter()}";
   }
 
@@ -44,7 +44,7 @@ class Api {
 
   //用户相关
   static String get loginV2 => "https://user.dmzj1.com/loginV2/m_confirm";
-  static String userProfile(String uid, String token) {
+  static String userProfile(String? uid, String? token) {
     return "$apiHost/UCenter/comicsv2/$uid.json?dmzj_token=$token&${defaultParameter()}";
   }
 
@@ -65,7 +65,7 @@ class Api {
   static String get comicHot =>
       "$apiHost/recommend/batchUpdate?category_id=54&${defaultParameter()}";
   //首页我的订阅
-  static String comicMySub(String uid) {
+  static String comicMySub(String? uid) {
     return "$apiHost/recommend/batchUpdate?uid=$uid&category_id=49&${defaultParameter()}";
   }
 
@@ -114,7 +114,7 @@ class Api {
 
   /// 轻小说排行榜详情
   static String novelRank(
-      {String tagId = "0", String sort = "0", int page = 0}) {
+      {String? tagId = "0", String? sort = "0", int page = 0}) {
     return "$apiHost/novel/rank/$sort/$tagId/$page.json?${defaultParameter()}";
   }
 
@@ -173,12 +173,12 @@ class Api {
   }
 
   /// 查询是否订阅漫画
-  static String comicCheckSubscribe(int comicId, String uid) {
+  static String comicCheckSubscribe(int comicId, String? uid) {
     return "$apiHost/subscribe/0/$uid/$comicId?${defaultParameter()}";
   }
 
   /// 查询是否订阅小说
-  static String novelCheckSubscribe(int novelId, String uid) {
+  static String novelCheckSubscribe(int novelId, String? uid) {
     return "$apiHost/subscribe/1/$uid/$novelId?${defaultParameter()}";
   }
 
@@ -192,7 +192,7 @@ class Api {
       "$apiHost/novel/filter.json?${defaultParameter()}";
 
   //漫画类目详情
-  static String comicCategoryDetail(List<int> ids,
+  static String comicCategoryDetail(List<int?> ids,
       {int sort = 0, int page = 0}) {
     var path = "classify/";
     for (var item in ids) {
@@ -210,7 +210,7 @@ class Api {
 
   /// 轻小说类目详情
   static String novelCategoryDetail(
-      {int cateId = 0, int status = 0, int sort = 0, int page = 0}) {
+      {int? cateId = 0, int? status = 0, int sort = 0, int page = 0}) {
     return "$apiHost/novel/$cateId/$status/$sort/$page.json?${defaultParameter()}";
   }
 
@@ -223,7 +223,7 @@ class Api {
   static String get addComicSubscribe => "http://v3api.dmzj1.com/subscribe/add";
 
   //取消漫画订阅
-  static String cancelComicSubscribe(int comicId, String uid) {
+  static String cancelComicSubscribe(int? comicId, String uid) {
     return "$apiHost/subscribe/cancel?obj_ids=$comicId&uid=$uid&type=mh";
   }
 
@@ -236,24 +236,24 @@ class Api {
   }
 
   //用户订阅,type 0=漫画,1=轻小说,sub_type 全部=1，未读=2，已读=3，完结=4
-  static String userSubscribe(int type, int subType, String uid, String token,
+  static String userSubscribe(int type, int subType, String? uid, String? token,
       {int page = 0, String letter = "all"}) {
     return "$apiHost/UCenter/subscribe?uid=$uid&sub_type=$subType&letter=$letter&dmzj_token=$token&page=$page&type=$type&${defaultParameter()}";
   }
 
   /// 用户漫画记录
-  static String userComicHistory(String uid, {int page = 0}) {
+  static String userComicHistory(String? uid, {int page = 0}) {
     return "https://interface.dmzj1.com/api/getReInfo/comic/$uid/$page?${defaultParameter()}";
   }
 
   /// 用户小说记录
-  static String userNovelHistory(String uid, {int page = 0}) {
+  static String userNovelHistory(String? uid, {int page = 0}) {
     return "https://interface.dmzj1.com/api/getReInfo/novel/$uid/$page?${defaultParameter()}";
   }
 
   /// 上传观看记录
   static String addUserComicHistory(int comicId, int chapterId, String uid,
-      {int page = 1}) {
+      {int? page = 1}) {
     Map map = {
       comicId.toString(): chapterId.toString(),
       "comicId": comicId.toString(),
@@ -267,7 +267,7 @@ class Api {
 
   /// 上传小说观看记录
   static String addUserNovelHistory(
-      int novelId, int volumeId, int chapterId, String uid,
+      int novelId, int? volumeId, int? chapterId, String uid,
       {int page = 1}) {
     Map map = {
       novelId.toString(): chapterId.toString(),
@@ -283,7 +283,7 @@ class Api {
   }
 
   /// 评论
-  static String commentV2(int id, int type,
+  static String commentV2(int? id, int type,
       {int page = 1, bool ishot = false}) {
     return "https://interface.dmzj1.com/api/NewComment2/list?type=$type&obj_id=$id&hot=${ishot ? 1 : 0}&page_index=$page&_=${DateTime.now().millisecondsSinceEpoch}";
   }
@@ -304,7 +304,7 @@ class Api {
   }
 
   /// 评论数量
-  static String commentCountV2(int id, int type) {
+  static String commentCountV2(int? id, int type) {
     return "https://interface.dmzj1.com/api/NewComment2/total?type=$type&obj_id=$id&countType=1&authorId=&_=${DateTime.now().millisecondsSinceEpoch}";
   }
 

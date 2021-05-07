@@ -13,7 +13,7 @@ import 'package:flutter_easyrefresh/material_header.dart';
 import 'package:http/http.dart' as http;
 
 class UserHistoryPage extends StatefulWidget {
-  UserHistoryPage({Key key}) : super(key: key);
+  UserHistoryPage({Key? key}) : super(key: key);
 
   @override
   _UserHistoryPageState createState() => _UserHistoryPageState();
@@ -46,7 +46,7 @@ class _UserHistoryPageState extends State<UserHistoryPage> {
 
 class HistoryTabItem extends StatefulWidget {
   final int type;
-  HistoryTabItem(this.type, {Key key}) : super(key: key);
+  HistoryTabItem(this.type, {Key? key}) : super(key: key);
 
   @override
   _HistoryTabItemState createState() => _HistoryTabItemState();
@@ -137,7 +137,7 @@ class _HistoryTabItemState extends State<HistoryTabItem>
                   borderRadius: BorderRadius.circular(4),
                   child: Container(
                     width: 80,
-                    child: Utils.createCacheImage(item.cover, 270, 360),
+                    child: Utils.createCacheImage(item.cover!, 270, 360),
                   )),
               SizedBox(
                 width: 12,
@@ -147,7 +147,7 @@ class _HistoryTabItemState extends State<HistoryTabItem>
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     Text(
-                      item.comic_name,
+                      item.comic_name!,
                       maxLines: 1,
                     ),
                     SizedBox(
@@ -178,7 +178,7 @@ class _HistoryTabItemState extends State<HistoryTabItem>
     print(item.novel_name);
     return InkWell(
       onTap: () {
-        Utils.openPage(context, int.parse(item.lnovel_id), 2);
+        Utils.openPage(context, int.parse(item.lnovel_id!), 2);
       },
       child: Container(
         padding: EdgeInsets.fromLTRB(8, 8, 8, 0),
@@ -194,7 +194,7 @@ class _HistoryTabItemState extends State<HistoryTabItem>
                   borderRadius: BorderRadius.circular(4),
                   child: Container(
                     width: 80,
-                    child: Utils.createCacheImage(item.cover, 270, 360),
+                    child: Utils.createCacheImage(item.cover!, 270, 360),
                   )),
               SizedBox(
                 width: 12,
@@ -204,7 +204,7 @@ class _HistoryTabItemState extends State<HistoryTabItem>
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     Text(
-                      item.novel_name,
+                      item.novel_name!,
                       maxLines: 1,
                     ),
                     SizedBox(
@@ -212,7 +212,7 @@ class _HistoryTabItemState extends State<HistoryTabItem>
                     ),
                     Text(
                         "看到" +
-                            item.volume_name +
+                            item.volume_name! +
                             " · " +
                             (item.chapter_name ?? ""),
                         style: TextStyle(color: Colors.grey, fontSize: 14)),
@@ -222,7 +222,7 @@ class _HistoryTabItemState extends State<HistoryTabItem>
                     Text(
                         DateUtil.formatDate(
                             DateTime.fromMillisecondsSinceEpoch(
-                                item.viewing_time * 1000),
+                                item.viewing_time! * 1000),
                             format: "yyyy-MM-dd HH:mm:ss"),
                         style: TextStyle(color: Colors.grey, fontSize: 14)),
                   ],
@@ -249,14 +249,14 @@ class _HistoryTabItemState extends State<HistoryTabItem>
       });
 
       var response = await http
-          .get(Uri.parse(Api.userNovelHistory(ConfigHelper.getUserInfo().uid)));
+          .get(Uri.parse(Api.userNovelHistory(ConfigHelper.getUserInfo()!.uid)));
       List jsonMap = jsonDecode(response.body);
       List<NovelHistoryItem> detail =
           jsonMap.map((i) => NovelHistoryItem.fromJson(i)).toList();
       if (detail != null) {
         for (var item in detail) {
           ConfigHelper.setNovelHistory(
-              int.parse(item.lnovel_id), item.chapter_id);
+              int.parse(item.lnovel_id!), item.chapter_id!);
         }
         setState(() {
           _novelList = detail;
@@ -281,7 +281,7 @@ class _HistoryTabItemState extends State<HistoryTabItem>
       });
 
       var response = await http
-          .get(Uri.parse(Api.userComicHistory(ConfigHelper.getUserInfo().uid)));
+          .get(Uri.parse(Api.userComicHistory(ConfigHelper.getUserInfo()!.uid)));
       List jsonMap = jsonDecode(response.body);
       List<ComicHistoryItem> detail =
           jsonMap.map((i) => ComicHistoryItem.fromJson(i)).toList();

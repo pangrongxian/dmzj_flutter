@@ -115,8 +115,6 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage>
     with SingleTickerProviderStateMixin {
-  static NewsHomePage newsPage;
-  static NovelHomePage novelPage;
   List<Widget> pages = [
     ComicHomePage(),
     Container(),
@@ -137,11 +135,11 @@ class _MyHomePageState extends State<MyHomePage>
       return;
     }
     if (await Utils.showAlertDialogAsync(
-        context, Text('有新版本可以更新'), Text(newVer.message))) {
+        context, Text('有新版本可以更新'), Text(newVer.message!))) {
       if (Platform.isAndroid) {
-        launch(newVer.android_url);
+        launch(newVer.android_url!);
       } else {
-        launch(newVer.ios_url);
+        launch(newVer.ios_url!);
       }
     }
   }
@@ -154,13 +152,11 @@ class _MyHomePageState extends State<MyHomePage>
         currentIndex: _index,
         onTap: (index) {
           setState(() {
-            if (index == 1 && newsPage == null) {
-              newsPage = NewsHomePage();
-              pages[1] = newsPage;
+            if (index == 1 && pages[1] is Container) {
+              pages[1] = NewsHomePage();
             }
-            if (index == 2 && novelPage == null) {
-              novelPage = NovelHomePage();
-              pages[2] = novelPage;
+            if (index == 2 && pages[2] is Container) {
+              pages[2] = NovelHomePage();
             }
             _index = index;
           });

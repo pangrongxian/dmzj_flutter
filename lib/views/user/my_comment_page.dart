@@ -4,7 +4,7 @@ import 'package:flutter_dmzj/widgets/user_comment_widget.dart';
 import 'package:provider/provider.dart';
 
 class MyCommentPage extends StatefulWidget {
-  MyCommentPage({Key key}) : super(key: key);
+  MyCommentPage({Key? key}) : super(key: key);
 
   @override
   _MyCommentPageState createState() => _MyCommentPageState();
@@ -26,15 +26,15 @@ class _MyCommentPageState extends State<MyCommentPage> {
         ),
         body: TabBarView(children: [
           UserCommentWidget(
-            int.parse(Provider.of<AppUserInfo>(context).loginInfo.uid ?? 0),
+            int.parse(Provider.of<AppUserInfo>(context).loginInfo!.uid ?? 0 as String),
             type: 0,
           ),
           UserCommentWidget(
-            int.parse(Provider.of<AppUserInfo>(context).loginInfo.uid ?? 0),
+            int.parse(Provider.of<AppUserInfo>(context).loginInfo!.uid ?? 0 as String),
             type: 1,
           ),
           UserCommentWidget(
-            int.parse(Provider.of<AppUserInfo>(context).loginInfo.uid ?? 0),
+            int.parse(Provider.of<AppUserInfo>(context).loginInfo!.uid ?? 0 as String),
             type: 2,
           )
         ]),

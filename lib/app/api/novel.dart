@@ -7,8 +7,8 @@ import 'package:flutter_dmzj/protobuf/novel/novel_detail_response.pb.dart';
 import 'api_util.dart';
 
 class NovelApi {
-  static NovelApi _novelApi;
-  static NovelApi get instance {
+  static NovelApi? _novelApi;
+  static NovelApi? get instance {
     if (_novelApi == null) {
       _novelApi = NovelApi();
     }
@@ -18,7 +18,7 @@ class NovelApi {
   /// 轻小说详情
   Future<NovelDetailInfoResponse> getDetail(int novelId) async {
     var path = "${ApiUtil.BASE_URL_V4}/novel/detail/$novelId";
-    var result = await HttpUtil.instance.httpGet(
+    var result = await HttpUtil.instance!.httpGet(
       path,
       queryParameters: ApiUtil.defaultParameter(needLogined: true),
     );
@@ -34,7 +34,7 @@ class NovelApi {
   /// 小说章节
   Future<List<NovelChapterVolumeResponse>> getChapter(int novelId) async {
     var path = "${ApiUtil.BASE_URL_V4}/novel/chapter/$novelId";
-    var result = await HttpUtil.instance.httpGet(
+    var result = await HttpUtil.instance!.httpGet(
       path,
       queryParameters: ApiUtil.defaultParameter(needLogined: true),
     );
@@ -48,7 +48,7 @@ class NovelApi {
   }
 
   /// 小说正文
-  String getNovelContentUrl(int volumeId, int chapterId) {
+  String getNovelContentUrl(int? volumeId, int? chapterId) {
     var path = "/lnovel/${volumeId}_$chapterId.txt";
     var ts = (DateTime.now().millisecondsSinceEpoch / 1000).toStringAsFixed(0);
     var key =

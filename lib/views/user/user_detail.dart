@@ -16,7 +16,7 @@ import 'package:http/http.dart' as http;
 class UserDetailPage extends StatefulWidget {
   final int userId;
   final int initPage;
-  UserDetailPage(this.userId, {Key key, this.initPage = 0}) : super(key: key);
+  UserDetailPage(this.userId, {Key? key, this.initPage = 0}) : super(key: key);
 
   @override
   _UserDetailPageState createState() => _UserDetailPageState();
@@ -51,11 +51,11 @@ class _UserDetailPageState extends State<UserDetailPage> {
                       width: 36,
                       child: CircleAvatar(
                         backgroundImage:
-                            Utils.createCachedImageProvider(_profile.cover),
+                            Utils.createCachedImageProvider(_profile!.cover!),
                       ),
                     ),
                     SizedBox(width: 12),
-                    Text(_profile.nickname),
+                    Text(_profile!.nickname!),
                   ],
                 )
               : Container(),
@@ -92,7 +92,7 @@ class _UserDetailPageState extends State<UserDetailPage> {
     );
   }
 
-  UserProfileModel _profile;
+  UserProfileModel? _profile;
   Future loadProfile() async {
     try {
       var result = await http
@@ -113,7 +113,7 @@ class _UserDetailPageState extends State<UserDetailPage> {
 class SubscribeTabView extends StatefulWidget {
   final int type;
   final int uid;
-  SubscribeTabView({Key key, this.uid = 0, this.type = 0}) : super(key: key);
+  SubscribeTabView({Key? key, this.uid = 0, this.type = 0}) : super(key: key);
 
   @override
   _SubscribeTabViewState createState() => _SubscribeTabViewState();

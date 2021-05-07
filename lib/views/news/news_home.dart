@@ -23,7 +23,7 @@ class _NewsHomePageState extends State<NewsHomePage>
     with TickerProviderStateMixin {
   List<NewsTagItemModel> _tabItems = [];
 
-  TabController _tabController;
+  TabController? _tabController;
 
   @override
   void initState() {
@@ -60,7 +60,7 @@ class _NewsHomePageState extends State<NewsHomePage>
                 title: TabBar(
                   controller: _tabController,
                   tabs: _tabItems
-                      .map((x) => Tab(child: Text(x.tag_name)))
+                      .map((x) => Tab(child: Text(x.tag_name!)))
                       .toList(),
                   isScrollable: true,
                   indicatorSize: TabBarIndicatorSize.label,
@@ -83,9 +83,9 @@ class _NewsHomePageState extends State<NewsHomePage>
 }
 
 class NewsNewTabView extends StatefulWidget {
-  final int id;
+  final int? id;
   final bool hasBanner;
-  NewsNewTabView(this.id, this.hasBanner, {Key key}) : super(key: key);
+  NewsNewTabView(this.id, this.hasBanner, {Key? key}) : super(key: key);
   @override
   State<StatefulWidget> createState() {
     return NewsNewTabViewState();
@@ -95,7 +95,7 @@ class NewsNewTabView extends StatefulWidget {
 class NewsNewTabViewState extends State<NewsNewTabView>
     with AutomaticKeepAliveClientMixin {
   ScrollController scrollController = ScrollController();
-  List<NewsBannerItemModel> _banners = [];
+  List<NewsBannerItemModel>? _banners = [];
   List<NewsListItemResponse> _news = [];
   int _page = 1;
   bool _loading = false;
@@ -104,7 +104,7 @@ class NewsNewTabViewState extends State<NewsNewTabView>
   bool get wantKeepAlive => true;
 
   //如果是IOS，且在审核期间，隐藏Banner
-  bool _hideBanner = false;
+  bool? _hideBanner = false;
 
   @override
   void initState() {
@@ -134,10 +134,10 @@ class NewsNewTabViewState extends State<NewsNewTabView>
               controller: scrollController,
               child: Column(
                 children: <Widget>[
-                  (Platform.isIOS && _hideBanner)
+                  (Platform.isIOS && _hideBanner!)
                       ? Container()
                       : AppBanner(
-                          items: _banners
+                          items: _banners!
                               .map<Widget>((i) => BannerImageItem(
                                     pic: i.pic_url,
                                     title: i.title,
@@ -289,7 +289,7 @@ class NewsNewTabViewState extends State<NewsNewTabView>
       if (_page == 1 && widget.hasBanner) {
         await loadBanner();
       }
-      var data = await NewsApi.instance.getNewsList(widget.id, page: _page);
+      var data = await NewsApi.instance!.getNewsList(widget.id, page: _page);
       // var response =
       //     await http.get(Uri.parse(Api.newsList(widget.id, page: _page)));
       // List jsonMap = jsonDecode(response.body);

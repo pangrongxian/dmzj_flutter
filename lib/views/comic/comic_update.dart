@@ -12,7 +12,7 @@ import 'package:flutter_easyrefresh/material_header.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 class ComicUpdatePage extends StatefulWidget {
-  ComicUpdatePage({Key key}) : super(key: key);
+  ComicUpdatePage({Key? key}) : super(key: key);
 
   @override
   _ComicUpdatePageState createState() => _ComicUpdatePageState();
@@ -40,7 +40,7 @@ class _ComicUpdatePageState extends State<ComicUpdatePage>
     }
   }
 
-  String _mode = "100";
+  String? _mode = "100";
   @override
   Widget build(BuildContext context) {
     super.build(context);
@@ -70,7 +70,7 @@ class _ComicUpdatePageState extends State<ComicUpdatePage>
                           style: TextStyle(
                               color: _types[f] == _mode
                                   ? Theme.of(context).accentColor
-                                  : Theme.of(context).textTheme.button.color),
+                                  : Theme.of(context).textTheme.button!.color),
                         ),
                         onPressed: () async {
                           _page = 1;
@@ -206,7 +206,7 @@ class _ComicUpdatePageState extends State<ComicUpdatePage>
       setState(() {
         _loading = true;
       });
-      var detail = await ComicApi.instance.getUpdateList(_mode, page: _page);
+      var detail = await ComicApi.instance!.getUpdateList(_mode, page: _page);
       //var response =
       //    await http.get(Uri.parse(Api.comicUpdate(_mode, page: _page)));
       // List jsonMap = jsonDecode(response.body);

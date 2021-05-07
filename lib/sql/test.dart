@@ -7,9 +7,9 @@ final String testColumnDesc = 'Desc';
 
 
 class TestSqlItem {
-	String id;
-String name;
-String desc;
+	String? id;
+String? name;
+String? desc;
 
 
   Map<String, dynamic> toMap() {
@@ -33,13 +33,13 @@ desc = map[testColumnDesc];
 }
 
 class TestProvider {
- static Database db;
+ static late Database db;
  static Future<TestSqlItem> insert(TestSqlItem item) async {
     await db.insert(testTableName, item.toMap());
     return item;
   }
 
-  static Future<TestSqlItem> getItem(String id) async {
+  static Future<TestSqlItem?> getItem(String id) async {
     
     List<Map> maps = await db.query(testTableName,
         columns: [testColumnId,
@@ -50,7 +50,7 @@ testColumnDesc,
         whereArgs: [id]);
 
     if (maps.length > 0) {
-      return TestSqlItem.fromMap(maps.first);
+      return TestSqlItem.fromMap(maps.first as Map<String, dynamic>);
     }
     return null;
   }

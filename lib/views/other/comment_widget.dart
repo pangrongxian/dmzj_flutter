@@ -18,9 +18,9 @@ class CommentWidget extends StatefulWidget {
   /// Type 4=漫画，6=新闻，2=专题，1=轻小说
   final int type;
 
-  final int objId;
+  final int? objId;
 
-  CommentWidget(this.type, this.objId, {Key key}) : super(key: key);
+  CommentWidget(this.type, this.objId, {Key? key}) : super(key: key);
 
   @override
   _CommentWidgetState createState() => _CommentWidgetState();
@@ -35,7 +35,7 @@ class _CommentWidgetState extends State<CommentWidget>
 
   int _page = 1;
 
-  int _commentCount = 0;
+  int? _commentCount = 0;
 
   List<CommentItem> _list = [];
 
@@ -162,7 +162,7 @@ class _CommentWidgetState extends State<CommentWidget>
   }
 
   Widget createItem(CommentItem item) {
-    var text = _htmlUnescape.convert(item.content);
+    var text = _htmlUnescape.convert(item.content!);
     return InkWell(
       onTap: () {
         showModalBottomSheet(
@@ -173,7 +173,7 @@ class _CommentWidgetState extends State<CommentWidget>
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   ListTile(
-                    title: Text(item.nickname),
+                    title: Text(item.nickname!),
                     leading: Icon(Icons.account_circle),
                     onTap: () {
                       Utils.openPage(context, item.sender_uid, 12);
@@ -230,7 +230,7 @@ class _CommentWidgetState extends State<CommentWidget>
                 child: CircleAvatar(
                   radius: 24,
                   backgroundImage:
-                      Utils.createCachedImageProvider(item.avatar_url),
+                      Utils.createCachedImageProvider(item.avatar_url!),
                 ),
               ),
             ),
@@ -243,7 +243,7 @@ class _CommentWidgetState extends State<CommentWidget>
                   children: <Widget>[
                     Expanded(
                       child: Text(
-                        item.nickname,
+                        item.nickname!,
                         maxLines: 1,
                         style: TextStyle(color: Theme.of(context).accentColor),
                         overflow: TextOverflow.ellipsis,
@@ -260,29 +260,29 @@ class _CommentWidgetState extends State<CommentWidget>
                 ),
                 item.masterCommentNum != 0
                     ? item.expand
-                        ? createMasterCommentAll(item.masterComment)
+                        ? createMasterCommentAll(item.masterComment!)
                         : createMasterComment(item)
                     : Container(),
                 Text(
                   text,
                 ),
-                item.upload_images != null && item.upload_images.length != 0
+                item.upload_images != null && item.upload_images!.length != 0
                     ? Padding(
                         padding: EdgeInsets.only(top: 8),
                         child: Wrap(
                           children:
-                              item.upload_images.split(",").map<Widget>((f) {
+                              item.upload_images!.split(",").map<Widget>((f) {
                             var str = f.split(".").toList();
                             var fileImg = str[0];
                             var fileImgSuffix = str[1];
                             return InkWell(
                                 onTap: () => Utils.showImageViewDialog(context,
-                                    "https://images.dmzj.com/commentImg/${item.obj_id % 500}/$f"),
+                                    "https://images.dmzj.com/commentImg/${item.obj_id! % 500}/$f"),
                                 child: Container(
                                   padding: EdgeInsets.only(right: 8),
                                   width: 100,
                                   child: Utils.createCacheImage(
-                                      "https://images.dmzj.com/commentImg/${item.obj_id % 500}/${fileImg}_small.$fileImgSuffix",
+                                      "https://images.dmzj.com/commentImg/${item.obj_id! % 500}/${fileImg}_small.$fileImgSuffix",
                                       100,
                                       100),
                                 ));
@@ -299,7 +299,7 @@ class _CommentWidgetState extends State<CommentWidget>
                     Expanded(
                       child: Text(
                         TimelineUtil.format(
-                          item.create_time * 1000,
+                          item.create_time! * 1000,
                           locale: 'zh',
                         ),
                         style: TextStyle(color: Colors.grey, fontSize: 12),
@@ -339,7 +339,7 @@ class _CommentWidgetState extends State<CommentWidget>
   }
 
   Widget createMasterComment(CommentItem comment) {
-    var list = comment.masterComment;
+    var list = comment.masterComment!;
 
     List<Widget> items = [];
     if (list.length > 2) {
@@ -400,7 +400,7 @@ class _CommentWidgetState extends State<CommentWidget>
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     ListTile(
-                      title: Text(item.nickname),
+                      title: Text(item.nickname!),
                       leading: Icon(Icons.account_circle),
                       onTap: () {
                         Utils.openPage(context, item.sender_uid, 12);
@@ -433,33 +433,33 @@ class _CommentWidgetState extends State<CommentWidget>
                   WidgetSpan(
                     child: InkWell(
                       child: Text(
-                        item.nickname,
+                        item.nickname!,
                         style: TextStyle(color: Theme.of(context).accentColor),
                       ),
                     ),
                   ),
                   TextSpan(
-                      text: ": " + _htmlUnescape.convert(item.content),
+                      text: ": " + _htmlUnescape.convert(item.content!),
                       style: TextStyle(
-                          color: Theme.of(context).textTheme.bodyText1.color))
+                          color: Theme.of(context).textTheme.bodyText1!.color))
                 ]),
               ),
-              item.upload_images != null && item.upload_images.length != 0
+              item.upload_images != null && item.upload_images!.length != 0
                   ? Padding(
                       padding: EdgeInsets.only(top: 8),
                       child: Wrap(
                         children:
-                            item.upload_images.split(",").map<Widget>((f) {
+                            item.upload_images!.split(",").map<Widget>((f) {
                           var str = f.split(".").toList();
                           var fileImg = str[0];
                           var fileImgSuffix = str[1];
                           return InkWell(
                             onTap: () => Utils.showImageViewDialog(context,
-                                "https://images.dmzj.com/commentImg/${item.obj_id % 500}/$f"),
+                                "https://images.dmzj.com/commentImg/${item.obj_id! % 500}/$f"),
                             child: Container(
                               width: 100,
                               child: Utils.createCacheImage(
-                                  "https://images.dmzj.com/commentImg/${item.obj_id % 500}/${fileImg}_small.$fileImgSuffix",
+                                  "https://images.dmzj.com/commentImg/${item.obj_id! % 500}/${fileImg}_small.$fileImgSuffix",
                                   100,
                                   100),
                             ),
@@ -523,7 +523,7 @@ class _CommentWidgetState extends State<CommentWidget>
       var response = await http
           .get(Uri.parse(Api.commentCountV2(widget.objId, widget.type)));
       var jsonMap = jsonDecode(response.body);
-      int num = jsonMap["data"];
+      int? num = jsonMap["data"];
       setState(() {
         _commentCount = num;
       });

@@ -9,7 +9,7 @@ import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class SettingPage extends StatefulWidget {
-  SettingPage({Key key}) : super(key: key);
+  SettingPage({Key? key}) : super(key: key);
 
   @override
   _SettingPageState createState() => _SettingPageState();
@@ -19,7 +19,7 @@ class _SettingPageState extends State<SettingPage> {
   String _version = "";
   //String _cacheSize = "计算中";
 
-  PackageInfo _packageInfo;
+  late PackageInfo _packageInfo;
   @override
   void initState() {
     super.initState();
@@ -185,11 +185,11 @@ class _SettingPageState extends State<SettingPage> {
                   return;
                 }
                 if (await Utils.showAlertDialogAsync(
-                    context, Text('有新版本可以更新'), Text(newVer.message))) {
+                    context, Text('有新版本可以更新'), Text(newVer.message!))) {
                   if (Platform.isAndroid) {
-                    launch(newVer.android_url);
+                    launch(newVer.android_url!);
                   } else {
-                    launch(newVer.ios_url);
+                    launch(newVer.ios_url!);
                   }
                 }
               }, //Provider.of<AppThemeData>(context).changeThemeColor(3),

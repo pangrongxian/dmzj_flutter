@@ -11,7 +11,7 @@ import 'package:http/http.dart' as http;
 
 class ComicAuthorPage extends StatefulWidget {
   final int auhtoId;
-  ComicAuthorPage(this.auhtoId, {Key key}) : super(key: key);
+  ComicAuthorPage(this.auhtoId, {Key? key}) : super(key: key);
 
   @override
   _ComicAuthorPageState createState() => _ComicAuthorPageState();
@@ -28,7 +28,7 @@ class _ComicAuthorPageState extends State<ComicAuthorPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(_detail == null ? "作者" : _detail.nickname + "的作品"),
+        title: Text(_detail == null ? "作者" : _detail!.nickname! + "的作品"),
       ),
       body: EasyRefresh(
         enableControlFinishLoad: false,
@@ -36,14 +36,14 @@ class _ComicAuthorPageState extends State<ComicAuthorPage> {
         onRefresh: loadData,
         child: ListView(
           children: _detail != null
-              ? _detail.data.map<Widget>((f) => createItem(f)).toList()
+              ? _detail!.data!.map<Widget>((f) => createItem(f)).toList()
               : [],
         ),
       ),
     );
   }
 
-  ComicAuthor _detail;
+  ComicAuthor? _detail;
   Widget createItem(ComicAuthorItem item) {
     return InkWell(
       onTap: () {
@@ -57,7 +57,7 @@ class _ComicAuthorPageState extends State<ComicAuthorPage> {
           children: <Widget>[
             Container(
               height: 100,
-              child: Utils.createCacheImage(item.cover, 270, 360),
+              child: Utils.createCacheImage(item.cover!, 270, 360),
             ),
             SizedBox(
               width: 12,
@@ -67,13 +67,13 @@ class _ComicAuthorPageState extends State<ComicAuthorPage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   Text(
-                    item.name,
+                    item.name!,
                     maxLines: 1,
                   ),
                   SizedBox(
                     height: 4,
                   ),
-                  Text(item.status,
+                  Text(item.status!,
                       style: TextStyle(color: Colors.grey, fontSize: 14),
                       maxLines: 1),
                 ],

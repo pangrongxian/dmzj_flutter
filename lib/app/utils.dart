@@ -41,13 +41,14 @@ class Utils {
       BuildContext context, String content, String action, Function onPressed) {
     final snackBar = new SnackBar(
         content: new Text(content),
-        action: new SnackBarAction(label: action, onPressed: onPressed));
+        action: new SnackBarAction(
+            label: action, onPressed: onPressed as void Function()));
 
     Scaffold.of(context).showSnackBar(snackBar);
   }
 
   static void showSnackbar(BuildContext context, String content,
-      {Duration duration}) {
+      {required Duration duration}) {
     final snackBar = new SnackBar(
       content: new Text(content),
       duration: duration,
@@ -56,8 +57,8 @@ class Utils {
     Scaffold.of(context).showSnackBar(snackBar);
   }
 
-  static bool hideBanner = true;
-  static Future<VersionInfo> checkVersion() async {
+  static bool? hideBanner = true;
+  static Future<VersionInfo?> checkVersion() async {
     try {
       var newVersion = await http.get(Uri.parse(
           "https://raw.staticdn.net/xiaoyaocz/dmzj_flutter/master/new_version.json?ts=" +
@@ -68,7 +69,7 @@ class Utils {
       changeHideBanner.fire(hideBanner);
       PackageInfo packageInfo = await PackageInfo.fromPlatform();
       if (int.parse(packageInfo.buildNumber) <
-          int.parse(verInfo.version_code)) {
+          int.parse(verInfo.version_code!)) {
         return verInfo;
       } else {
         return null;
@@ -106,7 +107,7 @@ class Utils {
     return result;
   }
 
-  static void showImageViewDialog(BuildContext context, String image) {
+  static void showImageViewDialog(BuildContext context, String? image) {
     showDialog(
         context: context,
         builder: (_) {
@@ -124,7 +125,7 @@ class Utils {
                         child: CircularProgressIndicator(),
                       );
                     },
-                    imageProvider: CachedNetworkImageProvider(image,
+                    imageProvider: CachedNetworkImageProvider(image!,
                         headers: {"Referer": "http://www.dmzj.com/"}),
                   )),
                 ),
@@ -135,8 +136,9 @@ class Utils {
                 child: FlatButton(
                   onPressed: () async {
                     try {
-                      var file = DefaultCacheManager().getFileFromMemory(image);
-                      var byes = (await file).file.readAsBytesSync();
+                      Future<FileInfo?> file =
+                          DefaultCacheManager().getFileFromMemory(image);
+                      var byes = (await file)!.file.readAsBytesSync();
                       var dir = await getApplicationDocumentsDirectory();
                       await File(dir.path +
                               "/" +
@@ -194,8 +196,8 @@ class Utils {
 
   /// 打开页面
   /// [type] 1=漫画，2=小说，5=专题，6=网页，7=新闻，8=漫画作者，10=游戏，11=类目详情，12=个人中心
-  static void openPage(BuildContext context, int id, int type,
-      {String url, String title}) {
+  static void openPage(BuildContext context, int? id, int? type,
+      {String? url, String? title}) {
     if (id == null) {
       Fluttertoast.showToast(msg: '无法打开此内容');
       return;
@@ -261,20 +263,20 @@ class Utils {
   }
 
   static void openCommentPage(
-      BuildContext context, int id, int type, String title) {
+      BuildContext context, int? id, int type, String? title) {
     Navigator.push(
         context,
         MaterialPageRoute(
             builder: (BuildContext context) => Scaffold(
                   appBar: AppBar(
-                    title: Text(title),
+                    title: Text(title!),
                   ),
                   body: CommentWidget(type, id),
                 )));
   }
 
   static void openSubscribePage(BuildContext context, {int index = 0}) {
-    if (!ConfigHelper.getUserIsLogined() ?? false) {
+    if (!ConfigHelper.getUserIsLogined()) {
       Fluttertoast.showToast(msg: '没有登录');
       return;
     }
@@ -286,7 +288,7 @@ class Utils {
   }
 
   static void openHistoryPage(BuildContext context) {
-    if (!ConfigHelper.getUserIsLogined() ?? false) {
+    if (!ConfigHelper.getUserIsLogined()) {
       Fluttertoast.showToast(msg: '没有登录');
       return;
     }
@@ -297,7 +299,7 @@ class Utils {
   }
 
   static void openMyCommentPage(BuildContext context) {
-    if (!ConfigHelper.getUserIsLogined() ?? false) {
+    if (!ConfigHelper.getUserIsLogined()) {
       Fluttertoast.showToast(msg: '没有登录');
       return;
     }
@@ -328,8 +330,8 @@ class Utils {
       int novelId,
       List<NovelChapterVolumeResponse> chapters,
       NovelChapterItemResponse chapterItem,
-      {String novelTitle,
-      bool isSubscribe}) async {
+      {String? novelTitle,
+      bool? isSubscribe}) async {
     // var ls = chapters.toList();
     NovelVolumeChapterItem currentItem = NovelVolumeChapterItem(
       chapter_id: chapterItem.chapterId,

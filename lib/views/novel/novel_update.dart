@@ -13,7 +13,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
 
 class NovelUpdatePage extends StatefulWidget {
-  NovelUpdatePage({Key key}) : super(key: key);
+  NovelUpdatePage({Key? key}) : super(key: key);
 
   @override
   _NovelUpdatePageState createState() => _NovelUpdatePageState();
@@ -75,7 +75,7 @@ class _NovelUpdatePageState extends State<NovelUpdatePage>
                   borderRadius: BorderRadius.circular(4),
                   child: Container(
                     width: 80,
-                    child: Utils.createCacheImage(item.cover, 270, 360),
+                    child: Utils.createCacheImage(item.cover!, 270, 360),
                   )),
               SizedBox(
                 width: 12,
@@ -85,7 +85,7 @@ class _NovelUpdatePageState extends State<NovelUpdatePage>
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     Text(
-                      item.name,
+                      item.name!,
                       maxLines: 1,
                     ),
                     SizedBox(
@@ -110,7 +110,7 @@ class _NovelUpdatePageState extends State<NovelUpdatePage>
                     SizedBox(
                       height: 2,
                     ),
-                    Text(item.type ?? "",
+                    Text(item.type,
                         style: TextStyle(color: Colors.grey, fontSize: 14)),
                     SizedBox(
                       height: 2,
@@ -123,7 +123,7 @@ class _NovelUpdatePageState extends State<NovelUpdatePage>
                     Text(
                         "更新于" +
                             TimelineUtil.format(
-                              item.last_update_time * 1000,
+                              item.last_update_time! * 1000,
                               locale: 'zh',
                             ),
                         style: TextStyle(color: Colors.grey, fontSize: 14)),
@@ -152,19 +152,17 @@ class _NovelUpdatePageState extends State<NovelUpdatePage>
       List jsonMap = jsonDecode(response.body);
       List<NovelUpdateItem> detail =
           jsonMap.map((i) => NovelUpdateItem.fromJson(i)).toList();
-      if (detail != null) {
-        setState(() {
-          if (_page == 0) {
-            _list = detail;
-          } else {
-            _list.addAll(detail);
-          }
-        });
-        if (detail.length != 0) {
-          _page++;
+      setState(() {
+        if (_page == 0) {
+          _list = detail;
         } else {
-          Fluttertoast.showToast(msg: "加载完毕");
+          _list.addAll(detail);
         }
+      });
+      if (detail.length != 0) {
+        _page++;
+      } else {
+        Fluttertoast.showToast(msg: "加载完毕");
       }
     } catch (e) {
       print(e);

@@ -25,13 +25,13 @@ import 'package:provider/provider.dart';
 
 class NovelReaderPage extends StatefulWidget {
   final int novelId;
-  final String novelTitle;
-  final List<NovelVolumeChapterItem> chapters;
+  final String? novelTitle;
+  final List<NovelVolumeChapterItem?> chapters;
   final NovelVolumeChapterItem currentItem;
-  bool subscribe;
+  bool? subscribe;
   NovelReaderPage(
       this.novelId, this.novelTitle, this.chapters, this.currentItem,
-      {this.subscribe, Key key})
+      {this.subscribe, Key? key})
       : super(key: key);
 
   @override
@@ -40,10 +40,10 @@ class NovelReaderPage extends StatefulWidget {
 
 class _NovelReaderPageState extends State<NovelReaderPage> {
   //EventBus settingEvent = EventBus();
-  List<String> _pageContents = ["加载中"];
-  NovelVolumeChapterItem _currentItem;
+  List<String?> _pageContents = ["加载中"];
+  NovelVolumeChapterItem? _currentItem;
   Battery _battery = Battery();
-  Uint8List _contents;
+  Uint8List? _contents;
 
   double _verSliderMax = 0;
   double _verSliderValue = 0;
@@ -98,7 +98,7 @@ class _NovelReaderPageState extends State<NovelReaderPage> {
   void dispose() {
     SystemChrome.setEnabledSystemUIOverlays(SystemUiOverlay.values);
     UserHelper.comicAddNovelHistory(
-        widget.novelId, _currentItem.volume_id, _currentItem.chapter_id);
+        widget.novelId, _currentItem!.volume_id, _currentItem!.chapter_id);
     super.dispose();
   }
 
@@ -205,7 +205,7 @@ class _NovelReaderPageState extends State<NovelReaderPage> {
                                   });
                                 },
                                 child: Utils.createCacheImage(
-                                    _pageContents[i - 1], 100, 100,
+                                    _pageContents[i - 1]!, 100, 100,
                                     fit: BoxFit.fitWidth),
                               ),
                             )
@@ -218,7 +218,7 @@ class _NovelReaderPageState extends State<NovelReaderPage> {
                               child: Text(
                                 _pageContents.length == 0
                                     ? ""
-                                    : _pageContents[i - 1],
+                                    : _pageContents[i - 1]!,
                                 style: TextStyle(
                                     fontSize: _fontSize,
                                     height: _lineHeight,
@@ -258,7 +258,7 @@ class _NovelReaderPageState extends State<NovelReaderPage> {
                                           });
                                         },
                                         child:
-                                            Utils.createCacheImage(f, 100, 100),
+                                            Utils.createCacheImage(f!, 100, 100),
                                       ))
                                   .toList(),
                             )
@@ -360,13 +360,13 @@ class _NovelReaderPageState extends State<NovelReaderPage> {
                   child: ListTile(
                     dense: true,
                     title: Text(
-                      widget.novelTitle,
+                      widget.novelTitle!,
                       style: TextStyle(color: Colors.white),
                     ),
                     subtitle: Text(
-                      _currentItem.volume_name.trim() +
+                      _currentItem!.volume_name!.trim() +
                           " · " +
-                          _currentItem.chapter_name.trim(),
+                          _currentItem!.chapter_name!.trim(),
                       style: TextStyle(color: Colors.white),
                     ),
                     leading: BackButton(
@@ -453,7 +453,7 @@ class _NovelReaderPageState extends State<NovelReaderPage> {
                   Row(
                     children: <Widget>[
                       Provider.of<AppUserInfo>(context).isLogin &&
-                              widget.subscribe
+                              widget.subscribe!
                           ? createButton(
                               "已订阅",
                               Icons.favorite,
@@ -536,14 +536,14 @@ class _NovelReaderPageState extends State<NovelReaderPage> {
                                     }
                                   },
                                   title: Text(
-                                    f.chapter_name,
+                                    f!.chapter_name!,
                                     style: TextStyle(
                                         color: f == _currentItem
                                             ? Theme.of(context).accentColor
                                             : Colors.white),
                                   ),
                                   subtitle: Text(
-                                    f.volume_name,
+                                    f.volume_name!,
                                     style: TextStyle(color: Colors.grey),
                                   ),
                                 ))
@@ -571,7 +571,7 @@ class _NovelReaderPageState extends State<NovelReaderPage> {
   }
 
   void previousPage() {
-    if (_controller.page > _pageContents.length) {
+    if (_controller.page! > _pageContents.length) {
       nextChapter();
     } else {
       setState(() {
@@ -580,13 +580,13 @@ class _NovelReaderPageState extends State<NovelReaderPage> {
     }
   }
 
-  Widget createButton(String text, IconData icon, {Function onTap}) {
+  Widget createButton(String text, IconData icon, {Function? onTap}) {
     return Expanded(
       child: Material(
         color: Colors.transparent,
         child: InkWell(
           borderRadius: BorderRadius.circular(8),
-          onTap: onTap,
+          onTap: onTap as void Function()?,
           child: Padding(
             padding: EdgeInsets.all(8),
             child: Column(
@@ -636,7 +636,7 @@ class _NovelReaderPageState extends State<NovelReaderPage> {
                         return;
                       }
                       Provider.of<AppSetting>(context, listen: false)
-                          .changeNovelFontSize(size - 1);
+                          .changeNovelFontSize(size! - 1);
                       await handelContent();
                     }),
                   ),
@@ -652,7 +652,7 @@ class _NovelReaderPageState extends State<NovelReaderPage> {
                         return;
                       }
                       Provider.of<AppSetting>(context, listen: false)
-                          .changeNovelFontSize(size + 1);
+                          .changeNovelFontSize(size! + 1);
                       await handelContent();
                     }),
                   )
@@ -677,7 +677,7 @@ class _NovelReaderPageState extends State<NovelReaderPage> {
                         return;
                       }
                       Provider.of<AppSetting>(context, listen: false)
-                          .changeNovelLineHeight(height - 0.1);
+                          .changeNovelLineHeight(height! - 0.1);
                       await handelContent();
                     }),
                   ),
@@ -694,7 +694,7 @@ class _NovelReaderPageState extends State<NovelReaderPage> {
                         return;
                       }
                       Provider.of<AppSetting>(context, listen: false)
-                          .changeNovelLineHeight(height + 0.1);
+                          .changeNovelLineHeight(height! + 0.1);
                       await handelContent();
                     }),
                   )
@@ -821,7 +821,7 @@ class _NovelReaderPageState extends State<NovelReaderPage> {
   }
 
   Widget createOutlineButton(String text,
-      {Function onPressed, Color borderColor}) {
+      {Function? onPressed, Color? borderColor}) {
     if (borderColor == null) {
       borderColor = Colors.grey.withOpacity(0.6);
     }
@@ -833,12 +833,12 @@ class _NovelReaderPageState extends State<NovelReaderPage> {
         text,
         style: TextStyle(color: Colors.white),
       ),
-      onPressed: onPressed,
+      onPressed: onPressed as void Function()?,
     );
   }
 
   Widget createOutlineButtonColor(Color color,
-      {Function onPressed, Color borderColor}) {
+      {Function? onPressed, Color? borderColor}) {
     if (borderColor == null) {
       borderColor = Colors.grey.withOpacity(0.6);
     }
@@ -852,7 +852,7 @@ class _NovelReaderPageState extends State<NovelReaderPage> {
         ),
         height: 32,
       ),
-      onTap: onPressed,
+      onTap: onPressed as void Function()?,
     );
   }
 
@@ -874,9 +874,9 @@ class _NovelReaderPageState extends State<NovelReaderPage> {
 
       //检查缓存
 
-      var url = NovelApi.instance
-          .getNovelContentUrl(_currentItem.volume_id, _currentItem.chapter_id);
-      var file = await _cacheManager.getFileFromCache(url);
+      var url = NovelApi.instance!
+          .getNovelContentUrl(_currentItem!.volume_id, _currentItem!.chapter_id);
+      FileInfo? file = await _cacheManager.getFileFromCache(url);
       if (file == null) {
         file = await _cacheManager.downloadFile(url);
       }
@@ -886,7 +886,7 @@ class _NovelReaderPageState extends State<NovelReaderPage> {
       if (String.fromCharCodes(bodyBytes.take(200))
           .contains(RegExp('<img.*?>'))) {
         var str = Utf8Decoder().convert(bodyBytes);
-        List<String> imgs = [];
+        List<String?> imgs = [];
         for (var item
             in RegExp(r'<img.*?src=[' '""](.*?)[' '""].*?>').allMatches(str)) {
           //print(item.group(1));
@@ -906,9 +906,9 @@ class _NovelReaderPageState extends State<NovelReaderPage> {
         await handelContent();
       }
 
-      ConfigHelper.setNovelHistory(widget.novelId, _currentItem.chapter_id);
+      ConfigHelper.setNovelHistory(widget.novelId, _currentItem!.chapter_id!);
       UserHelper.comicAddNovelHistory(
-          widget.novelId, _currentItem.volume_id, _currentItem.chapter_id);
+          widget.novelId, _currentItem!.volume_id, _currentItem!.chapter_id);
     } catch (e) {
       print(e);
     } finally {
@@ -944,7 +944,7 @@ class _NovelReaderPageState extends State<NovelReaderPage> {
     var height = par.height;
     var _content = HtmlUnescape()
         .convert(Utf8Decoder()
-            .convert(par.content)
+            .convert(par.content!)
             .replaceAll('\r\n', '\n')
             .replaceAll("<br/>", "\n")
             .replaceAll('<br />', "\n")
@@ -1033,7 +1033,7 @@ class _NovelReaderPageState extends State<NovelReaderPage> {
 }
 
 class ComputeParameter {
-  Uint8List content;
+  Uint8List? content;
   double width;
   double height;
   double fontSize;

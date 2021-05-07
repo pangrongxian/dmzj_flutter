@@ -17,7 +17,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
 
 class ComicRankPage extends StatefulWidget {
-  ComicRankPage({Key key}) : super(key: key);
+  ComicRankPage({Key? key}) : super(key: key);
 
   @override
   _ComicUpdatePageState createState() => _ComicUpdatePageState();
@@ -27,7 +27,7 @@ class _ComicUpdatePageState extends State<ComicRankPage>
     with AutomaticKeepAliveClientMixin {
   @override
   bool get wantKeepAlive => true;
-  Map<String, int> _tags = {"全部分类": 0};
+  Map<String?, int?> _tags = {"全部分类": 0};
   String _tag = "全部分类";
 
   Map<String, int> _byTimes = {
@@ -237,7 +237,7 @@ class _ComicUpdatePageState extends State<ComicRankPage>
       setState(() {
         _loading = true;
       });
-      var detail = await ComicApi.instance.getRankList(
+      var detail = await ComicApi.instance!.getRankList(
           tagId: _tags[_tag],
           rankType: _types[_type],
           byTime: _byTimes[_byTime],
@@ -284,7 +284,7 @@ class _ComicUpdatePageState extends State<ComicRankPage>
       List<ComicDetailTagItem> detail =
           jsonMap.map((i) => ComicDetailTagItem.fromJson(i)).toList();
       if (detail != null) {
-        Map<String, int> list = {};
+        Map<String?, int?> list = {};
         for (var item in detail) {
           list.addAll(
               {(item.tag_id == 0 ? "全部分类" : item.tag_name): item.tag_id});

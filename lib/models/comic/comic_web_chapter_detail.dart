@@ -1,95 +1,95 @@
 import 'dart:convert' show json;
 
 class ComicWebChapterDetail {
-  int _id;
-  int get id => _id;
-  int _comic_id;
-  int get comic_id => _comic_id;
-  String _chapter_name;
-  String get chapter_name => _chapter_name;
-  int _chapter_order;
-  int get chapter_order => _chapter_order;
-  int _createtime;
-  int get createtime => _createtime;
-  String _folder;
-  String get folder => _folder;
-  List<String> _page_url;
-  List<String> get page_url => _page_url;
-  int _chapter_type;
-  int get chapter_type => _chapter_type;
-  int _chaptertype;
-  int get chaptertype => _chaptertype;
-  int _chapter_true_type;
-  int get chapter_true_type => _chapter_true_type;
-  double _chapter_num;
-  double get chapter_num => _chapter_num;
-  int _updatetime;
-  int get updatetime => _updatetime;
-  int _sum_pages;
-  int get sum_pages => _sum_pages;
-  int _sns_tag;
-  int get sns_tag => _sns_tag;
-  int _uid;
-  int get uid => _uid;
-  String _username;
-  String get username => _username;
-  String _translatorid;
-  String get translatorid => _translatorid;
-  String _translator;
-  String get translator => _translator;
-  String _link;
-  String get link => _link;
-  String _message;
-  String get message => _message;
-  String _download;
-  String get download => _download;
-  int _hidden;
-  int get hidden => _hidden;
-  int _direction;
-  int get direction => _direction;
-  int _filesize;
-  int get filesize => _filesize;
-  int _high_file_size;
-  int get high_file_size => _high_file_size;
-  int _picnum;
-  int get picnum => _picnum;
-  int _hit;
-  int get hit => _hit;
-  int _prev_chap_id;
-  int get prev_chap_id => _prev_chap_id;
-  int _comment_count;
-  int get comment_count => _comment_count;
+  int? _id;
+  int? get id => _id;
+  int? _comic_id;
+  int? get comic_id => _comic_id;
+  String? _chapter_name;
+  String? get chapter_name => _chapter_name;
+  int? _chapter_order;
+  int? get chapter_order => _chapter_order;
+  int? _createtime;
+  int? get createtime => _createtime;
+  String? _folder;
+  String? get folder => _folder;
+  List<String>? _page_url;
+  List<String>? get page_url => _page_url;
+  int? _chapter_type;
+  int? get chapter_type => _chapter_type;
+  int? _chaptertype;
+  int? get chaptertype => _chaptertype;
+  int? _chapter_true_type;
+  int? get chapter_true_type => _chapter_true_type;
+  double? _chapter_num;
+  double? get chapter_num => _chapter_num;
+  int? _updatetime;
+  int? get updatetime => _updatetime;
+  int? _sum_pages;
+  int? get sum_pages => _sum_pages;
+  int? _sns_tag;
+  int? get sns_tag => _sns_tag;
+  int? _uid;
+  int? get uid => _uid;
+  String? _username;
+  String? get username => _username;
+  String? _translatorid;
+  String? get translatorid => _translatorid;
+  String? _translator;
+  String? get translator => _translator;
+  String? _link;
+  String? get link => _link;
+  String? _message;
+  String? get message => _message;
+  String? _download;
+  String? get download => _download;
+  int? _hidden;
+  int? get hidden => _hidden;
+  int? _direction;
+  int? get direction => _direction;
+  int? _filesize;
+  int? get filesize => _filesize;
+  int? _high_file_size;
+  int? get high_file_size => _high_file_size;
+  int? _picnum;
+  int? get picnum => _picnum;
+  int? _hit;
+  int? get hit => _hit;
+  int? _prev_chap_id;
+  int? get prev_chap_id => _prev_chap_id;
+  int? _comment_count;
+  int? get comment_count => _comment_count;
 
   ComicWebChapterDetail({
-    int id,
-    int comic_id,
-    String chapter_name,
-    int chapter_order,
-    int createtime,
-    String folder,
-    List<String> page_url,
-    int chapter_type,
-    int chaptertype,
-    int chapter_true_type,
-    double chapter_num,
-    int updatetime,
-    int sum_pages,
-    int sns_tag,
-    int uid,
-    String username,
-    String translatorid,
-    String translator,
-    String link,
-    String message,
-    String download,
-    int hidden,
-    int direction,
-    int filesize,
-    int high_file_size,
-    int picnum,
-    int hit,
-    int prev_chap_id,
-    int comment_count,
+    int? id,
+    int? comic_id,
+    String? chapter_name,
+    int? chapter_order,
+    int? createtime,
+    String? folder,
+    List<String>? page_url,
+    int? chapter_type,
+    int? chaptertype,
+    int? chapter_true_type,
+    double? chapter_num,
+    int? updatetime,
+    int? sum_pages,
+    int? sns_tag,
+    int? uid,
+    String? username,
+    String? translatorid,
+    String? translator,
+    String? link,
+    String? message,
+    String? download,
+    int? hidden,
+    int? direction,
+    int? filesize,
+    int? high_file_size,
+    int? picnum,
+    int? hit,
+    int? prev_chap_id,
+    int? comment_count,
   })  : _id = id,
         _comic_id = comic_id,
         _chapter_name = chapter_name,
@@ -120,8 +120,7 @@ class ComicWebChapterDetail {
         _prev_chap_id = prev_chap_id,
         _comment_count = comment_count;
   factory ComicWebChapterDetail.fromJson(jsonRes) {
-    if (jsonRes == null) return null;
-    List<String> page_url = jsonRes['page_url'] is List ? [] : null;
+    List<String>? page_url = jsonRes['page_url'] is List ? [] : null;
     if (page_url != null) {
       for (var item in jsonRes['page_url']) {
         if (item != null) {

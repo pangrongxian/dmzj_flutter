@@ -5,7 +5,7 @@ import 'package:flutter_dmzj/app/utils.dart';
 import 'package:provider/provider.dart';
 
 class UserPage extends StatefulWidget {
-  UserPage({Key key}) : super(key: key);
+  UserPage({Key? key}) : super(key: key);
 
   _UserPageState createState() => _UserPageState();
 }
@@ -22,11 +22,11 @@ class _UserPageState extends State<UserPage> {
               width: 36,
               child: CircleAvatar(
                 backgroundImage: Utils.createCachedImageProvider(
-                    Provider.of<AppUserInfo>(context).userProfile?.cover),
+                    Provider.of<AppUserInfo>(context).userProfile?.cover ?? ""),
               ),
             ),
             SizedBox(width: 12),
-            Text(Provider.of<AppUserInfo>(context).loginInfo?.nickname),
+            Text(Provider.of<AppUserInfo>(context).loginInfo?.nickname ?? ""),
           ],
         ),
         actions: <Widget>[

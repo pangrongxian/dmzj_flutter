@@ -20,7 +20,7 @@ class UserCommentWidget extends StatefulWidget {
 
   UserCommentWidget(
     this.userId, {
-    Key key,
+    Key? key,
     this.type = 0,
   }) : super(key: key);
 
@@ -86,7 +86,7 @@ class _UserCommentWidgetState extends State<UserCommentWidget>
   }
 
   Widget createItem(UserCommentItem item) {
-    var text = _htmlUnescape.convert(item.content);
+    var text = _htmlUnescape.convert(item.content!);
     return Container(
       decoration: BoxDecoration(
           border: Border(
@@ -111,7 +111,7 @@ class _UserCommentWidgetState extends State<UserCommentWidget>
               },
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(4),
-                child: Utils.createCacheImage(item.obj_cover, 270, 360),
+                child: Utils.createCacheImage(item.obj_cover!, 270, 360),
               ),
             ),
           ),
@@ -124,7 +124,7 @@ class _UserCommentWidgetState extends State<UserCommentWidget>
                 children: <Widget>[
                   Expanded(
                     child: Text(
-                      item.obj_name,
+                      item.obj_name!,
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                     ),
@@ -191,7 +191,7 @@ class _UserCommentWidgetState extends State<UserCommentWidget>
                           Expanded(child: Container()),
                           Text(
                             TimelineUtil.format(
-                              item.create_time * 1000,
+                              item.create_time! * 1000,
                               locale: 'zh',
                             ),
                             style: TextStyle(color: Colors.grey, fontSize: 12),
@@ -210,7 +210,7 @@ class _UserCommentWidgetState extends State<UserCommentWidget>
   }
 
   Widget createMasterComment(UserCommentItem comment) {
-    var item = comment.masterComment;
+    var item = comment.masterComment!;
     List<Widget> items = [];
 
     items.add(createMsterCommentItem(item));
@@ -237,15 +237,15 @@ class _UserCommentWidgetState extends State<UserCommentWidget>
                 WidgetSpan(
                   child: InkWell(
                     child: Text(
-                      item.nickname,
+                      item.nickname!,
                       style: TextStyle(color: Theme.of(context).accentColor),
                     ),
                   ),
                 ),
                 TextSpan(
-                    text: ": " + _htmlUnescape.convert(item.content),
+                    text: ": " + _htmlUnescape.convert(item.content!),
                     style: TextStyle(
-                        color: Theme.of(context).textTheme.bodyText1.color))
+                        color: Theme.of(context).textTheme.bodyText1!.color))
               ]),
             ),
           ],

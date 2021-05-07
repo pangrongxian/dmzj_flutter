@@ -7,7 +7,7 @@ import 'package:flutter_dmzj/models/comic/comic_category_item.dart';
 import 'package:http/http.dart' as http;
 
 class NovelCategoryPage extends StatefulWidget {
-  NovelCategoryPage({Key key}) : super(key: key);
+  NovelCategoryPage({Key? key}) : super(key: key);
 
   @override
   _NovelCategoryPageState createState() => _NovelCategoryPageState();
@@ -65,10 +65,10 @@ class _NovelCategoryPageState extends State<NovelCategoryPage>
                 children: <Widget>[
                   ClipRRect(
                       borderRadius: BorderRadius.circular(4),
-                      child: Utils.createCacheImage(_list[i].cover, 200, 200)),
+                      child: Utils.createCacheImage(_list[i].cover!, 200, 200)),
                   SizedBox(height: 4),
                   Flexible(
-                    child: Text(_list[i].title),
+                    child: Text(_list[i].title!),
                   ),
                 ],
               ),

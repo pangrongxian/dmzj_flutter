@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:typed_data';
+import 'package:collection/collection.dart' show IterableExtension;
 import 'package:common_utils/common_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
@@ -23,7 +24,7 @@ import 'package:share/share.dart';
 
 class ComicDetailPage extends StatefulWidget {
   final int comicId;
-  ComicDetailPage(this.comicId, {Key key}) : super(key: key);
+  ComicDetailPage(this.comicId, {Key? key}) : super(key: key);
 
   @override
   _ComicDetailPageState createState() => _ComicDetailPageState();
@@ -69,8 +70,8 @@ class _ComicDetailPageState extends State<ComicDetailPage>
     return (MediaQuery.of(context).size.width - 24) / 3 - 32;
   }
 
-  ComicDetailInfoResponse _detail;
-  ComicRelated _related;
+  ComicDetailInfoResponse? _detail;
+  late ComicRelated _related;
   @override
   Widget build(BuildContext context) {
     super.build(context);
@@ -79,7 +80,7 @@ class _ComicDetailPageState extends State<ComicDetailPage>
             length: 3,
             child: Scaffold(
               appBar: AppBar(
-                title: Text(_detail.title),
+                title: Text(_detail!.title),
                 actions: <Widget>[
                   Provider.of<AppUserInfo>(context).isLogin && _isSubscribe
                       ? IconButton(
@@ -116,11 +117,11 @@ class _ComicDetailPageState extends State<ComicDetailPage>
                     onSelected: (e) {
                       if (e == "share") {
                         Share.share(
-                            "${_detail.title}\r\nhttp://m.dmzj.com/info/${_detail.comicPy}.html");
+                            "${_detail!.title}\r\nhttp://m.dmzj.com/info/${_detail!.comicPy}.html");
                       } else {
                         if (_detail == null ||
-                            _detail.chapters == null ||
-                            _detail.chapters.length == 0) {
+                            _detail!.chapters == null ||
+                            _detail!.chapters.length == 0) {
                           Fluttertoast.showToast(msg: '没有可以下载的章节');
                           return;
                         }
@@ -149,9 +150,9 @@ class _ComicDetailPageState extends State<ComicDetailPage>
                     child: Column(
                       children: <Widget>[
                         Column(
-                          children: _related.author_comics
+                          children: _related.author_comics!
                               .map<Widget>((f) => _getItem(
-                                      f.author_name + "的其他作品", f.data,
+                                      f.author_name! + "的其他作品", f.data!,
                                       icon: Icon(Icons.chevron_right),
                                       ratio: getWidth() /
                                           ((getWidth() * (360 / 270)) + 36),
@@ -162,13 +163,13 @@ class _ComicDetailPageState extends State<ComicDetailPage>
                         ),
                         _getItem(
                           "同类题材作品",
-                          _related.theme_comics,
+                          _related.theme_comics!,
                           ratio: getWidth() / ((getWidth() * (360 / 270)) + 36),
                         ),
-                        _related.novels != null && _related.novels.length != 0
+                        _related.novels != null && _related.novels!.length != 0
                             ? _getItem(
                                 "相关小说",
-                                _related.novels,
+                                _related.novels!,
                                 type: 2,
                                 ratio: getWidth() /
                                     ((getWidth() * (360 / 270)) + 36),
@@ -211,11 +212,11 @@ class _ComicDetailPageState extends State<ComicDetailPage>
                     children: <Widget>[
                       InkWell(
                         onTap: () =>
-                            Utils.showImageViewDialog(context, _detail.cover),
+                            Utils.showImageViewDialog(context, _detail!.cover),
                         child: Container(
                           width: 100,
                           child:
-                              Utils.createCacheImage(_detail.cover, 270, 360),
+                              Utils.createCacheImage(_detail!.cover, 270, 360),
                         ),
                       ),
                       SizedBox(
@@ -226,27 +227,27 @@ class _ComicDetailPageState extends State<ComicDetailPage>
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
                             Text(
-                              _detail.title,
+                              _detail!.title,
                               style: TextStyle(fontWeight: FontWeight.bold),
                             ),
                             SizedBox(height: 2),
                             Text(
-                              "作者:" + tagsToString(_detail.authors ?? []),
+                              "作者:" + _detail!.authors.join(' '),
                               style: TextStyle(color: Colors.grey),
                             ),
                             SizedBox(height: 2),
                             Text(
-                              "点击:" + _detail.hotNum.toString(),
+                              "点击:" + _detail!.hotNum.toString(),
                               style: TextStyle(color: Colors.grey),
                             ),
                             SizedBox(height: 2),
                             Text(
-                              "订阅:" + _detail.subscribeNum.toString(),
+                              "订阅:" + _detail!.subscribeNum.toString(),
                               style: TextStyle(color: Colors.grey),
                             ),
                             SizedBox(height: 2),
                             Text(
-                              "状态:" + tagsToString(_detail.status ?? []),
+                              "状态:" + _detail!.status.join(' '),
                               style: TextStyle(color: Colors.grey),
                             ),
                             SizedBox(height: 2),
@@ -254,7 +255,7 @@ class _ComicDetailPageState extends State<ComicDetailPage>
                               "最后更新:" +
                                   DateUtil.formatDate(
                                       DateTime.fromMillisecondsSinceEpoch(
-                                          int.parse(_detail.lastUpdatetime
+                                          int.parse(_detail!.lastUpdatetime
                                                   .toString()) *
                                               1000),
                                       format: "yyyy-MM-dd"),
@@ -267,7 +268,7 @@ class _ComicDetailPageState extends State<ComicDetailPage>
                   ),
                   Container(
                     child: Wrap(
-                      children: _detail.types
+                      children: _detail!.types
                           .map<Widget>((f) => createTagItem(f.tagName, f.tagId))
                           .toList(),
                     ),
@@ -286,7 +287,7 @@ class _ComicDetailPageState extends State<ComicDetailPage>
                   Text("简介", style: TextStyle(fontWeight: FontWeight.bold)),
                   SizedBox(height: 4),
                   Text(
-                    _detail.description,
+                    _detail!.description,
                     style: TextStyle(color: Colors.grey),
                   ),
                 ],
@@ -308,11 +309,11 @@ class _ComicDetailPageState extends State<ComicDetailPage>
 
   Widget createChpter() {
     return Scaffold(
-      body: _detail.chapters != null && _detail.chapters.length != 0
+      body: _detail!.chapters != null && _detail!.chapters.length != 0
           ? ListView.builder(
-              itemCount: _detail.chapters.length,
+              itemCount: _detail!.chapters.length,
               itemBuilder: (ctx, i) {
-                var f = _detail.chapters[i];
+                var f = _detail!.chapters[i];
                 return Container(
                   padding: EdgeInsets.symmetric(vertical: 4, horizontal: 8),
                   width: double.infinity,
@@ -350,14 +351,14 @@ class _ComicDetailPageState extends State<ComicDetailPage>
                                       ? Theme.of(context).accentColor
                                       : Theme.of(context)
                                           .textTheme
-                                          .bodyText1
+                                          .bodyText1!
                                           .color),
                             ),
                             onPressed: () async {
                               await Utils.openComicReader(
                                   context,
                                   widget.comicId,
-                                  _detail.title,
+                                  _detail!.title,
                                   _isSubscribe,
                                   f.data,
                                   f.data[i]);
@@ -407,40 +408,40 @@ class _ComicDetailPageState extends State<ComicDetailPage>
 
   void openRead() async {
     if (_detail == null ||
-        _detail.chapters == null ||
-        _detail.chapters.length == 0 ||
-        _detail.chapters[0].data.length == 0) {
+        _detail!.chapters == null ||
+        _detail!.chapters.length == 0 ||
+        _detail!.chapters[0].data.length == 0) {
       Fluttertoast.showToast(msg: '没有可读的章节');
       return;
     }
     if (historyChapter != 0) {
-      ComicDetailChapterInfoResponse _item;
-      ComicDetailChapterResponse chpters;
-      for (var item in _detail.chapters) {
-        var first = item.data.firstWhere((f) => f.chapterId == historyChapter,
-            orElse: () => null);
+      ComicDetailChapterInfoResponse? _item;
+      late ComicDetailChapterResponse chpters;
+      for (var item in _detail!.chapters) {
+        var first =
+            item.data.firstWhereOrNull((f) => f.chapterId == historyChapter);
         if (first != null) {
           chpters = item;
           _item = first;
         }
       }
       if (_item != null) {
-        await Utils.openComicReader(context, widget.comicId, _detail.title,
+        await Utils.openComicReader(context, widget.comicId, _detail!.title,
             _isSubscribe, chpters.data, _item);
         updateHistory();
         return;
       }
     }
-    var _chapters = _detail.chapters[0].data;
+    var _chapters = _detail!.chapters[0].data;
     _chapters.sort((x, y) => x.chapterOrder.compareTo(y.chapterOrder));
-    await Utils.openComicReader(context, widget.comicId, _detail.title,
+    await Utils.openComicReader(context, widget.comicId, _detail!.title,
         _isSubscribe, _chapters, _chapters.first);
     updateHistory();
   }
 
   Widget _getItem(String title, List items,
-      {Icon icon,
-      Function ontap,
+      {Icon? icon,
+      Function? ontap,
       bool needSubTitle = true,
       int count = 3,
       int type = 1,
@@ -488,7 +489,7 @@ class _ComicDetailPageState extends State<ComicDetailPage>
         ));
   }
 
-  Widget _getTitle(String title, {Icon icon, Function ontap}) {
+  Widget _getTitle(String title, {Icon? icon, Function? ontap}) {
     return Row(
       children: <Widget>[
         Expanded(
@@ -500,7 +501,7 @@ class _ComicDetailPageState extends State<ComicDetailPage>
               color: Theme.of(context).cardColor,
               child: InkWell(
                 borderRadius: BorderRadius.circular(12),
-                onTap: ontap,
+                onTap: ontap as void Function()?,
                 child: icon ?? Icon(Icons.refresh),
               )),
         )
@@ -508,8 +509,8 @@ class _ComicDetailPageState extends State<ComicDetailPage>
     );
   }
 
-  Widget _getComicItemBuilder(int id, int type, String pic, String title,
-      {String author = "",
+  Widget _getComicItemBuilder(int? id, int type, String pic, String title,
+      {String? author = "",
       String url = "",
       double width = 270,
       double height = 360}) {
@@ -535,7 +536,7 @@ class _ComicDetailPageState extends State<ComicDetailPage>
                 ? Container()
                 : Flexible(
                     child: Text(
-                      author,
+                      author!,
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                       style: TextStyle(color: Colors.grey, fontSize: 12.0),
@@ -545,14 +546,6 @@ class _ComicDetailPageState extends State<ComicDetailPage>
         ),
       ),
     );
-  }
-
-  String tagsToString(List<ComicDetailTypeItemResponse> items) {
-    var str = "";
-    for (var item in items) {
-      str += item.tagName + " ";
-    }
-    return str;
   }
 
   bool _noCopyright = false;
@@ -589,7 +582,7 @@ class _ComicDetailPageState extends State<ComicDetailPage>
       // var jsonMap = jsonDecode(responseStr);
 
       // ComicDetail detail = ComicDetail.fromJson(jsonMap);
-      var detail = await ComicApi.instance.getDetail(widget.comicId);
+      var detail = await ComicApi.instance!.getDetail(widget.comicId);
       if (detail.title == null || detail.title == "") {
         setState(() {
           _loading = false;
@@ -641,12 +634,12 @@ class _ComicDetailPageState extends State<ComicDetailPage>
 
   Future checkSubscribe() async {
     try {
-      if (!ConfigHelper.getUserIsLogined() ?? false) {
+      if (!ConfigHelper.getUserIsLogined()) {
         return;
       }
       var response = await http.get(Uri.parse(Api.comicCheckSubscribe(
           widget.comicId,
-          Provider.of<AppUserInfo>(context, listen: false).loginInfo.uid)));
+          Provider.of<AppUserInfo>(context, listen: false).loginInfo!.uid)));
       var jsonMap = jsonDecode(response.body);
       setState(() {
         _isSubscribe = jsonMap["code"] == 0;
@@ -658,13 +651,13 @@ class _ComicDetailPageState extends State<ComicDetailPage>
 }
 
 class ComicChapterView extends StatefulWidget {
-  final ComicDetailInfoResponse detail;
+  final ComicDetailInfoResponse? detail;
   final int comicId;
   final bool isSubscribe;
   final int historyChapter;
-  final Function openReader;
+  final Function? openReader;
   ComicChapterView(this.comicId, this.detail, this.historyChapter,
-      {Key key, this.isSubscribe = false, this.openReader})
+      {Key? key, this.isSubscribe = false, this.openReader})
       : super(key: key);
 
   @override
@@ -691,14 +684,15 @@ class _ComicChapterViewState extends State<ComicChapterView>
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    return widget.detail.chapters != null && widget.detail.chapters.length != 0
+    return widget.detail!.chapters != null &&
+            widget.detail!.chapters.length != 0
         ? ListView.builder(
             shrinkWrap: true,
             padding: EdgeInsets.only(top: 12),
             physics: ScrollPhysics(),
-            itemCount: widget.detail.chapters.length,
+            itemCount: widget.detail!.chapters.length,
             itemBuilder: (ctx, i) {
-              var f = widget.detail.chapters[i];
+              var f = widget.detail!.chapters[i];
               return Container(
                 padding: EdgeInsets.symmetric(vertical: 4, horizontal: 12),
                 width: double.infinity,
@@ -780,14 +774,14 @@ class _ComicChapterViewState extends State<ComicChapterView>
                                         ? Theme.of(context).accentColor
                                         : Theme.of(context)
                                             .textTheme
-                                            .bodyText1
+                                            .bodyText1!
                                             .color),
                           ),
                           onPressed: () {
                             Utils.openComicReader(
                                 context,
                                 widget.comicId,
-                                widget.detail.title,
+                                widget.detail!.title,
                                 widget.isSubscribe,
                                 f.data,
                                 f.data[i]);
@@ -810,26 +804,25 @@ class _ComicChapterViewState extends State<ComicChapterView>
 
   void openRead() async {
     if (widget.detail == null ||
-        widget.detail.chapters == null ||
-        widget.detail.chapters.length == 0 ||
-        widget.detail.chapters[0].data.length == 0) {
+        widget.detail!.chapters == null ||
+        widget.detail!.chapters.length == 0 ||
+        widget.detail!.chapters[0].data.length == 0) {
       Fluttertoast.showToast(msg: '没有可读的章节');
       return;
     }
     if (widget.historyChapter != 0) {
-      ComicDetailChapterInfoResponse _item;
-      ComicDetailChapterResponse chpters;
-      for (var item in widget.detail.chapters) {
-        var first = item.data.firstWhere(
-            (f) => f.chapterId == widget.historyChapter,
-            orElse: () => null);
+      ComicDetailChapterInfoResponse? _item;
+      late ComicDetailChapterResponse chpters;
+      for (var item in widget.detail!.chapters) {
+        var first = item.data
+            .firstWhereOrNull((f) => f.chapterId == widget.historyChapter);
         if (first != null) {
           chpters = item;
           _item = first;
         }
       }
       if (_item != null) {
-        Utils.openComicReader(context, widget.comicId, widget.detail.title,
+        Utils.openComicReader(context, widget.comicId, widget.detail!.title,
             widget.isSubscribe, chpters.data, _item);
         return;
       }
@@ -837,9 +830,9 @@ class _ComicChapterViewState extends State<ComicChapterView>
     Utils.openComicReader(
         context,
         widget.comicId,
-        widget.detail.title,
+        widget.detail!.title,
         widget.isSubscribe,
-        widget.detail.chapters[0].data,
-        widget.detail.chapters[0].data.last);
+        widget.detail!.chapters[0].data,
+        widget.detail!.chapters[0].data.last);
   }
 }

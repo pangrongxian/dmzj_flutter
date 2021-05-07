@@ -4,7 +4,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 
 class NovelReaderSettings extends StatefulWidget {
-  NovelReaderSettings({Key key}) : super(key: key);
+  NovelReaderSettings({Key? key}) : super(key: key);
 
   @override
   _NovelReaderSettingsState createState() => _NovelReaderSettingsState();
@@ -27,7 +27,7 @@ class _NovelReaderSettingsState extends State<NovelReaderSettings> {
                 child: Text(
                   "字号  " +
                       Provider.of<AppSetting>(context, listen: false)
-                          .novelFontSize
+                          .novelFontSize!
                           .toStringAsFixed(0),
                 ),
               ),
@@ -40,7 +40,7 @@ class _NovelReaderSettingsState extends State<NovelReaderSettings> {
                     return;
                   }
                   Provider.of<AppSetting>(context, listen: false)
-                      .changeNovelFontSize(size - 1);
+                      .changeNovelFontSize(size! - 1);
                 }),
               ),
               SizedBox(
@@ -55,7 +55,7 @@ class _NovelReaderSettingsState extends State<NovelReaderSettings> {
                     return;
                   }
                   Provider.of<AppSetting>(context, listen: false)
-                      .changeNovelFontSize(size + 1);
+                      .changeNovelFontSize(size! + 1);
                 }),
               )
             ],
@@ -67,7 +67,7 @@ class _NovelReaderSettingsState extends State<NovelReaderSettings> {
                 child: Text(
                   "行距  " +
                       Provider.of<AppSetting>(context, listen: false)
-                          .novelLineHeight
+                          .novelLineHeight!
                           .toStringAsFixed(0),
                 ),
               ),
@@ -80,7 +80,7 @@ class _NovelReaderSettingsState extends State<NovelReaderSettings> {
                     return;
                   }
                   Provider.of<AppSetting>(context, listen: false)
-                      .changeNovelLineHeight(height - 0.1);
+                      .changeNovelLineHeight(height! - 0.1);
                 }),
               ),
               SizedBox(
@@ -95,7 +95,7 @@ class _NovelReaderSettingsState extends State<NovelReaderSettings> {
                     return;
                   }
                   Provider.of<AppSetting>(context, listen: false)
-                      .changeNovelLineHeight(height + 0.1);
+                      .changeNovelLineHeight(height! + 0.1);
                 }),
               )
             ],
@@ -214,7 +214,7 @@ class _NovelReaderSettingsState extends State<NovelReaderSettings> {
   }
 
   Widget createOutlineButton(String text,
-      {Function onPressed, Color borderColor}) {
+      {Function? onPressed, Color? borderColor}) {
     if (borderColor == null) {
       borderColor = Colors.grey.withOpacity(0.6);
     }
@@ -224,12 +224,12 @@ class _NovelReaderSettingsState extends State<NovelReaderSettings> {
       child: Text(
         text,
       ),
-      onPressed: onPressed,
+      onPressed: onPressed as void Function()?,
     );
   }
 
   Widget createOutlineButtonColor(Color color,
-      {Function onPressed, Color borderColor}) {
+      {Function? onPressed, Color? borderColor}) {
     if (borderColor == null) {
       borderColor = Colors.grey.withOpacity(0.6);
     }
@@ -243,7 +243,7 @@ class _NovelReaderSettingsState extends State<NovelReaderSettings> {
         ),
         height: 32,
       ),
-      onTap: onPressed,
+      onTap: onPressed as void Function()?,
     );
   }
 }

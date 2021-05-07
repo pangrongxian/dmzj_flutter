@@ -11,11 +11,11 @@ import 'package:webview_flutter/webview_flutter.dart';
 import 'package:http/http.dart' as http;
 
 class NewsDetailPage extends StatefulWidget {
-  final int articleId;
-  final String pageUrl;
-  final String title;
+  final int? articleId;
+  final String? pageUrl;
+  final String? title;
 
-  NewsDetailPage(this.articleId, this.pageUrl, this.title, {Key key})
+  NewsDetailPage(this.articleId, this.pageUrl, this.title, {Key? key})
       : super(key: key);
 
   _NewsDetailPageState createState() => _NewsDetailPageState();
@@ -41,12 +41,12 @@ class _NewsDetailPageState extends State<NewsDetailPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.title),
+        title: Text(widget.title!),
         actions: <Widget>[
           IconButton(
             icon: Icon(Icons.share),
             onPressed: () {
-              Share.share(widget.title + "\r\n" + widget.pageUrl);
+              Share.share(widget.title! + "\r\n" + widget.pageUrl!);
             },
           )
         ],
@@ -59,7 +59,7 @@ class _NewsDetailPageState extends State<NewsDetailPage> {
             Utils.showImageViewDialog(context, uri.queryParameters["src"]);
           } else if (uri.scheme == "dmzjandroid") {
             //print(uri.path);
-            Utils.openPage(context, int.parse(uri.queryParameters["id"]),
+            Utils.openPage(context, int.parse(uri.queryParameters["id"]!),
                 uri.path == "/cartoon_description" ? 1 : 2);
             //print(uri.queryParameters["id"]);
           } else if (uri.scheme == "https" || uri.scheme == "http") {

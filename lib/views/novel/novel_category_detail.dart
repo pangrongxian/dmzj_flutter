@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:collection/collection.dart' show IterableExtension;
 import 'package:flutter/material.dart';
 import 'package:flutter_dmzj/app/api.dart';
 import 'package:flutter_dmzj/app/utils.dart';
@@ -12,9 +13,9 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
 
 class NovelCategoryDetailPage extends StatefulWidget {
-  final String title;
+  final String? title;
   final int id;
-  NovelCategoryDetailPage(this.id, this.title, {Key key}) : super(key: key);
+  NovelCategoryDetailPage(this.id, this.title, {Key? key}) : super(key: key);
 
   @override
   _NovelCategoryDetailPageState createState() =>
@@ -50,7 +51,7 @@ class _NovelCategoryDetailPageState extends State<NovelCategoryDetailPage>
     super.build(context);
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.title),
+        title: Text(widget.title!),
         actions: <Widget>[
           Builder(
             builder: (BuildContext context) => IconButton(
@@ -83,7 +84,7 @@ class _NovelCategoryDetailPageState extends State<NovelCategoryDetailPage>
                     childAspectRatio:
                         getWidth() / ((getWidth() * (360 / 270)) + 48)),
                 itemBuilder: (context, i) => _getComicItemBuilder(
-                    _list[i].id, _list[i].cover, _list[i].name,
+                    _list[i].id, _list[i].cover!, _list[i].name!,
                     author: _list[i].authors ?? ""),
               )
             : _loading
@@ -120,12 +121,12 @@ class _NovelCategoryDetailPageState extends State<NovelCategoryDetailPage>
               Container(
                 padding: EdgeInsets.only(left: 4),
                 child: Text(
-                  f.title,
+                  f.title!,
                   style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                 ),
               ),
               Wrap(
-                children: f.items
+                children: f.items!
                     .map((x) => Padding(
                           padding: EdgeInsets.only(left: 4, right: 4),
                           child: ButtonTheme(
@@ -140,13 +141,13 @@ class _NovelCategoryDetailPageState extends State<NovelCategoryDetailPage>
                                       ? Theme.of(context).accentColor
                                       : Colors.transparent),
                               child: Text(
-                                x.tag_name,
+                                x.tagName!,
                                 style: TextStyle(
                                     color: x == f.item
                                         ? Theme.of(context).accentColor
                                         : Theme.of(context)
                                             .textTheme
-                                            .button
+                                            .button!
                                             .color),
                               ),
                               onPressed: () async {
@@ -198,7 +199,7 @@ class _NovelCategoryDetailPageState extends State<NovelCategoryDetailPage>
                         style: TextStyle(
                             color: _sort == 0
                                 ? Theme.of(context).accentColor
-                                : Theme.of(context).textTheme.button.color),
+                                : Theme.of(context).textTheme.button!.color),
                       ),
                       onPressed: () async {
                         _page = 0;
@@ -229,7 +230,7 @@ class _NovelCategoryDetailPageState extends State<NovelCategoryDetailPage>
                         style: TextStyle(
                             color: _sort == 1
                                 ? Theme.of(context).accentColor
-                                : Theme.of(context).textTheme.button.color),
+                                : Theme.of(context).textTheme.button!.color),
                       ),
                       onPressed: () async {
                         _page = 0;
@@ -252,7 +253,7 @@ class _NovelCategoryDetailPageState extends State<NovelCategoryDetailPage>
     );
   }
 
-  Widget _getComicItemBuilder(int id, String pic, String title,
+  Widget _getComicItemBuilder(int? id, String pic, String title,
       {String author = ""}) {
     return Card(
       child: InkWell(
@@ -300,8 +301,8 @@ class _NovelCategoryDetailPageState extends State<NovelCategoryDetailPage>
         _loading = true;
       });
       var response = await http.get(Uri.parse(Api.novelCategoryDetail(
-          cateId: _fiters[0].item.tag_id,
-          status: _fiters[1].item.tag_id,
+          cateId: _fiters[0].item!.tagId,
+          status: _fiters[1].item!.tagId,
           sort: _sort,
           page: _page)));
 
@@ -342,12 +343,11 @@ class _NovelCategoryDetailPageState extends State<NovelCategoryDetailPage>
           jsonMap.map((f) => ComicCategoryDetailFilter.fromJson(f)).toList();
       if (detail != null) {
         for (var item in detail) {
-          var _item = item.items
-              .firstWhere((f) => f.tag_id == widget.id, orElse: () => null);
+          var _item = item.items!.firstWhereOrNull((f) => f.tagId == widget.id);
           if (_item != null) {
             item.item = _item;
           } else {
-            item.item = item.items[0];
+            item.item = item.items![0];
           }
         }
         setState(() {

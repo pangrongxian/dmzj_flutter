@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:typed_data';
 
+import 'package:collection/collection.dart' show IterableExtension;
 import 'package:common_utils/common_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
@@ -22,7 +23,7 @@ import 'package:share/share.dart';
 
 class NovelDetailPage extends StatefulWidget {
   final int novelId;
-  NovelDetailPage(this.novelId, {Key key}) : super(key: key);
+  NovelDetailPage(this.novelId, {Key? key}) : super(key: key);
 
   @override
   _NovelDetailPageState createState() => _NovelDetailPageState();
@@ -56,7 +57,7 @@ class _NovelDetailPageState extends State<NovelDetailPage>
     }
   }
 
-  NovelDetailInfoResponse _detail;
+  NovelDetailInfoResponse? _detail;
   @override
   Widget build(BuildContext context) {
     super.build(context);
@@ -65,7 +66,7 @@ class _NovelDetailPageState extends State<NovelDetailPage>
             length: 3,
             child: Scaffold(
               appBar: AppBar(
-                title: Text(_detail.name),
+                title: Text(_detail!.name),
                 actions: <Widget>[
                   Provider.of<AppUserInfo>(context).isLogin && _isSubscribe
                       ? IconButton(
@@ -94,7 +95,7 @@ class _NovelDetailPageState extends State<NovelDetailPage>
                   IconButton(
                       icon: Icon(Icons.share),
                       onPressed: () => Share.share(
-                          "${_detail.name}\r\nhttp://q.dmzj.com/${widget.novelId}/index.shtml")),
+                          "${_detail!.name}\r\nhttp://q.dmzj.com/${widget.novelId}/index.shtml")),
                 ],
                 bottom: TabBar(tabs: [
                   Tab(text: "详情"),
@@ -138,10 +139,10 @@ class _NovelDetailPageState extends State<NovelDetailPage>
                   children: <Widget>[
                     InkWell(
                       onTap: () =>
-                          Utils.showImageViewDialog(context, _detail.cover),
+                          Utils.showImageViewDialog(context, _detail!.cover),
                       child: Container(
                         width: 100,
-                        child: Utils.createCacheImage(_detail.cover, 270, 360),
+                        child: Utils.createCacheImage(_detail!.cover, 270, 360),
                       ),
                     ),
                     SizedBox(
@@ -152,27 +153,27 @@ class _NovelDetailPageState extends State<NovelDetailPage>
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
                           Text(
-                            _detail.name,
+                            _detail!.name,
                             style: TextStyle(fontWeight: FontWeight.bold),
                           ),
                           SizedBox(height: 2),
                           Text(
-                            "作者:" + _detail.authors,
+                            "作者:" + _detail!.authors,
                             style: TextStyle(color: Colors.grey),
                           ),
                           SizedBox(height: 2),
                           Text(
-                            "点击:" + _detail.hotHits.toString(),
+                            "点击:" + _detail!.hotHits.toString(),
                             style: TextStyle(color: Colors.grey),
                           ),
                           SizedBox(height: 2),
                           Text(
-                            "订阅:" + _detail.subscribeNum.toString(),
+                            "订阅:" + _detail!.subscribeNum.toString(),
                             style: TextStyle(color: Colors.grey),
                           ),
                           SizedBox(height: 2),
                           Text(
-                            "状态:" + _detail.status,
+                            "状态:" + _detail!.status,
                             style: TextStyle(color: Colors.grey),
                           ),
                           SizedBox(height: 2),
@@ -180,7 +181,7 @@ class _NovelDetailPageState extends State<NovelDetailPage>
                             "最后更新:" +
                                 DateUtil.formatDate(
                                     DateTime.fromMillisecondsSinceEpoch(
-                                        _detail.lastUpdateTime.toInt() * 1000),
+                                        _detail!.lastUpdateTime.toInt() * 1000),
                                     format: "yyyy-MM-dd"),
                             style: TextStyle(color: Colors.grey),
                           ),
@@ -203,7 +204,7 @@ class _NovelDetailPageState extends State<NovelDetailPage>
                 Text("简介", style: TextStyle(fontWeight: FontWeight.bold)),
                 SizedBox(height: 4),
                 Text(
-                  _detail.introduction,
+                  _detail!.introduction,
                   style: TextStyle(color: Colors.grey),
                 ),
               ],
@@ -223,9 +224,8 @@ class _NovelDetailPageState extends State<NovelDetailPage>
               itemCount: volumes.length,
               itemBuilder: (ctx, i) {
                 var f = volumes[i];
-                var his = f.chapters.firstWhere(
-                    (x) => x.chapterId == historyChapter,
-                    orElse: () => null);
+                var his = f.chapters
+                    .firstWhereOrNull((x) => x.chapterId == historyChapter);
                 return Padding(
                   padding: EdgeInsets.only(bottom: 8),
                   child: Container(
@@ -239,7 +239,7 @@ class _NovelDetailPageState extends State<NovelDetailPage>
                           onTap: () async {
                             await Utils.openNovelReader(
                                 context, widget.novelId, volumes, item,
-                                novelTitle: _detail.name,
+                                novelTitle: _detail!.name,
                                 isSubscribe: _isSubscribe);
                             updateHistory();
                           },
@@ -259,7 +259,7 @@ class _NovelDetailPageState extends State<NovelDetailPage>
                                       ? Theme.of(context).accentColor
                                       : Theme.of(context)
                                           .textTheme
-                                          .bodyText1
+                                          .bodyText1!
                                           .color),
                             ),
                           ),
@@ -290,11 +290,10 @@ class _NovelDetailPageState extends State<NovelDetailPage>
     }
 
     if (historyChapter != 0) {
-      NovelChapterItemResponse chapterItem;
+      NovelChapterItemResponse? chapterItem;
       for (var item in volumes) {
-        var first = item.chapters.firstWhere(
-            (f) => f.chapterId == historyChapter,
-            orElse: () => null);
+        var first = item.chapters
+            .firstWhereOrNull((f) => f.chapterId == historyChapter);
         if (first != null) {
           chapterItem = first;
         }
@@ -302,14 +301,14 @@ class _NovelDetailPageState extends State<NovelDetailPage>
       if (chapterItem != null) {
         await Utils.openNovelReader(
             context, widget.novelId, volumes, chapterItem,
-            novelTitle: _detail.name, isSubscribe: _isSubscribe);
+            novelTitle: _detail!.name, isSubscribe: _isSubscribe);
         updateHistory();
         return;
       }
     } else {
       await Utils.openNovelReader(
           context, widget.novelId, volumes, volumes[0].chapters[0],
-          novelTitle: _detail.name, isSubscribe: _isSubscribe);
+          novelTitle: _detail!.name, isSubscribe: _isSubscribe);
       updateHistory();
     }
   }
@@ -334,7 +333,7 @@ class _NovelDetailPageState extends State<NovelDetailPage>
       setState(() {
         _loading = true;
       });
-      var detail = await NovelApi.instance.getDetail(widget.novelId);
+      var detail = await NovelApi.instance!.getDetail(widget.novelId);
       // print(detail.writeToJson());
       // Uint8List responseBody;
       // var api = Api.novelDetail(widget.novelId);
@@ -390,13 +389,10 @@ class _NovelDetailPageState extends State<NovelDetailPage>
 
       // List<NovelVolumeItem> detail =
       //     jsonMap.map((f) => NovelVolumeItem.fromJson(f)).toList();
-      var detail = await NovelApi.instance.getChapter(widget.novelId);
-      if (detail != null) {
-        //await _cacheManager.putFile(api, responseBody);
-        setState(() {
-          volumes = detail;
-        });
-      }
+      var detail = await NovelApi.instance!.getChapter(widget.novelId);
+      setState(() {
+        volumes = detail;
+      });
     } catch (e) {
       print(e);
     }
@@ -404,12 +400,12 @@ class _NovelDetailPageState extends State<NovelDetailPage>
 
   Future checkSubscribe() async {
     try {
-      if (!ConfigHelper.getUserIsLogined() ?? false) {
+      if (!ConfigHelper.getUserIsLogined()) {
         return;
       }
       var response = await http.get(Uri.parse(Api.novelCheckSubscribe(
           widget.novelId,
-          Provider.of<AppUserInfo>(context, listen: false).loginInfo.uid)));
+          Provider.of<AppUserInfo>(context, listen: false).loginInfo!.uid)));
       var jsonMap = jsonDecode(response.body);
       setState(() {
         _isSubscribe = jsonMap["code"] == 0;
