@@ -57,13 +57,18 @@ class ConfigHelper {
 
   /// 读取用户资料
   static UserProfileModel? getUserProfile() {
-    var userInfoString = prefs.getString("userProfile");
-    return (userInfoString != null && userInfoString.length != 0)
-        ? UserProfileModel.fromJson(jsonDecode(userInfoString))
-        : null;
+    try {
+      var userInfoString = prefs.getString("userProfile");
+      return (userInfoString != null && userInfoString.length != 0)
+          ? UserProfileModel.fromJson(jsonDecode(userInfoString))
+          : null;
+    } catch (e) {
+      return null;
+    }
   }
 
   static void setUserProfile(UserProfileModel? value) {
+    if (value == null) return;
     prefs.setString("userProfile", jsonEncode(value));
   }
 

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_dmzj/app/utils.dart';
 import 'package:share/share.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:webview_flutter/webview_flutter.dart';
@@ -31,7 +32,7 @@ class _WebViewPageState extends State<WebViewPage> {
           IconButton(
               icon: Icon(Icons.share),
               onPressed: () async {
-                Share.share(
+                Utils.share(
                     "${await _controller.getTitle()}\r\n${await _controller.currentUrl()}");
               }),
           IconButton(

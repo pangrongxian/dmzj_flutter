@@ -8,7 +8,7 @@ import 'package:flutter_dmzj/widgets/user_subscribe_widget.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
 import 'package:flutter_easyrefresh/material_footer.dart';
 import 'package:flutter_easyrefresh/material_header.dart';
-import 'package:fluttertoast/fluttertoast.dart';
+import 'package:flutter_dmzj/app/utils.dart';
 import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
 
@@ -217,7 +217,9 @@ class _SubscribeTabViewState extends State<SubscribeTabView>
           widget.type,
           _subType,
           Provider.of<AppUserInfo>(context, listen: false).loginInfo!.uid,
-          Provider.of<AppUserInfo>(context, listen: false).loginInfo!.dmzj_token,
+          Provider.of<AppUserInfo>(context, listen: false)
+              .loginInfo!
+              .dmzj_token,
           letter: _letters.values.toList()[_selectLetters],
           page: _page)));
 
@@ -236,7 +238,7 @@ class _SubscribeTabViewState extends State<SubscribeTabView>
         if (detail.length != 0) {
           _page++;
         } else {
-          Fluttertoast.showToast(msg: "加载完毕");
+          Utils.showToast(msg: "加载完毕");
         }
       }
     } catch (e) {

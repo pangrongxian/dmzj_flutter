@@ -264,12 +264,12 @@ class _ComicUpdatePageState extends State<ComicRankPage>
         if (detail.length != 0) {
           _page++;
         } else {
-          Fluttertoast.showToast(msg: "加载完毕");
+          Utils.showToast(msg: "加载完毕");
         }
       }
     } catch (e) {
       print(e);
-      Fluttertoast.showToast(msg: e.toString());
+      Utils.showToast(msg: e.toString());
     } finally {
       setState(() {
         _loading = false;

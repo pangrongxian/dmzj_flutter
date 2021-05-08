@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_dmzj/app/app_theme.dart';
 import 'package:flutter_dmzj/app/utils.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:package_info/package_info.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -118,14 +118,14 @@ class _SettingPageState extends State<SettingPage> {
                 color: Colors.grey,
               ),
               onTap: () {
-                Fluttertoast.showToast(msg: '老子没写完呢');
+                Utils.showToast(msg: '老子没写完呢');
                 //下载使用API
                 //下载允许使用数据
                 //下载失败，跳过or失败
                 //下载队列数量
 
                 //_cacheManager.emptyCache();
-                //Fluttertoast.showToast(msg: '已清除');
+                //Utils.showToast(msg: '已清除');
               }, //Provider.of<AppThemeData>(context).changeThemeColor(3),
             ),
           ),
@@ -155,14 +155,14 @@ class _SettingPageState extends State<SettingPage> {
                 color: Colors.grey,
               ),
               onTap: () {
-                Fluttertoast.showToast(msg: '老子没写完呢');
+                Utils.showToast(msg: '老子没写完呢');
                 //下载使用API
                 //下载允许使用数据
                 //下载失败，跳过or失败
                 //下载队列数量
 
                 //_cacheManager.emptyCache();
-                //Fluttertoast.showToast(msg: '已清除');
+                //Utils.showToast(msg: '已清除');
               }, //Provider.of<AppThemeData>(context).changeThemeColor(3),
             ),
           ),
@@ -181,7 +181,7 @@ class _SettingPageState extends State<SettingPage> {
               onTap: () async {
                 var newVer = await Utils.checkVersion();
                 if (newVer == null) {
-                  Fluttertoast.showToast(msg: "已经是最新版本了");
+                  Utils.showToast(msg: "已经是最新版本了");
                   return;
                 }
                 if (await Utils.showAlertDialogAsync(

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_dmzj/app/utils.dart';
 import 'package:flutter_dmzj/controllers/news/news_categores_controller.dart';
-import 'package:flutter_dmzj/models/news/news_tag_model.dart';
 import 'package:flutter_dmzj/widgets/app_error_widget.dart';
 import 'package:get/get.dart';
 
@@ -45,6 +45,7 @@ class _NewsHomePageState extends State<NewsHomePage>
                     preferredSize: Size.fromHeight(56),
                     child: Container(
                       height: 56,
+                      color: Theme.of(context).scaffoldBackgroundColor,
                       child: Row(
                         children: [
                           Expanded(
@@ -53,9 +54,11 @@ class _NewsHomePageState extends State<NewsHomePage>
                                   Theme.of(context).textTheme.bodyText1?.color,
                               labelStyle: TextStyle(
                                 fontSize: 22,
+                                fontFamily: Utils.windowsFontFamily,
                               ),
                               unselectedLabelStyle: TextStyle(
                                 fontSize: 18,
+                                fontFamily: Utils.windowsFontFamily,
                               ),
                               indicatorColor: Colors.transparent,
                               isScrollable: true,

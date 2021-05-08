@@ -2,7 +2,7 @@ import 'dart:convert' show json;
 
 class NewsStatDetail {
   String? _comment_amount = "0";
-  String get comment_amount => _comment_amount!;
+  String get comment_amount => _comment_amount ?? "";
   set comment_amount(value) {
     var v = int.tryParse(value, radix: 0);
     _comment_amount = v.toString();

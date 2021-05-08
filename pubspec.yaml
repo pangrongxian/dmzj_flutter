@@ -65,7 +65,7 @@ dependencies:
   # 预加载的PageView
   preload_page_view: ^0.1.6
   # 包信息
-  package_info: ^2.0.0
+  package_info_plus: ^1.0.1
   # 解密V4 API
   crypton: ^2.0.1
   crypto: ^3.0.1

@@ -27,41 +27,57 @@ class _ComicHomePageState extends State<ComicHomePage>
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: AppBar(
-          title: TabBar(
-            controller: _tabController,
-            tabs: <Widget>[
-              Tab(child: Text("推荐")),
-              Tab(child: Text("更新")),
-              Tab(child: Text("分类")),
-              Tab(child: Text("排行")),
-              Tab(child: Text("专题")),
-            ],
-            indicatorSize: TabBarIndicatorSize.label,
-            isScrollable: true,
-            //labelPadding: EdgeInsets.all(8),
+    return SafeArea(
+      child: Scaffold(
+          appBar: PreferredSize(
+            preferredSize: Size.fromHeight(56),
+            child: Container(
+              height: 56,
+              color: Theme.of(context).scaffoldBackgroundColor,
+              child: Row(
+                children: [
+                  Expanded(
+                    child: TabBar(
+                      controller: _tabController,
+                      labelColor: Theme.of(context).textTheme.bodyText1?.color,
+                      labelStyle: TextStyle(
+                        fontSize: 22,
+                        fontFamily: Utils.windowsFontFamily,
+                      ),
+                      unselectedLabelStyle: TextStyle(
+                        fontSize: 18,
+                        fontFamily: Utils.windowsFontFamily,
+                      ),
+                      indicatorColor: Colors.transparent,
+                      isScrollable: true,
+                      tabs: ["推荐", "更新", "分类", "排行", "专题"]
+                          .map((x) => Tab(child: Text(x)))
+                          .toList(),
+                    ),
+                  ),
+                  IconButton(
+                      icon: Icon(Icons.search),
+                      tooltip: "搜索",
+                      onPressed: () {
+                        showSearch(
+                            context: context,
+                            delegate: ComicSearchBarDelegate());
+                        //Utils.openPage(context, 1798, 1);
+                      }),
+                ],
+              ),
+            ),
           ),
-          actions: <Widget>[
-            IconButton(
-                icon: Icon(Icons.search),
-                tooltip: "搜索",
-                onPressed: () {
-                  showSearch(
-                      context: context, delegate: ComicSearchBarDelegate());
-                  //Utils.openPage(context, 1798, 1);
-                }) //18417
-          ],
-        ),
-        body: TabBarView(
-          controller: _tabController,
-          children: <Widget>[
-            ComicRecommend(),
-            ComicUpdatePage(),
-            ComicCategoryPage(),
-            ComicRankPage(),
-            ComicSpecialPage(),
-          ],
-        ));
+          body: TabBarView(
+            controller: _tabController,
+            children: <Widget>[
+              ComicRecommend(),
+              ComicUpdatePage(),
+              ComicCategoryPage(),
+              ComicRankPage(),
+              ComicSpecialPage(),
+            ],
+          )),
+    );
   }
 }

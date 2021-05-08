@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:typed_data';
 import 'package:collection/collection.dart' show IterableExtension;
 import 'package:common_utils/common_utils.dart';
 import 'package:flutter/material.dart';
@@ -11,13 +10,10 @@ import 'package:flutter_dmzj/app/http_util.dart';
 import 'package:flutter_dmzj/app/user_helper.dart';
 import 'package:flutter_dmzj/app/user_info.dart';
 import 'package:flutter_dmzj/app/utils.dart';
-import 'package:flutter_dmzj/models/comic/comic_detail_model.dart';
 import 'package:flutter_dmzj/models/comic/comic_related_model.dart';
 import 'package:flutter_dmzj/protobuf/comic/detail_response.pb.dart';
 import 'package:flutter_dmzj/sql/comic_history.dart';
-import 'package:flutter_dmzj/views/download/comic_download.dart';
 import 'package:flutter_dmzj/views/other/comment_widget.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
 import 'package:share/share.dart';
@@ -116,13 +112,13 @@ class _ComicDetailPageState extends State<ComicDetailPage>
                     icon: Icon(Icons.more_vert),
                     onSelected: (e) {
                       if (e == "share") {
-                        Share.share(
+                        Utils.share(
                             "${_detail!.title}\r\nhttp://m.dmzj.com/info/${_detail!.comicPy}.html");
                       } else {
                         if (_detail == null ||
                             _detail!.chapters == null ||
                             _detail!.chapters.length == 0) {
-                          Fluttertoast.showToast(msg: '没有可以下载的章节');
+                          Utils.showToast(msg: '没有可以下载的章节');
                           return;
                         }
                         // Navigator.push(
@@ -232,7 +228,10 @@ class _ComicDetailPageState extends State<ComicDetailPage>
                             ),
                             SizedBox(height: 2),
                             Text(
-                              "作者:" + _detail!.authors.join(' '),
+                              "作者:" +
+                                  _detail!.authors
+                                      .map((x) => x.tagName)
+                                      .join(' '),
                               style: TextStyle(color: Colors.grey),
                             ),
                             SizedBox(height: 2),
@@ -247,7 +246,10 @@ class _ComicDetailPageState extends State<ComicDetailPage>
                             ),
                             SizedBox(height: 2),
                             Text(
-                              "状态:" + _detail!.status.join(' '),
+                              "状态:" +
+                                  _detail!.status
+                                      .map((x) => x.tagName)
+                                      .join(' '),
                               style: TextStyle(color: Colors.grey),
                             ),
                             SizedBox(height: 2),
@@ -411,7 +413,7 @@ class _ComicDetailPageState extends State<ComicDetailPage>
         _detail!.chapters == null ||
         _detail!.chapters.length == 0 ||
         _detail!.chapters[0].data.length == 0) {
-      Fluttertoast.showToast(msg: '没有可读的章节');
+      Utils.showToast(msg: '没有可读的章节');
       return;
     }
     if (historyChapter != 0) {
@@ -607,7 +609,7 @@ class _ComicDetailPageState extends State<ComicDetailPage>
         return;
       }
       print(e);
-      Fluttertoast.showToast(msg: e.toString());
+      Utils.showToast(msg: e.toString());
     } finally {
       setState(() {
         _loading = false;
@@ -807,7 +809,7 @@ class _ComicChapterViewState extends State<ComicChapterView>
         widget.detail!.chapters == null ||
         widget.detail!.chapters.length == 0 ||
         widget.detail!.chapters[0].data.length == 0) {
-      Fluttertoast.showToast(msg: '没有可读的章节');
+      Utils.showToast(msg: '没有可读的章节');
       return;
     }
     if (widget.historyChapter != 0) {

@@ -46,7 +46,7 @@ class _NewsDetailPageState extends State<NewsDetailPage> {
           IconButton(
             icon: Icon(Icons.share),
             onPressed: () {
-              Share.share(widget.title! + "\r\n" + widget.pageUrl!);
+              Utils.share(widget.title! + "\r\n" + widget.pageUrl!);
             },
           )
         ],

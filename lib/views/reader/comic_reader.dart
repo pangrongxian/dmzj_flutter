@@ -279,7 +279,7 @@ class _ComicReaderPageState extends State<ComicReaderPage> {
                           color: Colors.white,
                         ),
                         onPressed: () {
-                          Share.share(
+                          Utils.share(
                               '${widget.comicTitle}-${_currentItem!.chapterTitle}\r\nhttps://m.dmzj.com/view/${widget.comicId}/${_currentItem!.chapterId}.html');
                         }),
                   )),
@@ -1055,7 +1055,7 @@ class _ComicReaderPageState extends State<ComicReaderPage> {
 
   void nextChapter() async {
     if (widget.chapters.indexOf(_currentItem) == widget.chapters.length - 1) {
-      Fluttertoast.showToast(msg: '已经是最后一章了');
+      Utils.showToast(msg: '已经是最后一章了');
       return;
     }
     setState(() {
@@ -1066,7 +1066,7 @@ class _ComicReaderPageState extends State<ComicReaderPage> {
 
   void previousChapter() async {
     if (widget.chapters.indexOf(_currentItem) == 0) {
-      Fluttertoast.showToast(msg: '已经是最前面一章了');
+      Utils.showToast(msg: '已经是最前面一章了');
       return;
     }
     setState(() {

@@ -201,7 +201,7 @@ class _CommentWidgetState extends State<CommentWidget>
                     leading: Icon(Icons.content_copy),
                     onTap: () {
                       Clipboard.setData(ClipboardData(text: item.content));
-                      Fluttertoast.showToast(msg: '已将内容复制到剪贴板');
+                      Utils.showToast(msg: '已将内容复制到剪贴板');
                       Navigator.of(context).pop();
                     },
                   ),
@@ -411,7 +411,7 @@ class _CommentWidgetState extends State<CommentWidget>
                       leading: Icon(Icons.content_copy),
                       onTap: () {
                         Clipboard.setData(ClipboardData(text: item.content));
-                        Fluttertoast.showToast(msg: '已将内容复制到剪贴板');
+                        Utils.showToast(msg: '已将内容复制到剪贴板');
                         Navigator.of(context).pop();
                       },
                     )
@@ -506,7 +506,7 @@ class _CommentWidgetState extends State<CommentWidget>
         if (detail.length != 0) {
           _page++;
         } else {
-          Fluttertoast.showToast(msg: "加载完毕");
+          Utils.showToast(msg: "加载完毕");
         }
       }
     } catch (e) {

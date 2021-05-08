@@ -69,7 +69,7 @@ class _UserDetailPageState extends State<UserDetailPage> {
             IconButton(
                 icon: Icon(Icons.mail_outline),
                 onPressed: () {
-                  Fluttertoast.showToast(msg: '啊，还没写完呢');
+                  Utils.showToast(msg: '啊，还没写完呢');
                 })
           ],
         ),
@@ -194,7 +194,7 @@ class _SubscribeTabViewState extends State<SubscribeTabView>
         if (detail.length != 0) {
           _page++;
         } else {
-          Fluttertoast.showToast(msg: "加载完毕");
+          Utils.showToast(msg: "加载完毕");
         }
       }
     } catch (e) {

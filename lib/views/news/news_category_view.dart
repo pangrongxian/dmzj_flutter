@@ -37,7 +37,7 @@ class NewsCategoryViewState extends State<NewsCategoryView>
     if (columnNum < 1) columnNum = 1;
     if (columnNum > 3) columnNum = 3;
     var columnWidth = (MediaQuery.of(context).size.width - 24) / columnNum;
-    var columnHeight = 72.0;
+    var columnHeight = 80.0;
 
     return GetX<NewsListController>(
       init: NewsListController(widget.id, widget.hasBanner),
@@ -130,8 +130,8 @@ class NewsCategoryViewState extends State<NewsCategoryView>
       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: columnNum,
         childAspectRatio: columnWidth / columnHeight,
-        crossAxisSpacing: 8,
-        mainAxisSpacing: 8,
+        crossAxisSpacing: 4,
+        mainAxisSpacing: 4,
       ),
       itemCount: controller.newsList.length,
       itemBuilder: (_, i) {

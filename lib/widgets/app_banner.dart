@@ -15,10 +15,18 @@ class _AppBannerState extends State<AppBanner> {
   @override
   Widget build(BuildContext context) {
     var width = MediaQuery.of(context).size.width;
-    var viewportFraction = width <= 500 ? 1.0 : 0.4;
+    var w = (width - 500) / 500;
+    if (w < 0) {
+      w = 0;
+    }
+    print(width.toString() + "," + w.toString());
+    if (w >= 0.6) {
+      w = 0.6;
+    }
+    var viewportFraction = 1 - w;
 
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+      padding: EdgeInsets.only(left: 8, right: 8, bottom: 4),
       child: Stack(
         alignment: AlignmentDirectional.bottomEnd,
         children: <Widget>[
@@ -87,7 +95,7 @@ class BannerImageItem extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.all(4.0),
         child: ClipRRect(
-          borderRadius: BorderRadius.circular(8),
+          borderRadius: BorderRadius.circular(4),
           child: Stack(
             fit: StackFit.expand,
             children: <Widget>[

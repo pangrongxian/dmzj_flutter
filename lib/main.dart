@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_dmzj/app/app_setting.dart';
 import 'package:flutter_dmzj/app/config_helper.dart';
+import 'package:flutter_dmzj/app/utils.dart';
 import 'package:flutter_dmzj/controllers/home_index_controller.dart';
 import 'package:flutter_dmzj/sql/comic_down.dart';
 import 'package:flutter_dmzj/sql/comic_history.dart';
@@ -25,10 +26,13 @@ void main() async {
   SystemChrome.setSystemUIOverlayStyle(
     SystemUiOverlayStyle(
       statusBarColor: Colors.transparent,
+      //statusBarIconBrightness: Brightness.dark,
     ),
   );
+
   ConfigHelper.prefs = await SharedPreferences.getInstance();
-  await initDatabase();
+
+  //await initDatabase();
   runApp(MultiProvider(
     providers: [
       ChangeNotifierProvider<AppTheme>(create: (_) => AppTheme(), lazy: false),
@@ -80,12 +84,14 @@ class MyApp extends StatelessWidget {
       title: '动漫之家Flutter',
       theme: ThemeData(
         primarySwatch: Provider.of<AppTheme>(context).themeColor,
+        fontFamily: Utils.windowsFontFamily,
       ),
       themeMode: Provider.of<AppTheme>(context).themeMode,
       darkTheme: ThemeData(
         brightness: Brightness.dark,
         primarySwatch: Provider.of<AppTheme>(context).themeColor,
         accentColor: Provider.of<AppTheme>(context).themeColor,
+        fontFamily: Utils.windowsFontFamily,
       ),
       home: HomePage(),
       initialRoute: "/",
@@ -127,6 +133,8 @@ class HomePage extends StatelessWidget {
           onTap: controller.changeIndex,
           unselectedFontSize: 12,
           selectedFontSize: 12,
+          showSelectedLabels: false,
+          showUnselectedLabels: false,
           items: <BottomNavigationBarItem>[
             BottomNavigationBarItem(
               label: "漫画",
@@ -140,8 +148,8 @@ class HomePage extends StatelessWidget {
             ),
             BottomNavigationBarItem(
               label: "轻小说",
-              icon: Icon(Ionicons.reader_outline),
-              activeIcon: Icon(Ionicons.reader),
+              icon: Icon(Ionicons.book_outline),
+              activeIcon: Icon(Ionicons.book),
             ),
             BottomNavigationBarItem(
               label: "我的",

@@ -8,7 +8,6 @@ import 'package:flutter_dmzj/models/comic/comic_category_detail_item.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
 import 'package:flutter_easyrefresh/material_footer.dart';
 import 'package:flutter_easyrefresh/material_header.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
 
 class ComicCategoryDetailPage extends StatefulWidget {
@@ -333,7 +332,7 @@ class _ComicCategoryDetailPageState extends State<ComicCategoryDetailPage>
         if (detail.length != 0) {
           _page++;
         } else {
-          Fluttertoast.showToast(msg: "加载完毕");
+          Utils.showToast(msg: "加载完毕");
         }
       }
     } catch (e) {

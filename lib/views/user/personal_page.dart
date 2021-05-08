@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_dmzj/app/app_theme.dart';
 import 'package:flutter_dmzj/app/user_info.dart';
 import 'package:flutter_dmzj/app/utils.dart';
+import 'package:ionicons/ionicons.dart';
 import 'package:provider/provider.dart';
 
 class PersonalPage extends StatefulWidget {
@@ -18,49 +19,6 @@ class _PersonalPageState extends State<PersonalPage> {
       body: ListView(
         padding: EdgeInsets.zero,
         children: <Widget>[
-          // Provider.of<AppUserInfo>(context, listen: false).isLogin
-          //     ? InkWell(
-          //         onTap: () => Navigator.pushNamed(context, "/User"),
-          //         child: UserAccountsDrawerHeader(
-          //           currentAccountPicture: CircleAvatar(
-          //             backgroundImage: NetworkImage(
-          //               Provider.of<AppUserInfo>(context).loginInfo.photo,
-          //               headers: {"Referer": "http://www.dmzj.com/"},
-          //             ),
-          //           ),
-          //           accountName: InkWell(
-          //             child: Text(
-          //               Provider.of<AppUserInfo>(context).loginInfo.nickname,
-          //               style: TextStyle(fontWeight: FontWeight.bold),
-          //             ),
-          //           ),
-          //           accountEmail: Text(Provider.of<AppUserInfo>(context)
-          //                   .userProfile
-          //                   ?.description ??
-          //               ""),
-          //           // decoration: BoxDecoration(
-          //           //     image: DecorationImage(
-          //           //   image: AssetImage("assets/img_ucenter_def_bac.jpg"),
-          //           //   fit: BoxFit.cover,
-          //           //   //colorFilter: ColorFilter.mode(Theme.of(context).accentColor.withOpacity(0.4), BlendMode.colorBurn)
-          //           // )),
-          //         ),
-          //       )
-          //     : InkWell(
-          //         onTap: () => Navigator.pushNamed(context, "/Login"),
-          //         child: UserAccountsDrawerHeader(
-          //           currentAccountPicture: CircleAvatar(
-          //             child: Icon(Icons.account_circle),
-          //           ),
-          //           accountName: InkWell(
-          //             child: Text(
-          //               "点击登录",
-          //               style: TextStyle(fontWeight: FontWeight.bold),
-          //             ),
-          //           ),
-          //           accountEmail: Text("登录后享受更多功能"),
-          //         ),
-          //       ),
           Stack(
             children: <Widget>[
               Image.asset(
@@ -89,28 +47,29 @@ class _PersonalPageState extends State<PersonalPage> {
                     ? InkWell(
                         onTap: () {
                           showDialog(
-                              context: context,
-                              builder: (_) => AlertDialog(
-                                    title: Text("退出登录"),
-                                    content: Text("确定要退出登录吗?"),
-                                    actions: <Widget>[
-                                      new FlatButton(
-                                        child: new Text("取消"),
-                                        onPressed: () {
-                                          Navigator.of(context).pop();
-                                        },
-                                      ),
-                                      new FlatButton(
-                                        child: new Text("确定"),
-                                        onPressed: () {
-                                          Provider.of<AppUserInfo>(context,
-                                                  listen: false)
-                                              .logout();
-                                          Navigator.of(context).pop();
-                                        },
-                                      )
-                                    ],
-                                  ));
+                            context: context,
+                            builder: (_) => AlertDialog(
+                              title: Text("退出登录"),
+                              content: Text("确定要退出登录吗?"),
+                              actions: <Widget>[
+                                new FlatButton(
+                                  child: new Text("取消"),
+                                  onPressed: () {
+                                    Navigator.of(context).pop();
+                                  },
+                                ),
+                                new FlatButton(
+                                  child: new Text("确定"),
+                                  onPressed: () {
+                                    Provider.of<AppUserInfo>(context,
+                                            listen: false)
+                                        .logout();
+                                    Navigator.of(context).pop();
+                                  },
+                                )
+                              ],
+                            ),
+                          );
                         },
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
@@ -179,74 +138,66 @@ class _PersonalPageState extends State<PersonalPage> {
               ))
             ],
           ),
-          Material(
-            color: Theme.of(context).cardColor,
-            child: Column(
-              children: <Widget>[
-                // ListTile(
-                //   title: Text("消息中心"),
-                //   leading: Icon(Icons.email),
-                //   trailing: Icon(Icons.chevron_right, color: Colors.grey),
-                //   onTap: () => {},
-                // ),
-                ListTile(
-                  title: Text("我的订阅"),
-                  leading: Icon(Icons.favorite),
-                  trailing: Icon(Icons.chevron_right, color: Colors.grey),
-                  onTap: () => Utils.openSubscribePage(context),
-                ),
-                ListTile(
-                  title: Text("浏览记录"),
-                  leading: Icon(Icons.history),
-                  trailing: Icon(Icons.chevron_right, color: Colors.grey),
-                  onTap: () => Utils.openHistoryPage(context),
-                ),
-                ListTile(
-                  title: Text("我的评论"),
-                  leading: Icon(Icons.comment),
-                  trailing: Icon(Icons.chevron_right, color: Colors.grey),
-                  onTap: () => Utils.openMyCommentPage(context),
-                ),
-                ListTile(
-                  title: Text("我的下载"),
-                  trailing: Icon(Icons.chevron_right, color: Colors.grey),
-                  leading: Icon(Icons.file_download),
-                  onTap: () => {},
-                ),
-              ],
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+            child: Text(
+              "我的",
+              style: TextStyle(fontSize: 14, color: Colors.grey),
             ),
           ),
-
-          SizedBox(
-            height: 12,
+          ListTile(
+            title: Text("我的订阅"),
+            leading: Icon(Ionicons.heart_outline),
+            trailing: Icon(Icons.chevron_right, color: Colors.grey),
+            onTap: () => Utils.openSubscribePage(context),
           ),
-          Material(
-            color: Theme.of(context).cardColor,
-            child: Column(children: <Widget>[
-              ListTile(
-                title: Text("夜间模式"),
-                leading: Icon(Icons.brightness_4),
-                trailing: Padding(
-                  padding: EdgeInsets.all(8),
-                  child: Text(
-                    Provider.of<AppTheme>(context).themeModeName,
-                    style: TextStyle(fontSize: 14.0, color: Colors.grey),
-                  ),
-                ),
-                onTap: () => Provider.of<AppTheme>(context, listen: false)
-                    .showThemeModeDialog(
-                  context,
-                ),
+          ListTile(
+            title: Text("浏览记录"),
+            leading: Icon(Ionicons.time_outline),
+            trailing: Icon(Icons.chevron_right, color: Colors.grey),
+            onTap: () => Utils.openHistoryPage(context),
+          ),
+          ListTile(
+            title: Text("我的评论"),
+            leading: Icon(Ionicons.chatbox_ellipses_outline),
+            trailing: Icon(Icons.chevron_right, color: Colors.grey),
+            onTap: () => Utils.openMyCommentPage(context),
+          ),
+          ListTile(
+            title: Text("我的下载"),
+            leading: Icon(Ionicons.download_outline),
+            trailing: Icon(Icons.chevron_right, color: Colors.grey),
+            onTap: () => {},
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+            child: Text(
+              "设置",
+              style: TextStyle(fontSize: 14, color: Colors.grey),
+            ),
+          ),
+          ListTile(
+            title: Text("夜间模式"),
+            leading: Icon(Ionicons.moon_outline),
+            trailing: Padding(
+              padding: EdgeInsets.all(8),
+              child: Text(
+                Provider.of<AppTheme>(context).themeModeName,
+                style: TextStyle(fontSize: 14.0, color: Colors.grey),
               ),
-              ListTile(
-                title: Text("设置"),
-                leading: Icon(Icons.settings),
-                trailing: Icon(Icons.chevron_right, color: Colors.grey),
-                onTap: () {
-                  Navigator.pushNamed(context, "/Setting");
-                },
-              ),
-            ]),
+            ),
+            onTap: () => Provider.of<AppTheme>(context, listen: false)
+                .showThemeModeDialog(
+              context,
+            ),
+          ),
+          ListTile(
+            title: Text("设置"),
+            leading: Icon(Ionicons.settings_outline),
+            trailing: Icon(Icons.chevron_right, color: Colors.grey),
+            onTap: () {
+              Navigator.pushNamed(context, "/Setting");
+            },
           ),
         ],
       ),

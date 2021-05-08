@@ -3,7 +3,9 @@ import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:event_bus/event_bus.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:flutter_dmzj/app/config_helper.dart';
 import 'package:flutter_dmzj/models/comic/comic_detail_model.dart';
@@ -27,10 +29,12 @@ import 'package:flutter_dmzj/views/user/user_detail.dart';
 import 'package:flutter_dmzj/views/user/user_history.dart';
 import 'package:flutter_dmzj/views/user/user_subscribe.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:package_info/package_info.dart';
+import 'package:get/get.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:photo_view/photo_view.dart';
 import 'package:http/http.dart' as http;
+import 'package:share/share.dart';
 
 class Utils {
   static EventBus changeComicHomeTabIndex = EventBus();
@@ -145,9 +149,9 @@ class Utils {
                               DateTime.now().millisecondsSinceEpoch.toString() +
                               ".jpg")
                           .writeAsBytes(byes, mode: FileMode.write);
-                      Fluttertoast.showToast(msg: '保存成功');
+                      Utils.showToast(msg: '保存成功');
                     } catch (e) {
-                      Fluttertoast.showToast(msg: '保存失败');
+                      Utils.showToast(msg: '保存失败');
                     }
                   },
                   textColor: Colors.white,
@@ -199,7 +203,7 @@ class Utils {
   static void openPage(BuildContext context, int? id, int? type,
       {String? url, String? title}) {
     if (id == null) {
-      Fluttertoast.showToast(msg: '无法打开此内容');
+      Utils.showToast(msg: '无法打开此内容');
       return;
     }
     switch (type) {
@@ -277,7 +281,7 @@ class Utils {
 
   static void openSubscribePage(BuildContext context, {int index = 0}) {
     if (!ConfigHelper.getUserIsLogined()) {
-      Fluttertoast.showToast(msg: '没有登录');
+      Utils.showToast(msg: '没有登录');
       return;
     }
     Navigator.push(
@@ -289,7 +293,7 @@ class Utils {
 
   static void openHistoryPage(BuildContext context) {
     if (!ConfigHelper.getUserIsLogined()) {
-      Fluttertoast.showToast(msg: '没有登录');
+      Utils.showToast(msg: '没有登录');
       return;
     }
     Navigator.push(
@@ -300,7 +304,7 @@ class Utils {
 
   static void openMyCommentPage(BuildContext context) {
     if (!ConfigHelper.getUserIsLogined()) {
-      Fluttertoast.showToast(msg: '没有登录');
+      Utils.showToast(msg: '没有登录');
       return;
     }
     Navigator.push(context,
@@ -370,5 +374,34 @@ class Utils {
         ),
       ),
     );
+  }
+
+  static String? get windowsFontFamily {
+    if (kIsWeb) return null;
+    if (Platform.isWindows) return "微软雅黑";
+    return null;
+  }
+
+  static void showToast({String msg = ""}) {
+    if (Platform.isAndroid || Platform.isIOS) {
+      Fluttertoast.showToast(msg: msg);
+    } else {
+      Get.rawSnackbar(
+        message: msg,
+        margin: EdgeInsets.all(12),
+        padding: EdgeInsets.symmetric(vertical: 12, horizontal: 8),
+        borderRadius: 8,
+        duration: Duration(seconds: 2),
+      );
+    }
+  }
+
+  static void share(String content) {
+    if (Platform.isAndroid || Platform.isIOS) {
+      Share.share(content);
+    } else {
+      Clipboard.setData(ClipboardData(text: content));
+      showToast(msg: "已复制内容");
+    }
   }
 }

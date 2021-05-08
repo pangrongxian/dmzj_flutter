@@ -162,7 +162,7 @@ class _NovelUpdatePageState extends State<NovelUpdatePage>
       if (detail.length != 0) {
         _page++;
       } else {
-        Fluttertoast.showToast(msg: "加载完毕");
+        Utils.showToast(msg: "加载完毕");
       }
     } catch (e) {
       print(e);

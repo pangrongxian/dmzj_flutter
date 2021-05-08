@@ -52,6 +52,10 @@ class _NovelCategoryDetailPageState extends State<NovelCategoryDetailPage>
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.title!),
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back),
+          onPressed: () => Navigator.pop(context),
+        ),
         actions: <Widget>[
           Builder(
             builder: (BuildContext context) => IconButton(
@@ -321,7 +325,7 @@ class _NovelCategoryDetailPageState extends State<NovelCategoryDetailPage>
         if (detail.length != 0) {
           _page++;
         } else {
-          Fluttertoast.showToast(msg: "加载完毕");
+          Utils.showToast(msg: "加载完毕");
         }
       }
     } catch (e) {

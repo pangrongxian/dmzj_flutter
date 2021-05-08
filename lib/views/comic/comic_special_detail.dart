@@ -39,7 +39,7 @@ class _ComicSpecialDetailPageState extends State<ComicSpecialDetailPage>
                 actions: <Widget>[
                   IconButton(
                       icon: Icon(Icons.share),
-                      onPressed: () => Share.share(
+                      onPressed: () => Utils.share(
                           "${_detail!.title}\r\nhttp://m.dmzj.com/zhuanti/${_detail!.page_url}"))
                 ],
                 bottom: TabBar(

@@ -94,7 +94,7 @@ class _NovelDetailPageState extends State<NovelDetailPage>
                           }),
                   IconButton(
                       icon: Icon(Icons.share),
-                      onPressed: () => Share.share(
+                      onPressed: () => Utils.share(
                           "${_detail!.name}\r\nhttp://q.dmzj.com/${widget.novelId}/index.shtml")),
                 ],
                 bottom: TabBar(tabs: [
@@ -282,10 +282,10 @@ class _NovelDetailPageState extends State<NovelDetailPage>
   }
 
   void openRead() async {
-    //Fluttertoast.showToast(msg: '没写完');
+    //Utils.showToast(msg: '没写完');
 
     if (volumes == null || volumes == null || volumes[0].chapters.length == 0) {
-      Fluttertoast.showToast(msg: '没有可读的章节');
+      Utils.showToast(msg: '没有可读的章节');
       return;
     }
 

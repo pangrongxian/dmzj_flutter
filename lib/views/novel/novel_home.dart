@@ -32,6 +32,7 @@ class _NovelHomePageState extends State<NovelHomePage>
           preferredSize: Size.fromHeight(56),
           child: Container(
             height: 56,
+            color: Theme.of(context).scaffoldBackgroundColor,
             child: Row(
               children: [
                 Expanded(
@@ -40,9 +41,11 @@ class _NovelHomePageState extends State<NovelHomePage>
                     labelColor: Theme.of(context).textTheme.bodyText1?.color,
                     labelStyle: TextStyle(
                       fontSize: 22,
+                      fontFamily: Utils.windowsFontFamily,
                     ),
                     unselectedLabelStyle: TextStyle(
                       fontSize: 18,
+                      fontFamily: Utils.windowsFontFamily,
                     ),
                     indicatorColor: Colors.transparent,
                     isScrollable: true,

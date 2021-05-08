@@ -52,8 +52,8 @@ class _NovelCategoryPageState extends State<NovelCategoryPage>
             crossAxisCount: MediaQuery.of(context).size.width ~/ 120 < 3
                 ? 3
                 : MediaQuery.of(context).size.width ~/ 120,
-            crossAxisSpacing: 12.0,
-            mainAxisSpacing: 12.0,
+            crossAxisSpacing: 8.0,
+            mainAxisSpacing: 8.0,
             childAspectRatio: getWidth() / (getWidth() + 32)),
         itemBuilder: (context, i) => Container(
           child: BorderCard(
