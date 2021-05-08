@@ -1,31 +1,142 @@
-import 'dart:convert';
+import 'dart:io';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_dmzj/app/api.dart';
-import 'package:flutter_dmzj/app/user_helper.dart';
+import 'package:flutter_dmzj/app/http_util.dart';
 import 'package:flutter_dmzj/app/utils.dart';
-import 'package:flutter_dmzj/models/news/news_stat_detail.dart';
+import 'package:flutter_dmzj/controllers/news/news_detail_controller.dart';
 import 'package:flutter_dmzj/widgets/icon_text_button.dart';
-import 'package:share/share.dart';
+import 'package:flutter_widget_from_html_core/flutter_widget_from_html_core.dart';
+import 'package:get/get.dart';
+import 'package:ionicons/ionicons.dart';
+import 'package:universal_html/parsing.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:webview_flutter/webview_flutter.dart';
-import 'package:http/http.dart' as http;
 
-class NewsDetailPage extends StatefulWidget {
-  final int? articleId;
-  final String? pageUrl;
-  final String? title;
+class NewsDetailPage extends StatelessWidget {
+  NewsDetailPage({Key? key}) : super(key: key);
+  final NewsDetailController controller = Get.put(NewsDetailController());
+  final title = (Get.arguments as Map)['title'] ?? "";
+  final url = (Get.arguments as Map)['url'] ?? "";
+  final newsId = (Get.arguments as Map)['id'] ?? 0;
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(
+          title,
+          style: TextStyle(color: Theme.of(context).textTheme.bodyText1?.color),
+        ),
+        backgroundColor: Theme.of(context).cardColor,
+        elevation: 2,
+        iconTheme:
+            IconThemeData(color: Theme.of(context).textTheme.bodyText1?.color),
+        actions: <Widget>[
+          IconButton(
+            icon: Icon(Icons.share),
+            onPressed: () {
+              Utils.share("$title\r\n$url");
+            },
+          )
+        ],
+      ),
+      body: (Platform.isAndroid || Platform.isIOS)
+          ? WebView(
+              navigationDelegate: (args) {
+                var uri = Uri.parse(args.url);
+                print(args.url);
+                if (uri.scheme == "dmzjimage") {
+                  Utils.showImageViewDialog(
+                      context, uri.queryParameters["src"]);
+                } else if (uri.scheme == "dmzjandroid") {
+                  //print(uri.path);
+                  Utils.openPage(context, int.parse(uri.queryParameters["id"]!),
+                      uri.path == "/cartoon_description" ? 1 : 2);
+                  //print(uri.queryParameters["id"]);
+                } else if (uri.scheme == "https" || uri.scheme == "http") {
+                  //_controller.loadUrl(args.url);
+                  return NavigationDecision.navigate;
+                }
 
-  NewsDetailPage(this.articleId, this.pageUrl, this.title, {Key? key})
-      : super(key: key);
-
-  _NewsDetailPageState createState() => _NewsDetailPageState();
+                return NavigationDecision.prevent;
+              },
+              initialUrl: url,
+              javascriptMode: JavascriptMode.unrestricted,
+              onPageFinished: (e) {
+                //try {
+                //_controller.evaluateJavascript(
+                // "\$(\".news_box\").css(\"min-height\",\"680px\");");
+                //} catch (e) {
+                //}
+              },
+            )
+          : DesktopContent(url),
+      bottomNavigationBar: Offstage(
+        offstage: newsId == 0,
+        child: BottomAppBar(
+          child: Row(
+            children: <Widget>[
+              Obx(
+                () => IconTextButton(
+                  Icon(
+                    controller.liked.value
+                        ? Ionicons.heart
+                        : Ionicons.heart_outline,
+                    size: 20.0,
+                  ),
+                  "点赞(${controller.moodCount.value})",
+                  controller.addLike,
+                ),
+              ),
+              Obx(
+                () => IconTextButton(
+                  Icon(
+                    Ionicons.chatbox_ellipses_outline,
+                    size: 20.0,
+                  ),
+                  "评论(${controller.commentCount.value})",
+                  () => Utils.openCommentPage(
+                    context,
+                    controller.newsId,
+                    6,
+                    title,
+                  ),
+                ),
+              ),
+              Obx(
+                () => IconTextButton(
+                  Icon(
+                    controller.subscribed.value
+                        ? Ionicons.star
+                        : Ionicons.star_outline,
+                    size: 20.0,
+                  ),
+                  controller.subscribed.value ? "已收藏" : "收藏",
+                  controller.addOrDelNewsSubscribe,
+                ),
+              )
+            ],
+          ),
+        ),
+      ),
+    );
+  }
 }
 
-class _NewsDetailPageState extends State<NewsDetailPage> {
+class DesktopContent extends StatefulWidget {
+  final String pageUrl;
+  DesktopContent(this.pageUrl, {Key? key}) : super(key: key);
+
+  @override
+  _DesktopContentState createState() => _DesktopContentState();
+}
+
+class _DesktopContentState extends State<DesktopContent> {
+  final ScrollController _scrollController = ScrollController();
   @override
   void initState() {
     super.initState();
-    loadStat();
+    loadHtml();
   }
 
   @override
@@ -35,133 +146,105 @@ class _NewsDetailPageState extends State<NewsDetailPage> {
     }
   }
 
-  bool _isLike = false;
-  bool _isSub = false;
+  String _kHtml = "<p></p>";
+  String _author = "", _src = "动漫之家", _time = "";
+  String _title = "";
+  void loadHtml() async {
+    try {
+      var result = await HttpUtil.instance.httpGet(widget.pageUrl);
+      final htmlDocument = parseHtmlDocument(result);
+      var news = htmlDocument.documentElement?.querySelector('.news_box');
+      var title = htmlDocument.documentElement?.querySelector('.min_box_tit');
+
+      setState(() {
+        _kHtml = news?.innerHtml ?? "";
+        _title = title?.innerText ?? "";
+        _author =
+            htmlDocument.documentElement?.querySelector('.txt1')?.innerText ??
+                "";
+        _src =
+            htmlDocument.documentElement?.querySelector('.txt2')?.innerText ??
+                "";
+        _time =
+            htmlDocument.documentElement?.querySelector('.txt3')?.innerText ??
+                "";
+      });
+    } catch (e) {
+      throw e;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title!),
-        actions: <Widget>[
-          IconButton(
-            icon: Icon(Icons.share),
-            onPressed: () {
-              Utils.share(widget.title! + "\r\n" + widget.pageUrl!);
+    return Scrollbar(
+      controller: _scrollController,
+      child: ListView(
+        controller: _scrollController,
+        padding: EdgeInsets.all(12),
+        children: [
+          SelectableText(
+            _title,
+            style: TextStyle(fontSize: 18),
+          ),
+          SizedBox(
+            height: 4,
+          ),
+          SelectableText(
+            "$_author $_src $_time",
+            style: TextStyle(fontSize: 12, color: Colors.grey),
+          ),
+          SizedBox(
+            height: 12,
+          ),
+          HtmlWidget(
+            _kHtml,
+            customWidgetBuilder: (e) {
+              if (e.localName == "img") {
+                var imgSrc = e.attributes["src"];
+                if (imgSrc == null) {
+                  imgSrc = e.attributes["data-original"];
+                }
+                return InkWell(
+                  child: CachedNetworkImage(
+                    imageUrl: imgSrc ?? "",
+                    httpHeaders: {"Referer": "http://www.dmzj.com/"},
+                    fit: BoxFit.fitWidth,
+                  ),
+                  onTap: () {
+                    Utils.showImageViewDialog(
+                      context,
+                      imgSrc,
+                    );
+                  },
+                );
+              }
+
+              return null;
+            },
+            textStyle: TextStyle(
+              fontSize: 16,
+              height: 1.4,
+            ),
+            onTapUrl: (url) {
+              var uri = Uri.parse(url);
+              if (uri.scheme == "dmzjimage") {
+                Utils.showImageViewDialog(context, uri.queryParameters["src"]);
+                return;
+              }
+              if (uri.scheme == "dmzjandroid") {
+                Utils.openPage(
+                    context,
+                    int.parse(uri.queryParameters["id"] ?? "0"),
+                    uri.path == "/cartoon_description" ? 1 : 2);
+                return;
+              }
+              if (uri.scheme == "https" || uri.scheme == "http") {
+                launch(url);
+              }
             },
           )
         ],
       ),
-      body: WebView(
-        navigationDelegate: (args) {
-          var uri = Uri.parse(args.url);
-          print(args.url);
-          if (uri.scheme == "dmzjimage") {
-            Utils.showImageViewDialog(context, uri.queryParameters["src"]);
-          } else if (uri.scheme == "dmzjandroid") {
-            //print(uri.path);
-            Utils.openPage(context, int.parse(uri.queryParameters["id"]!),
-                uri.path == "/cartoon_description" ? 1 : 2);
-            //print(uri.queryParameters["id"]);
-          } else if (uri.scheme == "https" || uri.scheme == "http") {
-            //_controller.loadUrl(args.url);
-            return NavigationDecision.navigate;
-          }
-
-          return NavigationDecision.prevent;
-        },
-        initialUrl: widget.pageUrl,
-        javascriptMode: JavascriptMode.unrestricted,
-        onPageFinished: (e) {
-          //try {
-          //_controller.evaluateJavascript(
-          // "\$(\".news_box\").css(\"min-height\",\"680px\");");
-          //} catch (e) {
-          //}
-        },
-      ),
-      bottomNavigationBar: Offstage(
-        offstage: widget.articleId == null || widget.articleId == 0,
-        child: BottomAppBar(
-          child: Row(
-            children: <Widget>[
-              IconTextButton(
-                  Icon(
-                    _isLike ? Icons.favorite : Icons.favorite_border,
-                    size: 18.0,
-                  ),
-                  "点赞(${_stat.mood_amount})",
-                  addLike),
-              IconTextButton(
-                  Icon(
-                    Icons.chat_bubble_outline,
-                    size: 16.0,
-                  ),
-                  "评论(${_stat.comment_amount})",
-                  () => Utils.openCommentPage(
-                      context, widget.articleId, 6, widget.title)),
-              IconTextButton(
-                  Icon(
-                    _isSub ? Icons.star : Icons.star_border,
-                    size: 18.0,
-                  ),
-                  _isSub ? "已收藏" : "收藏",
-                  addOrCancelSub)
-            ],
-          ),
-        ),
-      ),
     );
-  }
-
-  NewsStatDetail _stat = NewsStatDetail();
-  Future loadStat() async {
-    try {
-      var api = Api.newsStat(widget.articleId);
-      var response = await http.get(Uri.parse(api));
-      var jsonMap = jsonDecode(response.body);
-      var detail = NewsStatDetail.fromJson(jsonMap["data"]);
-      setState(() {
-        _stat = detail;
-      });
-      var result = await UserHelper.newsCheckSub(widget.articleId);
-      setState(() {
-        _isSub = result;
-      });
-    } catch (e) {
-      print(e);
-    }
-  }
-
-  void addLike() async {
-    try {
-      if (_isLike) {
-        return;
-      }
-      var api = Api.addNewsLike(widget.articleId);
-      var response = await http.get(Uri.parse(api));
-      var jsonMap = jsonDecode(response.body);
-      if (jsonMap["code"] == 0) {
-        setState(() {
-          _isLike = true;
-          _stat.mood_amount++;
-        });
-      }
-    } catch (e) {
-      print(e);
-    }
-  }
-
-  void addOrCancelSub() async {
-    try {
-      var result =
-          await UserHelper.addOrCancelNewsSub(widget.articleId, _isSub);
-      if (result == true) {
-        setState(() {
-          _isSub = !_isSub;
-        });
-      }
-    } catch (e) {
-      print(e);
-    }
   }
 }

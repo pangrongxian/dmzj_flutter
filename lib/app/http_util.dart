@@ -65,6 +65,31 @@ class HttpUtil {
     }
   }
 
+  Future<dynamic> httpPostJson(
+    String url, {
+    Map<String, dynamic>? data,
+    bool needLogin = false,
+  }) async {
+    try {
+      var result = await dio.post(
+        url,
+        data: data,
+        options: Options(
+          responseType: ResponseType.json,
+        ),
+      );
+
+      return result.data;
+    } catch (e) {
+      if (e is DioError) {
+        dioErrorHandle(e);
+      } else {
+        throw AppError("网络请求失败");
+      }
+      return {};
+    }
+  }
+
   void dioErrorHandle(DioError e) {
     switch (e.type) {
       case DioErrorType.cancel:

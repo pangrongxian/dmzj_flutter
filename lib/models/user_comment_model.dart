@@ -71,7 +71,8 @@ class UserCommentItem {
         obj_cover: jsonRes['obj_cover'],
         obj_name: jsonRes['obj_name'],
         page_url: jsonRes['page_url'],
-        masterComment: UserMasterComment.fromJson(jsonRes['masterComment']),
+        masterComment:
+            UserMasterComment.fromJson(jsonRes['masterComment'] ?? {}),
       );
   Map<String, dynamic> toJson() => {
         'comment_id': _comment_id,

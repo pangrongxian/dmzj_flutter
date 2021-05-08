@@ -107,10 +107,10 @@ class MyApp extends StatelessWidget {
           name: '/',
           page: () => HomePage(),
         ),
-        // GetPage(
-        //   name: '/news/detail',
-        //   page: () => NewsDetailPage(),
-        // ),
+        GetPage(
+          name: '/news/detail',
+          page: () => NewsDetailPage(),
+        ),
       ],
     );
   }

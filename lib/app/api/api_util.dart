@@ -1,7 +1,8 @@
 import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
-
+import 'package:convert/convert.dart';
+import 'package:crypto/crypto.dart';
 import 'package:crypton/crypton.dart';
 import 'package:flutter_dmzj/app/config_helper.dart';
 
@@ -22,7 +23,7 @@ class ApiUtil {
   }
 
   static const BASE_URL_V4 = "https://nnv4api.dmzj1.com";
-  static const BASE_URL_V3 = "https://v3api.dmzj1.com";
+  static const BASE_URL_V3 = "https://nnv3api.dmzj1.com";
   static Map<String, dynamic> defaultParameter({bool needLogined = false}) {
     Map<String, dynamic> map = {
       "channel": Platform.operatingSystem,
@@ -34,5 +35,10 @@ class ApiUtil {
       map.addAll({'uid': ConfigHelper.getUserInfo()?.uid ?? ""});
     }
     return map;
+  }
+
+  static String sign(String content, String mode) {
+    var _content = new Utf8Encoder().convert(mode + content);
+    return hex.encode(md5.convert(_content).bytes);
   }
 }

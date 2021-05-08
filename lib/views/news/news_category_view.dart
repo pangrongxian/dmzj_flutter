@@ -3,6 +3,7 @@ import 'package:common_utils/common_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dmzj/app/api.dart';
 import 'package:flutter_dmzj/app/api/news.dart';
+import 'package:flutter_dmzj/app/page_navigator.dart';
 import 'package:flutter_dmzj/app/utils.dart';
 import 'package:flutter_dmzj/controllers/news/news_list_controller.dart';
 import 'package:flutter_dmzj/models/news/news_banner_model.dart';
@@ -62,12 +63,10 @@ class NewsCategoryViewState extends State<NewsCategoryView>
                                   (i) => BannerImageItem(
                                     pic: i.pic_url,
                                     title: i.title,
-                                    onTaped: () => Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (_) => NewsDetailPage(
-                                            i.object_id, i.object_url, i.title),
-                                      ),
+                                    onTaped: () => PageNavigator.toNewsDetail(
+                                      id: i.object_id,
+                                      url: i.object_url,
+                                      title: i.title,
                                     ),
                                   ),
                                 )
@@ -133,6 +132,7 @@ class NewsCategoryViewState extends State<NewsCategoryView>
         crossAxisSpacing: 4,
         mainAxisSpacing: 4,
       ),
+      scrollDirection: Axis.vertical,
       itemCount: controller.newsList.length,
       itemBuilder: (_, i) {
         var item = controller.newsList[i];
@@ -143,8 +143,11 @@ class NewsCategoryViewState extends State<NewsCategoryView>
 
   Widget listItemBuilder(NewsListItemResponse item) {
     return BorderCard(
-      onTap: () => Utils.openPage(context, item.articleId, 7,
-          title: item.title, url: item.pageUrl),
+      onTap: () => PageNavigator.toNewsDetail(
+        id: item.articleId,
+        title: item.title,
+        url: item.pageUrl,
+      ),
       child: Padding(
         padding: const EdgeInsets.all(4.0),
         child: Row(

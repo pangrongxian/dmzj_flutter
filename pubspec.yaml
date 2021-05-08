@@ -74,6 +74,9 @@ dependencies:
   dio: ^4.0.0
   #ion图标
   ionicons: ^0.1.2
+  #html处理
+  universal_html: ^2.0.8
+  flutter_widget_from_html_core: ^0.6.1
   
 dev_dependencies:
   flutter_test:

@@ -137,24 +137,27 @@ class Utils {
               Positioned(
                 bottom: 12,
                 right: 12,
-                child: FlatButton(
+                child: TextButton(
                   onPressed: () async {
                     try {
                       Future<FileInfo?> file =
                           DefaultCacheManager().getFileFromMemory(image);
                       var byes = (await file)!.file.readAsBytesSync();
                       var dir = await getApplicationDocumentsDirectory();
+
                       await File(dir.path +
                               "/" +
                               DateTime.now().millisecondsSinceEpoch.toString() +
                               ".jpg")
                           .writeAsBytes(byes, mode: FileMode.write);
-                      Utils.showToast(msg: '保存成功');
+                      Utils.showToast(msg: '已保存至:${dir.path}');
                     } catch (e) {
                       Utils.showToast(msg: '保存失败');
                     }
                   },
-                  textColor: Colors.white,
+                  style: ButtonStyle(
+                    foregroundColor: MaterialStateProperty.all(Colors.white),
+                  ),
                   child: Text("保存"),
                 ),
               ),
@@ -233,11 +236,7 @@ class Utils {
           return WebViewPage(url);
         }));
         break;
-      case 7:
-        Navigator.push(context, MaterialPageRoute(builder: (context) {
-          return NewsDetailPage(id, url, title);
-        }));
-        break;
+
       case 8:
         Navigator.push(context, MaterialPageRoute(builder: (context) {
           return ComicAuthorPage(id);
@@ -403,5 +402,22 @@ class Utils {
       Clipboard.setData(ClipboardData(text: content));
       showToast(msg: "已复制内容");
     }
+  }
+
+  static Size calculateTextHeight(
+      BuildContext context, String value, double fontSize, int maxLines) {
+    TextPainter painter = TextPainter(
+      locale: Localizations.localeOf(context),
+      maxLines: maxLines,
+      textDirection: TextDirection.ltr,
+      text: TextSpan(
+        text: value,
+        style: TextStyle(
+          fontSize: fontSize,
+        ),
+      ),
+    );
+    painter.layout(maxWidth: 100);
+    return painter.size;
   }
 }

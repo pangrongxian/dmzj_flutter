@@ -36,18 +36,19 @@ class _ComicDetailPageState extends State<ComicDetailPage>
   @override
   void initState() {
     super.initState();
-    updateHistory();
+    // updateHistory();
     Utils.changHistory.on<int>().listen((e) {
-      updateHistory();
+      //updateHistory();
     });
     loadData();
   }
 
   void updateHistory() async {
-    var his = await ComicHistoryProvider.getItem(widget.comicId);
-    setState(() {
-      historyChapter = his?.chapter_id ?? 0;
-    });
+    //TODO desktop
+    //var his = await ComicHistoryProvider.getItem(widget.comicId);
+    // setState(() {
+    //   historyChapter = his?.chapter_id ?? 0;
+    // });
   }
 
   @override

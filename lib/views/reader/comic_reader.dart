@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:battery/battery.dart';
@@ -49,8 +50,8 @@ class ComicReaderPage extends StatefulWidget {
 
 class _ComicReaderPageState extends State<ComicReaderPage> {
   ComicDetailChapterInfoResponse? _currentItem;
-  Battery _battery = Battery();
-  Connectivity _connectivity = Connectivity();
+  //late Battery _battery;
+
   String _batteryStr = "-%";
   String _networkState = "";
 
@@ -72,48 +73,51 @@ class _ComicReaderPageState extends State<ComicReaderPage> {
     }
 
     _currentItem = widget.item;
-
-    _connectivity.checkConnectivity().then((e) {
-      var str = "";
-      if (e == ConnectivityResult.mobile) {
-        str = "移动网络";
-      } else if (e == ConnectivityResult.wifi) {
-        str = "WIFI";
-      } else if (e == ConnectivityResult.none) {
-        str = "无网络";
-      } else {
-        str = "未知网络";
-      }
-      setState(() {
-        _networkState = str;
+    if (Platform.isAndroid || Platform.isIOS) {
+      var _connectivity = Connectivity();
+      _connectivity.checkConnectivity().then((e) {
+        var str = "";
+        if (e == ConnectivityResult.mobile) {
+          str = "移动网络";
+        } else if (e == ConnectivityResult.wifi) {
+          str = "WIFI";
+        } else if (e == ConnectivityResult.none) {
+          str = "无网络";
+        } else {
+          str = "未知网络";
+        }
+        setState(() {
+          _networkState = str;
+        });
       });
-    });
-    _connectivity.onConnectivityChanged.listen((e) {
-      var str = "";
-      if (e == ConnectivityResult.mobile) {
-        str = "移动网络";
-      } else if (e == ConnectivityResult.wifi) {
-        str = "WIFI";
-      } else if (e == ConnectivityResult.none) {
-        str = "无网络";
-      } else {
-        str = "未知网络";
-      }
-      setState(() {
-        _networkState = str;
+      _connectivity.onConnectivityChanged.listen((e) {
+        var str = "";
+        if (e == ConnectivityResult.mobile) {
+          str = "移动网络";
+        } else if (e == ConnectivityResult.wifi) {
+          str = "WIFI";
+        } else if (e == ConnectivityResult.none) {
+          str = "无网络";
+        } else {
+          str = "未知网络";
+        }
+        setState(() {
+          _networkState = str;
+        });
       });
-    });
-    _battery.batteryLevel.then((e) {
-      setState(() {
-        _batteryStr = e.toString() + "%";
+      var _battery = Battery();
+      _battery.batteryLevel.then((e) {
+        setState(() {
+          _batteryStr = e.toString() + "%";
+        });
       });
-    });
-    _battery.onBatteryStateChanged.listen((BatteryState state) async {
-      var e = await _battery.batteryLevel;
-      setState(() {
-        _batteryStr = e.toString() + "%";
+      _battery.onBatteryStateChanged.listen((BatteryState state) async {
+        var e = await _battery.batteryLevel;
+        setState(() {
+          _batteryStr = e.toString() + "%";
+        });
       });
-    });
+    }
 
     _scrollController.addListener(() {
       var value = _scrollController.offset;
@@ -153,8 +157,8 @@ class _ComicReaderPageState extends State<ComicReaderPage> {
     if (!ConfigHelper.getComicVertical()) {
       print(_selectIndex);
       page = _selectIndex;
-      if (page > _detail!.picnum!) {
-        page = _detail!.picnum;
+      if (page > (_detail?.picnum ?? 0)) {
+        page = _detail?.picnum ?? 0;
       }
     }
 
@@ -203,7 +207,7 @@ class _ComicReaderPageState extends State<ComicReaderPage> {
                           ? "${_currentItem!.chapterTitle}  加载中 WIFI  100%电量"
                           : Provider.of<AppSetting>(context).comicVerticalMode
                               ? "${_currentItem!.chapterTitle}  $_verticalValue  $_networkState  $_batteryStr电量"
-                              : "${_currentItem!.chapterTitle}  $_selectIndex/${_detail!.page_url!.length}  $_networkState  $_batteryStr 电量",
+                              : "${_currentItem!.chapterTitle}  $_selectIndex/${(_detail?.page_url?.length ?? 0)}  $_networkState  $_batteryStr 电量",
                       style: TextStyle(color: Colors.white, fontSize: 12),
                     ),
                   )
@@ -311,34 +315,34 @@ class _ComicReaderPageState extends State<ComicReaderPage> {
                           ),
                         ),
                       ),
-                      Expanded(
-                        child: !_loading
-                            ? Provider.of<AppSetting>(context).comicVerticalMode
-                                ? Slider(
-                                    value: _verSliderValue,
-                                    max: _verSliderMax,
-                                    onChanged: (e) {
-                                      _scrollController.jumpTo(e);
-                                    },
-                                  )
-                                : Slider(
-                                    value: _selectIndex >= 1
-                                        ? _selectIndex.toDouble()
-                                        : 0,
-                                    max: _detail!.picnum!.toDouble(),
-                                    onChanged: (e) {
-                                      setState(() {
-                                        _selectIndex = e.toInt();
-                                        _pageController
-                                            .jumpToPage(e.toInt() + 1);
-                                      });
-                                    },
-                                  )
-                            : Text(
-                                "加载中",
-                                style: TextStyle(color: Colors.white),
-                              ),
-                      ),
+                      // Expanded(
+                      //   child: !_loading
+                      //       ? Provider.of<AppSetting>(context).comicVerticalMode
+                      //           ? Slider(
+                      //               value: _verSliderValue,
+                      //               max: _verSliderMax,
+                      //               onChanged: (e) {
+                      //                 _scrollController.jumpTo(e);
+                      //               },
+                      //             )
+                      //           : Slider(
+                      //               value: _selectIndex >= 1
+                      //                   ? _selectIndex.toDouble()
+                      //                   : 0,
+                      //               max: _detail?.picnum?.toDouble() ?? 0,
+                      //               onChanged: (e) {
+                      //                 setState(() {
+                      //                   _selectIndex = e.toInt();
+                      //                   _pageController
+                      //                       .jumpToPage(e.toInt() + 1);
+                      //                 });
+                      //               },
+                      //             )
+                      //       : Text(
+                      //           "加载中",
+                      //           style: TextStyle(color: Colors.white),
+                      //         ),
+                      // ),
                       ButtonTheme(
                         minWidth: 10,
                         padding:
@@ -475,7 +479,7 @@ class _ComicReaderPageState extends State<ComicReaderPage> {
     if (_pageController.page == 1) {
       previousChapter();
       setState(() {
-        _selectIndex = _detail!.page_url!.length;
+        _selectIndex = _detail?.page_url?.length ?? 0;
         _pageController = PreloadPageController(initialPage: _selectIndex + 1);
         print('_selectIndex:' + _selectIndex.toString());
         print('page:${_selectIndex + 1}');
@@ -494,7 +498,7 @@ class _ComicReaderPageState extends State<ComicReaderPage> {
   }
 
   void previousPage() {
-    if (_pageController.page! > _detail!.page_url!.length) {
+    if (_pageController.page! > (_detail?.page_url?.length ?? 0)) {
       nextChapter();
     } else {
       setState(() {
@@ -559,10 +563,10 @@ class _ComicReaderPageState extends State<ComicReaderPage> {
         child: PreloadPageView.builder(
             reverse: Provider.of<AppSetting>(context).comicReadReverse,
             controller: _pageController,
-            itemCount: _detail!.page_url!.length + 3,
+            itemCount: _detail?.page_url?.length ?? 0 + 3,
             preloadPagesCount: 3,
             onPageChanged: (i) {
-              if (i == _detail!.page_url!.length + 2) {
+              if (i == (_detail?.page_url?.length ?? 0) + 2) {
                 nextChapter();
                 return;
               }
@@ -570,7 +574,7 @@ class _ComicReaderPageState extends State<ComicReaderPage> {
                 previousChapter();
                 return;
               }
-              if (i < _detail!.page_url!.length + 1) {
+              if (i < (_detail?.page_url?.length ?? 0) + 1) {
                 setState(() {
                   _selectIndex = i;
                 });
@@ -588,10 +592,10 @@ class _ComicReaderPageState extends State<ComicReaderPage> {
                       style: TextStyle(color: Colors.grey)),
                 );
               }
-              if (index == _detail!.page_url!.length + 1) {
+              if (index == (_detail?.page_url?.length ?? 0) + 1) {
                 return createTucao(24);
               }
-              if (index == _detail!.page_url!.length + 2) {
+              if (index == (_detail?.page_url?.length ?? 0) + 2) {
                 return Center(
                   child: Text(
                       widget.chapters.indexOf(_currentItem) ==
@@ -682,7 +686,7 @@ class _ComicReaderPageState extends State<ComicReaderPage> {
                   );
                 },
                 imageProvider: Utils.createCachedImageProvider(
-                  _detail!.page_url![index - 1],
+                  _detail?.page_url?[index - 1] ?? "",
                 ),
               );
             }),
@@ -712,18 +716,18 @@ class _ComicReaderPageState extends State<ComicReaderPage> {
         footer: MaterialFooter(enableInfiniteLoad: false),
         header: MaterialHeader(),
         child: ListView.builder(
-            itemCount: _detail!.page_url!.length + 1,
+            itemCount: (_detail?.page_url?.length ?? 0) + 1,
             controller: _scrollController,
             itemBuilder: (ctx, i) {
-              if (i == _detail!.page_url!.length) {
+              if (i == _detail?.page_url!.length) {
                 return createTucao(24);
               } else {
-                var f = _detail!.page_url![i];
+                var f = _detail?.page_url![i];
                 return Container(
                   color: Colors.black,
                   padding: EdgeInsets.only(bottom: 0),
                   child: CachedNetworkImage(
-                      imageUrl: f,
+                      imageUrl: f ?? "",
                       httpHeaders: {"Referer": "http://www.dmzj.com/"},
                       placeholder: (ctx, i) => Container(
                             height: 400,
@@ -740,7 +744,7 @@ class _ComicReaderPageState extends State<ComicReaderPage> {
   }
 
   Widget createVerticalColumn() {
-    var ls = _detail!.page_url!
+    var ls = _detail?.page_url!
         .map<Widget>(
           (f) => Padding(
             padding: EdgeInsets.only(bottom: 0),
@@ -757,9 +761,9 @@ class _ComicReaderPageState extends State<ComicReaderPage> {
           ),
         )
         .toList();
-    ls.add(createTucao(24));
+    ls?.add(createTucao(24));
     return Column(
-      children: ls,
+      children: ls ?? [],
     );
   }
 

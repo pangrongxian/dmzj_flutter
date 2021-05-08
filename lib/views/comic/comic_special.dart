@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_dmzj/app/api.dart';
 import 'package:flutter_dmzj/app/utils.dart';
 import 'package:flutter_dmzj/models/comic/comic_special_item.dart';
+import 'package:flutter_dmzj/widgets/border_card.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
 import 'package:flutter_easyrefresh/material_footer.dart';
 import 'package:flutter_easyrefresh/material_header.dart';
@@ -35,17 +36,18 @@ class _ComicSpecialPageState extends State<ComicSpecialPage>
     }
   }
 
-  double getWidth() {
-    var count = MediaQuery.of(context).size.width ~/ 400;
-    if (count < 1) count = 1;
-    return (MediaQuery.of(context).size.width - count * 8) / count - 8;
-  }
-
   List<ComicSpecialItem> _list = [];
   bool _loading = false;
   int _page = 0;
   @override
   Widget build(BuildContext context) {
+    var columnNum = MediaQuery.of(context).size.width ~/ 400;
+    if (columnNum < 1) columnNum = 1;
+    var columnWidth = (MediaQuery.of(context).size.width - 24) / columnNum;
+    var textSize = Utils.calculateTextHeight(context, "测试",
+        Theme.of(context).textTheme.bodyText1?.fontSize ?? 16, 1);
+    var columnHeight = (columnWidth * (2.8 / 7.2)) + textSize.height + 16;
+
     super.build(context);
     return EasyRefresh(
       onRefresh: () async {
@@ -56,50 +58,51 @@ class _ComicSpecialPageState extends State<ComicSpecialPage>
       footer: MaterialFooter(),
       onLoad: loadData,
       child: GridView.builder(
-          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: MediaQuery.of(context).size.width ~/ 400 < 1
-                  ? 1
-                  : MediaQuery.of(context).size.width ~/ 400,
-              crossAxisSpacing: 4.0,
-              mainAxisSpacing: 4.0,
-              childAspectRatio: getWidth() / ((getWidth() * (280 / 710)) + 44)),
-          itemCount: _list.length,
-          itemBuilder: (cxt, i) {
-            var f = _list[i];
-            return Padding(
-                padding: EdgeInsets.only(bottom: 4),
-                child: Card(
-                  child: RawMaterialButton(
-                    onPressed: () {
-                      Utils.openPage(context, f.id, 5);
-                    },
-                    child: Container(
-                        padding: EdgeInsets.all(4),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.stretch,
-                          children: <Widget>[
-                            Utils.createCacheImage(f.small_cover!, 710, 280),
-                            SizedBox(height: 4),
-                            Flexible(
-                              child: Row(
-                                children: <Widget>[
-                                  Expanded(child: Text(f.title!)),
-                                  Text(
-                                    DateUtil.formatDate(
-                                        DateTime.fromMillisecondsSinceEpoch(
-                                            f.create_time! * 1000),
-                                        format: "yyyy-MM-dd"),
-                                    style: TextStyle(
-                                        color: Colors.grey, fontSize: 12),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ],
+        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: columnNum,
+          childAspectRatio: columnWidth / columnHeight,
+          mainAxisSpacing: 8.0,
+          crossAxisSpacing: 8.0,
+        ),
+        itemCount: _list.length,
+        padding: EdgeInsets.symmetric(horizontal: 12),
+        itemBuilder: (cxt, i) {
+          var f = _list[i];
+          return BorderCard(
+            onTap: () {
+              Utils.openPage(context, f.id, 5);
+            },
+            child: Container(
+              padding: EdgeInsets.all(4),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: <Widget>[
+                  Utils.createCacheImage(f.small_cover!, 710, 280),
+                  SizedBox(height: 4),
+                  Flexible(
+                    child: Row(
+                      children: <Widget>[
+                        Expanded(
+                            child: Text(
+                          f.title ?? "",
+                          maxLines: 1,
                         )),
+                        Text(
+                          DateUtil.formatDate(
+                              DateTime.fromMillisecondsSinceEpoch(
+                                  f.create_time! * 1000),
+                              format: "yyyy-MM-dd"),
+                          style: TextStyle(color: Colors.grey, fontSize: 12),
+                        ),
+                      ],
+                    ),
                   ),
-                ));
-          }),
+                ],
+              ),
+            ),
+          );
+        },
+      ),
     );
   }
 
