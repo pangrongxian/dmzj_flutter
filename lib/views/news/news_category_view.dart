@@ -1,20 +1,15 @@
-import 'dart:convert';
 import 'package:common_utils/common_utils.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_dmzj/app/api.dart';
-import 'package:flutter_dmzj/app/api/news.dart';
 import 'package:flutter_dmzj/app/page_navigator.dart';
 import 'package:flutter_dmzj/app/utils.dart';
 import 'package:flutter_dmzj/controllers/news/news_list_controller.dart';
-import 'package:flutter_dmzj/models/news/news_banner_model.dart';
 import 'package:flutter_dmzj/protobuf/news/news_list_response.pb.dart';
-import 'package:flutter_dmzj/views/news/news_detail.dart';
 import 'package:flutter_dmzj/widgets/app_banner.dart';
 import 'package:flutter_dmzj/widgets/app_error_widget.dart';
 import 'package:flutter_dmzj/widgets/border_card.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
 import 'package:get/get.dart';
-import 'package:http/http.dart' as http;
+import 'package:html_unescape/html_unescape.dart';
 
 class NewsCategoryView extends StatefulWidget {
   final int id;
@@ -31,6 +26,7 @@ class NewsCategoryViewState extends State<NewsCategoryView>
   @override
   bool get wantKeepAlive => true;
   final ScrollController _scrollController = ScrollController();
+  final HtmlUnescape _htmlUnescape = HtmlUnescape();
   @override
   Widget build(BuildContext context) {
     super.build(context);
@@ -62,7 +58,7 @@ class NewsCategoryViewState extends State<NewsCategoryView>
                                 .map<Widget>(
                                   (i) => BannerImageItem(
                                     pic: i.pic_url,
-                                    title: i.title,
+                                    title: _htmlUnescape.convert(i.title ?? ""),
                                     onTaped: () => PageNavigator.toNewsDetail(
                                       id: i.object_id,
                                       url: i.object_url,
@@ -145,7 +141,7 @@ class NewsCategoryViewState extends State<NewsCategoryView>
     return BorderCard(
       onTap: () => PageNavigator.toNewsDetail(
         id: item.articleId,
-        title: item.title,
+        title: _htmlUnescape.convert(item.title),
         url: item.pageUrl,
       ),
       child: Padding(
@@ -169,7 +165,7 @@ class NewsCategoryViewState extends State<NewsCategoryView>
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: <Widget>[
                   Text(
-                    item.title,
+                    _htmlUnescape.convert(item.title),
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
                   ),
