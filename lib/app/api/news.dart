@@ -81,7 +81,7 @@ class NewsApi {
     if (!ConfigHelper.getUserIsLogined()) {
       return false;
     }
-    var path = "https://interface.dmzj1.com/api/news/subscribe/check";
+    var path = "https://interface.muwai.com/api/news/subscribe/check";
     var par = {
       'uid': int.parse(ConfigHelper.getUserInfo()?.uid ?? "0"),
       "sub_id": newsId,
@@ -116,7 +116,7 @@ class NewsApi {
     if (!ConfigHelper.getUserIsLogined()) {
       return false;
     }
-    var path = "https://interface.dmzj1.com/api/news/subscribe/add";
+    var path = "https://interface.muwai.com/api/news/subscribe/add";
     var par = {
       'uid': int.parse(ConfigHelper.getUserInfo()?.uid ?? "0"),
       "sub_id": newsId,
@@ -140,7 +140,7 @@ class NewsApi {
     if (!ConfigHelper.getUserIsLogined()) {
       return false;
     }
-    var path = "https://interface.dmzj1.com/api/news/subscribe/del";
+    var path = "https://interface.muwai.com/api/news/subscribe/del";
     var par = {
       'uid': int.parse(ConfigHelper.getUserInfo()?.uid ?? "0"),
       "sub_id": newsId,
