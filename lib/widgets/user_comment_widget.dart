@@ -151,7 +151,8 @@ class _UserCommentWidgetState extends State<UserCommentWidget>
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
-                      item.masterComment != null
+                      item.masterComment != null &&
+                              item.masterComment?.content != null
                           ? createMasterComment(item)
                           : Container(),
                       Text(
@@ -237,13 +238,13 @@ class _UserCommentWidgetState extends State<UserCommentWidget>
                 WidgetSpan(
                   child: InkWell(
                     child: Text(
-                      item.nickname!,
+                      item.nickname ?? "",
                       style: TextStyle(color: Theme.of(context).accentColor),
                     ),
                   ),
                 ),
                 TextSpan(
-                    text: ": " + _htmlUnescape.convert(item.content!),
+                    text: ": " + _htmlUnescape.convert(item.content ?? ""),
                     style: TextStyle(
                         color: Theme.of(context).textTheme.bodyText1!.color))
               ]),

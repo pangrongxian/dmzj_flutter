@@ -159,9 +159,10 @@ class _LoginPageState extends State<LoginPage> {
             .changeLoginInfo(data.data);
         Provider.of<AppUserInfo>(context, listen: false)
             .getUserProfile(data.data!.uid, data.data!.dmzj_token);
-        Utils.showToast(msg: "登录成功");
+
         UserHelper.loadComicHistory();
         Navigator.pop(context);
+        Utils.showToast(msg: "登录成功");
       } else {
         Utils.showToast(msg: data.msg!);
       }
