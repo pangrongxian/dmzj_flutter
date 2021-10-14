@@ -57,52 +57,55 @@ class _ComicSpecialPageState extends State<ComicSpecialPage>
       header: MaterialHeader(),
       footer: MaterialFooter(),
       onLoad: loadData,
-      child: GridView.builder(
-        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: columnNum,
-          childAspectRatio: columnWidth / columnHeight,
-          mainAxisSpacing: 8.0,
-          crossAxisSpacing: 8.0,
-        ),
-        itemCount: _list.length,
-        padding: EdgeInsets.symmetric(horizontal: 12),
-        itemBuilder: (cxt, i) {
-          var f = _list[i];
-          return BorderCard(
-            onTap: () {
-              Utils.openPage(context, f.id, 5);
-            },
-            child: Container(
-              padding: EdgeInsets.all(4),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: <Widget>[
-                  Utils.createCacheImage(f.small_cover!, 710, 280),
-                  SizedBox(height: 4),
-                  Flexible(
-                    child: Row(
+      child: _list.length < 0
+          ? Container()
+          : GridView.builder(
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: columnNum,
+                childAspectRatio: columnWidth / columnHeight,
+                mainAxisSpacing: 8.0,
+                crossAxisSpacing: 8.0,
+              ),
+              itemCount: _list.length,
+              padding: EdgeInsets.symmetric(horizontal: 12),
+              itemBuilder: (cxt, i) {
+                var f = _list[i];
+                return BorderCard(
+                  onTap: () {
+                    Utils.openPage(context, f.id, 5);
+                  },
+                  child: Container(
+                    padding: EdgeInsets.all(4),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: <Widget>[
-                        Expanded(
-                            child: Text(
-                          f.title ?? "",
-                          maxLines: 1,
-                        )),
-                        Text(
-                          DateUtil.formatDate(
-                              DateTime.fromMillisecondsSinceEpoch(
-                                  f.create_time! * 1000),
-                              format: "yyyy-MM-dd"),
-                          style: TextStyle(color: Colors.grey, fontSize: 12),
+                        Utils.createCacheImage(f.small_cover!, 710, 280),
+                        SizedBox(height: 4),
+                        Flexible(
+                          child: Row(
+                            children: <Widget>[
+                              Expanded(
+                                  child: Text(
+                                f.title ?? "",
+                                maxLines: 1,
+                              )),
+                              Text(
+                                DateUtil.formatDate(
+                                    DateTime.fromMillisecondsSinceEpoch(
+                                        f.create_time! * 1000),
+                                    format: "yyyy-MM-dd"),
+                                style:
+                                    TextStyle(color: Colors.grey, fontSize: 12),
+                              ),
+                            ],
+                          ),
                         ),
                       ],
                     ),
                   ),
-                ],
-              ),
+                );
+              },
             ),
-          );
-        },
-      ),
     );
   }
 

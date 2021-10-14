@@ -117,24 +117,26 @@ class NewsCategoryViewState extends State<NewsCategoryView>
     required double columnHeight,
     ScrollController? scrollController,
   }) {
-    return GridView.builder(
-      padding: EdgeInsets.only(left: 12, right: 12, bottom: 8),
-      controller: scrollController,
-      shrinkWrap: scrollController != null,
-      physics: scrollController == null ? null : ScrollPhysics(),
-      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: columnNum,
-        childAspectRatio: columnWidth / columnHeight,
-        crossAxisSpacing: 4,
-        mainAxisSpacing: 4,
-      ),
-      scrollDirection: Axis.vertical,
-      itemCount: controller.newsList.length,
-      itemBuilder: (_, i) {
-        var item = controller.newsList[i];
-        return listItemBuilder(item);
-      },
-    );
+    return controller.newsList.length > 0
+        ? GridView.builder(
+            padding: EdgeInsets.only(left: 12, right: 12, bottom: 8),
+            controller: scrollController,
+            shrinkWrap: scrollController != null,
+            physics: scrollController == null ? null : ScrollPhysics(),
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: columnNum,
+              childAspectRatio: columnWidth / columnHeight,
+              crossAxisSpacing: 4,
+              mainAxisSpacing: 4,
+            ),
+            scrollDirection: Axis.vertical,
+            itemCount: controller.newsList.length,
+            itemBuilder: (_, i) {
+              var item = controller.newsList[i];
+              return listItemBuilder(item);
+            },
+          )
+        : Container();
   }
 
   Widget listItemBuilder(NewsListItemResponse item) {

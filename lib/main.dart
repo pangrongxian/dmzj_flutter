@@ -32,7 +32,7 @@ void main() async {
 
   ConfigHelper.prefs = await SharedPreferences.getInstance();
 
-  //await initDatabase();
+  await initDatabase();
   runApp(MultiProvider(
     providers: [
       ChangeNotifierProvider<AppTheme>(create: (_) => AppTheme(), lazy: false),
@@ -122,41 +122,46 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Obx(
-      () => Scaffold(
-        body: IndexedStack(
-          index: controller.index.value,
-          children: controller.pages,
-        ),
-        bottomNavigationBar: BottomNavigationBar(
-          type: BottomNavigationBarType.fixed,
-          currentIndex: controller.index.value,
-          onTap: controller.changeIndex,
-          unselectedFontSize: 12,
-          selectedFontSize: 12,
-          showSelectedLabels: false,
-          showUnselectedLabels: false,
-          items: <BottomNavigationBarItem>[
-            BottomNavigationBarItem(
-              label: "漫画",
-              icon: Icon(Ionicons.home_outline),
-              activeIcon: Icon(Ionicons.home),
-            ),
-            BottomNavigationBarItem(
-              label: "新闻",
-              icon: Icon(Ionicons.newspaper_outline),
-              activeIcon: Icon(Ionicons.newspaper),
-            ),
-            BottomNavigationBarItem(
-              label: "轻小说",
-              icon: Icon(Ionicons.book_outline),
-              activeIcon: Icon(Ionicons.book),
-            ),
-            BottomNavigationBarItem(
-              label: "我的",
-              icon: Icon(Ionicons.person_circle_outline),
-              activeIcon: Icon(Ionicons.person_circle),
-            ),
-          ],
+      () => AnnotatedRegion<SystemUiOverlayStyle>(
+        value: Get.isDarkMode
+            ? SystemUiOverlayStyle.light
+            : SystemUiOverlayStyle.dark,
+        child: Scaffold(
+          body: IndexedStack(
+            index: controller.index.value,
+            children: controller.pages,
+          ),
+          bottomNavigationBar: BottomNavigationBar(
+            type: BottomNavigationBarType.fixed,
+            currentIndex: controller.index.value,
+            onTap: controller.changeIndex,
+            unselectedFontSize: 12,
+            selectedFontSize: 12,
+            showSelectedLabels: false,
+            showUnselectedLabels: false,
+            items: <BottomNavigationBarItem>[
+              BottomNavigationBarItem(
+                label: "漫画",
+                icon: Icon(Ionicons.home_outline),
+                activeIcon: Icon(Ionicons.home),
+              ),
+              BottomNavigationBarItem(
+                label: "新闻",
+                icon: Icon(Ionicons.newspaper_outline),
+                activeIcon: Icon(Ionicons.newspaper),
+              ),
+              BottomNavigationBarItem(
+                label: "轻小说",
+                icon: Icon(Ionicons.book_outline),
+                activeIcon: Icon(Ionicons.book),
+              ),
+              BottomNavigationBarItem(
+                label: "我的",
+                icon: Icon(Ionicons.person_circle_outline),
+                activeIcon: Icon(Ionicons.person_circle),
+              ),
+            ],
+          ),
         ),
       ),
     );
